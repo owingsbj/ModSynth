@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res/com.gallantrealm.modsynth"
+    android:id="@+id/padPane"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:layout_weight="1"
+    android:fillViewport="true"
+    android:scrollbarStyle="insideInset" >
+
+	<TableLayout android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:stretchColumns="1">
+
+		<TableRow
+		    android:id="@+id/envDelayRow"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_weight="1"
+		    android:paddingBottom="2dp"
+		    android:paddingTop="2dp" >
+
+			<TextView android:layout_width="wrap_content"
+				android:layout_height="wrap_content" android:layout_gravity="center_vertical"
+				android:shadowColor="#80000000" android:shadowDx="2"
+				android:shadowDy="2" android:shadowRadius="1" android:text="Delay"
+				android:textAppearance="?android:attr/textAppearanceMedium"
+				android:textSize="13sp" />
+
+			<com.gallantrealm.android.Slider
+				android:id="@+id/envDelay" android:layout_width="fill_parent"
+				android:layout_height="wrap_content" android:layout_gravity="center_vertical"
+				android:layout_weight="1" android:max="100"
+				android:progressDrawable="@drawable/progress_horizontal"
+				android:thumb="@drawable/seek_thumb" />
+
+		</TableRow>
+
+		<TableRow
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_weight="1"
+		    android:paddingBottom="2dp"
+		    android:paddingTop="2dp" >
+
+			<TextView android:layout_width="wrap_content"
+				android:layout_height="wrap_content" android:layout_gravity="center_vertical"
+				android:shadowColor="#80000000" android:shadowDx="2"
+				android:shadowDy="2" android:shadowRadius="1" android:text="Attack"
+				android:textAppearance="?android:attr/textAppearanceMedium"
+				android:textSize="13sp" />
+
+			<com.gallantrealm.android.Slider
+				android:id="@+id/envAttack" android:layout_width="fill_parent"
+				android:layout_height="wrap_content" android:layout_gravity="center_vertical"
+				android:layout_weight="1" android:max="100"
+				android:progressDrawable="@drawable/progress_horizontal"
+				android:thumb="@drawable/seek_thumb" />
+
+		</TableRow>
+
+		<TableRow
+		    android:id="@+id/envHoldRow"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_weight="1"
+		    android:paddingBottom="2dp"
+		    android:paddingTop="2dp" >
+
+			<TextView android:layout_width="wrap_content"
+				android:layout_height="wrap_content" android:layout_gravity="center_vertical"
+				android:shadowColor="#80000000" android:shadowDx="2"
+				android:shadowDy="2" android:shadowRadius="1" android:text="Hold"
+				android:textAppearance="?android:attr/textAppearanceMedium"
+				android:textSize="13sp" />
+
+			<com.gallantrealm.android.Slider
+				android:id="@+id/envHold" android:layout_width="match_parent"
+				android:layout_height="wrap_content" android:layout_gravity="center_vertical"
+				android:max="100" android:progressDrawable="@drawable/progress_horizontal"
+				android:thumb="@drawable/seek_thumb" />
+
+		</TableRow>
+
+		<TableRow
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_weight="1"
+		    android:paddingBottom="2dp"
+		    android:paddingTop="2dp" >
+
+			<TextView android:layout_width="wrap_content"
+				android:layout_height="wrap_content" android:layout_gravity="center_vertical"
+				android:shadowColor="#80000000" android:shadowDx="2"
+				android:shadowDy="2" android:shadowRadius="1" android:text="Decay"
+				android:textAppearance="?android:attr/textAppearanceMedium"
+				android:textSize="13sp" />
+
+			<com.gallantrealm.android.Slider
+				android:id="@+id/envDecay" android:layout_width="match_parent"
+				android:layout_height="wrap_content" android:layout_gravity="center_vertical"
+				android:max="100" android:progressDrawable="@drawable/progress_horizontal"
+				android:thumb="@drawable/seek_thumb" />
+
+		</TableRow>
+
+		<TableRow
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_weight="1"
+		    android:paddingBottom="2dp"
+		    android:paddingTop="2dp" >
+
+			<TextView android:layout_width="wrap_content"
+				android:layout_height="wrap_content" android:layout_gravity="center_vertical"
+				android:shadowColor="#80000000" android:shadowDx="2"
+				android:shadowDy="2" android:shadowRadius="1" android:text="Sustain"
+				android:textAppearance="?android:attr/textAppearanceMedium"
+				android:textSize="13sp" />
+
+			<com.gallantrealm.android.Slider
+				android:id="@+id/envSustain" android:layout_width="match_parent"
+				android:layout_height="wrap_content" android:layout_gravity="center_vertical"
+				android:max="100" android:progressDrawable="@drawable/progress_horizontal"
+				android:thumb="@drawable/seek_thumb" />
+
+		</TableRow>
+
+		<TableRow
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_weight="1"
+		    android:paddingBottom="2dp"
+		    android:paddingTop="2dp" >
+
+			<TextView android:layout_width="wrap_content"
+				android:layout_height="wrap_content" android:layout_gravity="center_vertical"
+				android:shadowColor="#80000000" android:shadowDx="2"
+				android:shadowDy="2" android:shadowRadius="1" android:text="Release"
+				android:textAppearance="?android:attr/textAppearanceMedium"
+				android:textSize="13sp" />
+
+			<com.gallantrealm.android.Slider
+				android:id="@+id/envRelease" android:layout_width="match_parent"
+				android:layout_height="wrap_content" android:layout_gravity="center_vertical"
+				android:max="100" android:progressDrawable="@drawable/progress_horizontal"
+				android:thumb="@drawable/seek_thumb" />
+
+		</TableRow>
+
+		<TableRow
+		    android:id="@+id/envSlopeRow"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_weight="1"
+		    android:paddingBottom="2dp"
+		    android:paddingTop="2dp" >
+
+			<TextView android:layout_width="wrap_content"
+				android:layout_height="wrap_content" android:layout_gravity="center_vertical"
+				android:shadowColor="#80000000" android:shadowDx="2"
+				android:shadowDy="2" android:shadowRadius="1" android:text="Slope"
+				android:textAppearance="?android:attr/textAppearanceMedium"
+				android:textSize="13sp" />
+			
+			<LinearLayout
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_gravity="center_vertical" >
+				<Spinner
+					android:id="@+id/envSlopeSpinner"
+					android:layout_width="fill_parent"
+					android:layout_height="40dp"
+					android:layout_gravity="center_vertical"
+					android:layout_weight="1"
+					android:background="@drawable/btn_dropdown" />
+				<CheckBox
+					android:id="@+id/envVelocitySensitive"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_gravity="center_vertical"
+					android:button="@drawable/btn_check"
+					android:text="Velocity"
+					android:textSize="13sp" />
+			</LinearLayout>
+		</TableRow>
+	</TableLayout>
+</ScrollView>

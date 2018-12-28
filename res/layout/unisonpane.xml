@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent"
+	android:orientation="vertical" xmlns:app="http://schemas.android.com/apk/res/com.gallantrealm.modsynth">
+	<TableLayout
+		android:layout_width="fill_parent"
+		android:layout_height="fill_parent"
+		android:gravity="center_vertical">
+
+		<TableRow
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:layout_weight="1">
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="fill_parent"
+				android:gravity="center_vertical"
+				android:shadowColor="#80000000"
+				android:shadowDx="2"
+				android:shadowDy="2"
+				android:shadowRadius="1"
+				android:text="Voices"
+				android:textAppearance="?android:attr/textAppearanceMedium"
+				android:textSize="13sp"/>
+			<Spinner
+				android:id="@+id/unisonVoicesSpinner"
+				android:layout_height="40dp"
+				android:layout_gravity="center_vertical"
+				android:layout_marginLeft="6dp"
+				android:layout_weight="1"
+				android:background="@drawable/btn_dropdown"/>
+		</TableRow>
+
+		<TableRow
+		    android:layout_height="wrap_content"
+		    android:layout_weight="1" >
+
+			<TextView
+			    android:layout_width="wrap_content"
+			    android:layout_height="fill_parent"
+			    android:gravity="center_vertical"
+			    android:shadowColor="#80000000"
+			    android:shadowDx="2"
+			    android:shadowDy="2"
+			    android:shadowRadius="1"
+			    android:text="Polyphony"
+			    android:textAppearance="?android:attr/textAppearanceMedium"
+			    android:textSize="13sp" />
+
+			<Spinner
+			    android:id="@+id/unisonPolySpinner"
+			    android:layout_height="40dp"
+			    android:layout_gravity="center_vertical"
+			    android:layout_marginLeft="6dp"
+			    android:layout_weight="1"
+			    android:background="@drawable/btn_dropdown" />
+
+		</TableRow>
+
+		<TableRow
+			android:layout_height="wrap_content"
+			android:layout_weight="1">
+
+			<TextView
+			    android:layout_width="wrap_content"
+			    android:layout_height="fill_parent"
+			    android:gravity="center_vertical"
+			    android:shadowColor="#80000000"
+			    android:shadowDx="2"
+			    android:shadowDy="2"
+			    android:shadowRadius="1"
+			    android:text="Width"
+			    android:textAppearance="?android:attr/textAppearanceMedium"
+			    android:textSize="13sp" />
+
+			<com.gallantrealm.android.Slider
+			    android:id="@+id/unisonWidth"
+			    android:layout_width="fill_parent"
+			    android:layout_height="fill_parent"
+			    android:layout_gravity="center_vertical"
+			    android:layout_weight="1"
+			    android:max="100"
+			    android:progressDrawable="@drawable/progress_horizontal"
+			    android:thumb="@drawable/seek_thumb" />
+
+		</TableRow>
+
+		<TableRow
+		    android:id="@+id/unisonSpreadRow"
+		    android:layout_height="wrap_content"
+		    android:layout_weight="1" >
+
+		    <TextView
+		        android:layout_width="wrap_content"
+		        android:layout_height="fill_parent"
+		        android:layout_gravity="center_vertical"
+		        android:gravity="center_vertical"
+		        android:shadowColor="#80000000"
+		        android:shadowDx="2"
+		        android:shadowDy="2"
+		        android:shadowRadius="1"
+		        android:text="Stereo"
+		        android:textAppearance="?android:attr/textAppearanceMedium"
+		        android:textSize="13sp" />
+
+		    <com.gallantrealm.android.Slider
+		        android:id="@+id/unisonSpread"
+		        android:layout_width="fill_parent"
+		        android:layout_height="fill_parent"
+		        android:layout_gravity="center_vertical"
+		        android:layout_weight="1"
+		        android:max="100"
+		        android:progressDrawable="@drawable/progress_horizontal"
+		        android:thumb="@drawable/seek_thumb" />
+
+		</TableRow>
+
+	</TableLayout>
+</LinearLayout>

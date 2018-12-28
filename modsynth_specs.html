@@ -1,0 +1,694 @@
+<style>
+table, th, td {
+	border: 1px solid black;
+	border-collapse: collapse;
+	padding: 5px;
+}
+</style>
+<table style="border: 1px">
+	<tr>
+		<th>Module</th>
+		<th>Control</th>
+		<th>Min <br>(MIDI 0)</th>
+		<th>Max <br>(MIDI 127)</th>
+		<th>Units</th>
+		<th>Curve</th>
+	</tr>
+	<tr>
+		<td rowspan="4">Keyboard</td>
+		<td>Voices</td>
+		<td>0 (Mono)</td>
+		<td>10</td>
+		<td>voices</td>
+		<td>linear</td>
+	</tr>
+	<tr>
+		<td>Octave</td>
+		<td>0 (C0)</td>
+		<td>10 (C10)</td>
+		<td>octave left of middle C</td>
+		<td>linear</td>
+	</tr>
+	<tr>
+		<td>Tuning</td>
+		<td>0 (Equal Temperament)</td>
+		<td>2 (Out of Tune)</td>
+		<td>-</td>
+		<td>linear</td>
+	</tr>
+	<tr>
+		<td>Portamento</td>
+		<td>0</td>
+		<td>100</td>
+		<td>ms/semitone</td>
+		<td>linear</td>
+	</tr>
+	<tr>
+		<td rowspan="5">Pad</td>
+		<td>Voices</td>
+		<td>1</td>
+		<td>10</td>
+		<td>voices</td>
+		<td>linear</td>
+	</tr>
+	<tr>
+		<td>X Range</td>
+		<td>0</td>
+		<td>1</td>
+		<td>-</td>
+		<td>linear</td>
+	</tr>
+	<tr>
+		<td>X Type</td>
+		<td>0 (Continuous)</td>
+		<td>3 (Velocity)</td>
+		<td>-</td>
+		<td>linear</td>
+	</tr>
+	<tr>
+		<td>Y Range</td>
+		<td>0</td>
+		<td>1</td>
+		<td>-</td>
+		<td>linear</td>
+	</tr>
+	<tr>
+		<td>Y Type</td>
+		<td>0 (Continuous)</td>
+		<td>3 (Velocity)</td>
+		<td>-</td>
+		<td>linear</td>
+	</tr>
+	<tr>
+		<td rowspan="4">Sequencer</td>
+		<td>Sequence Bar</td>
+		<td>-12</td>
+		<td>12</td>
+		<td>semitones</td>
+		<td>linear</td>
+	</tr>
+	<tr>
+		<td>Voices</td>
+		<td>1</td>
+		<td>10</td>
+		<td>voices</td>
+		<td>linear</td>
+	</tr>
+	<tr>
+		<td>Octave</td>
+		<td>-5</td>
+		<td>5</td>
+		<td>octaves offset</td>
+		<td>linear</td>
+	</tr>
+	<tr>
+		<td>Length</td>
+		<td>1</td>
+		<td>16</td>
+		<td>steps</td>
+		<td>linear</td>
+	</tr>
+	<tr>
+		<td rowspan="6">Oscillator</td>
+		<td>Wave Form</td>
+		<td>0 (Square)</td>
+		<td>5 (Harmonics)</td>
+		<td>-</td>
+		<td>linear</td>
+	</tr>
+	<tr>
+		<td>Octave</td>
+		<td>-5</td>
+		<td>5</td>
+		<td>octaves offset</td>
+		<td>linear</td>
+	</tr>
+	<tr>
+		<td>Pitch</td>
+		<td>0</td>
+		<td>12</td>
+		<td>semitones offset</td>
+		<td>linear</td>
+	</tr>
+	<tr>
+		<td>Detune</td>
+		<td>-50</td>
+		<td>50</td>
+		<td>cents (1/100 semitone)</td>
+		<td>linear</td>
+	</tr>
+	<tr>
+		<td>Noise</td>
+		<td>0</td>
+		<td>1</td>
+		<td>+/- octaves variance</td>
+		<td>squared</td>
+	</tr>
+	<tr>
+		<td>Modulation</td>
+		<td>0</td>
+		<td>100</td>
+		<td>% phase shift</td>
+		<td>squared</td>
+	</tr>
+	<tr>
+		<td rowspan="4">LFO</td>
+		<td>Wave Form</td>
+		<td>0 (Square)</td>
+		<td>5 (Custom)</td>
+		<td>-</td>
+		<td>linear</td>
+	</tr>
+	<tr>
+		<td>Rate</td>
+		<td>0</td>
+		<td>10</td>
+		<td>hz</td>
+		<td>squared</td>
+	</tr>
+	<tr>
+		<td>(+) Random</td>
+		<td>0</td>
+		<td>1</td>
+		<td>+/- octaves variance</td>
+		<td>squared</td>
+	</tr>
+	<tr>
+		<td>(+) Fade In</td>
+		<td>0</td>
+		<td>10</td>
+		<td>seconds</td>
+		<td>linear</td>
+	</tr>
+	<tr>
+		<td rowspan="4">Filter</td>
+		<td>Type</td>
+		<td>0 (Low Pass)</td>
+		<td>3 (Notch)</td>
+		<td>-</td>
+		<td>linear</td>
+	</tr>
+	<tr>
+		<td>Resonance</td>
+		<td>0</td>
+		<td>100</td>
+		<td>Q</td>
+		<td>squared</td>
+	</tr>
+	<tr>
+		<td>Cutoff</td>
+		<td>16.350 (C0)</td>
+		<td>5274.04 (E8)</td>
+		<td>hz</td>
+		<td>exponential</td>
+	</tr>
+	<tr>
+		<td>Modulation</td>
+		<td>0</td>
+		<td>100</td>
+		<td>% of cutoff range</td>
+		<td>squared</td>
+	</tr>
+	<tr>
+		<td rowspan="3">Amp</td>
+		<td>Volume</td>
+		<td>0</td>
+		<td>100</td>
+		<td>% of input volume</td>
+		<td>linear</td>
+	</tr>
+	<tr>
+		<td>Tone</td>
+		<td>10</td>
+		<td>0</td>
+		<td>approx db reduction at 500 hz</td>
+		<td>sqrt</td>
+	</tr>
+	<tr>
+		<td>Overdrive</td>
+		<td>1</td>
+		<td>11</td>
+		<td>multiples of volume</td>
+		<td>linear</td>
+	</tr>
+	<tr>
+		<td rowspan="4">Envelope</td>
+		<td>Attack</td>
+		<td>0</td>
+		<td>10</td>
+		<td>seconds</td>
+		<td>squared</td>
+	</tr>
+	<tr>
+		<td>Decay</td>
+		<td>0</td>
+		<td>10</td>
+		<td>seconds</td>
+		<td>squared</td>
+	</tr>
+	<tr>
+		<td>Sustain</td>
+		<td>0</td>
+		<td>100</td>
+		<td>% of full level</td>
+		<td>linear</td>
+	</tr>
+	<tr>
+		<td>Release</td>
+		<td>0</td>
+		<td>10</td>
+		<td>seconds</td>
+		<td>squared</td>
+	</tr>
+	<tr>
+		<td rowspan="4">Mixer</td>
+		<td>Level 1</td>
+		<td>0</td>
+		<td>100</td>
+		<td>% of input1</td>
+		<td>squared</td>
+	</tr>
+	<tr>
+		<td>Level 2</td>
+		<td>0</td>
+		<td>100</td>
+		<td>% of input2</td>
+		<td>squared</td>
+	</tr>
+	<tr>
+		<td>Level 3</td>
+		<td>0</td>
+		<td>100</td>
+		<td>% of input3</td>
+		<td>squared</td>
+	</tr>
+	<tr>
+		<td>Bias</td>
+		<td>0</td>
+		<td>1</td>
+		<td>amount added to output</td>
+		<td>linear</td>
+	</tr>
+	<tr>
+		<td rowspan="4">Delay</td>
+		<td>Delay Level</td>
+		<td>0</td>
+		<td>100</td>
+		<td>% of delay</td>
+		<td>linear</td>
+	</tr>
+	<tr>
+		<td>Delay Time</td>
+		<td>0</td>
+		<td>1</td>
+		<td>seconds</td>
+		<td>squared</td>
+	</tr>
+	<tr>
+		<td>Feedback</td>
+		<td>0</td>
+		<td>100</td>
+		<td>% of output fed to input</td>
+		<td>linear</td>
+	</tr>
+	<tr>
+		<td>Modulation</td>
+		<td>0</td>
+		<td>0.01</td>
+		<td>seconds variance of delay time</td>
+		<td>linear</td>
+	</tr>
+	<tr>
+		<td rowspan="1">Output</td>
+		<td>No controls</td>
+		<td></td>
+		<td></td>
+		<td>-</td>
+		<td></td>
+	</tr>
+	<tr>
+		<td rowspan="6">(+) MultiOsc</td>
+		<td>Wave Form</td>
+		<td>0 (Square)</td>
+		<td>5 (Harmonics)</td>
+		<td>-</td>
+		<td>linear</td>
+	</tr>
+	<tr>
+		<td>Octave</td>
+		<td>-5</td>
+		<td>5</td>
+		<td>octaves offset</td>
+		<td>linear</td>
+	</tr>
+	<tr>
+		<td>Pitch</td>
+		<td>0</td>
+		<td>12</td>
+		<td>semitones offset</td>
+		<td>linear</td>
+	</tr>
+	<tr>
+		<td>Detune</td>
+		<td>-50</td>
+		<td>50</td>
+		<td>cents (1/100 semitone)</td>
+		<td>linear</td>
+	</tr>
+	<tr>
+		<td>Chorus</td>
+		<td>0</td>
+		<td>1</td>
+		<td>semitones spread</td>
+		<td>squared</td>
+	</tr>
+	<tr>
+		<td>Modulation</td>
+		<td>0</td>
+		<td>100</td>
+		<td>% phase shift</td>
+		<td>squared</td>
+	</tr>
+	<tr>
+		<td rowspan="4">(+) Unison</td>
+		<td>Voices</td>
+		<td>2</td>
+		<td>5</td>
+		<td>voices</td>
+		<td>linear</td>
+	</tr>
+	<tr>
+		<td>Polyphony</td>
+		<td>1</td>
+		<td>5</td>
+		<td>voices</td>
+		<td>linear</td>
+	</tr>
+	<tr>
+		<td>Width</td>
+		<td>0</td>
+		<td>1</td>
+		<td>+/- semitones</td>
+		<td>linear</td>
+	</tr>
+	<tr>
+		<td>Stereo</td>
+		<td>0</td>
+		<td>100</td>
+		<td>% spread</td>
+		<td>linear</td>
+	</tr>
+	<tr>
+		<td rowspan="3">(+) PCM</td>
+		<td>Octave</td>
+		<td>-5</td>
+		<td>5</td>
+		<td>octaves offset</td>
+		<td>linear</td>
+	</tr>
+	<tr>
+		<td>Pitch</td>
+		<td>0</td>
+		<td>12</td>
+		<td>semitones offset</td>
+		<td>linear</td>
+	</tr>
+	<tr>
+		<td>Detune</td>
+		<td>-50</td>
+		<td>50</td>
+		<td>cents (1/100 semitone)</td>
+		<td>linear</td>
+	</tr>
+	<tr>
+		<td rowspan="3">(+) SpectralFilter</td>
+		<td>Resonance</td>
+		<td>0</td>
+		<td>250</td>
+		<td>Q</td>
+		<td>squared</td>
+	</tr>
+	<tr>
+		<td>Cutoff</td>
+		<td>16.350 (C0)</td>
+		<td>5274.04 (E8)</td>
+		<td>hz</td>
+		<td>exponential</td>
+	</tr>
+	<tr>
+		<td>Modulation</td>
+		<td>0</td>
+		<td>100</td>
+		<td>% of cutoff range</td>
+		<td>squared</td>
+	</tr>
+	<tr>
+		<td rowspan="3">(+) Crusher</td>
+		<td>Rate</td>
+		<td>41000</td>
+		<td>1</td>
+		<td>hz</td>
+		<td>linear</td>
+	</tr>
+	<tr>
+		<td>Level</td>
+		<td>1000</td>
+		<td>1</td>
+		<td>pixelations</td>
+		<td>linear</td>
+	</tr>
+	<tr>
+		<td>Modulation</td>
+		<td>0</td>
+		<td>100</td>
+		<td>% of rate or level range</td>
+		<td>linear</td>
+	</tr>
+	<tr>
+		<td rowspan="2">(+) Glide</td>
+		<td>Up</td>
+		<td>0</td>
+		<td>1</td>
+		<td>semitones/sec</td>
+		<td>squared</td>
+	</tr>
+	<tr>
+		<td>Down</td>
+		<td>0</td>
+		<td>1</td>
+		<td>semitones/sec</td>
+		<td>squared</td>
+	</tr>
+	<tr>
+		<td rowspan="1">(+) SampleHold</td>
+		<td>No Controls</td>
+		<td></td>
+		<td></td>
+		<td>-</td>
+		<td></td>
+	</tr>
+	<tr>
+		<td rowspan="3">(+) Divider</td>
+		<td>Divisor</td>
+		<td>2</td>
+		<td>16</td>
+		<td>-</td>
+		<td>linear</td>
+	</tr>
+	<tr>
+		<td>Phase</td>
+		<td>0</td>
+		<td>15</td>
+		<td>22.5 degree intervals</td>
+		<td>linear</td>
+	</tr>
+	<tr>
+		<td>Duty</td>
+		<td>1</td>
+		<td>15</td>
+		<td>1/16 of cycle</td>
+		<td>linear</td>
+	</tr>
+	<tr>
+		<td rowspan="3">(+) Function</td>
+		<td>a</td>
+		<td>0</td>
+		<td>1</td>
+		<td>-</td>
+		<td>linear</td>
+	</tr>
+	<tr>
+		<td>b</td>
+		<td>0</td>
+		<td>1</td>
+		<td>-</td>
+		<td>linear</td>
+	</tr>
+	<tr>
+		<td>c</td>
+		<td>0</td>
+		<td>1</td>
+		<td>-</td>
+		<td>linear</td>
+	</tr>
+	<tr>
+		<td rowspan="12">(+) Operator</td>
+		<td>Octave</td>
+		<td>-5</td>
+		<td>5</td>
+		<td>octaves offset</td>
+		<td>linear</td>
+	</tr>
+	<tr>
+		<td>Pitch</td>
+		<td>0</td>
+		<td>12</td>
+		<td>semitones offset</td>
+		<td>linear</td>
+	</tr>
+	<tr>
+		<td>Detune</td>
+		<td>-50</td>
+		<td>50</td>
+		<td>cents (1/100 semitone)</td>
+		<td>linear</td>
+	</tr>
+	<tr>
+		<td>Feedback</td>
+		<td>0</td>
+		<td>10</td>
+		<td>% of output fed to modulation</td>
+		<td>linear</td>
+	</tr>
+	<tr>
+		<td>Delay</td>
+		<td>0</td>
+		<td>1</td>
+		<td>seconds</td>
+		<td>linear</td>
+	</tr>
+	<tr>
+		<td>Attack</td>
+		<td>0</td>
+		<td>10</td>
+		<td>seconds</td>
+		<td>squared</td>
+	</tr>
+	<tr>
+		<td>Hold</td>
+		<td>0</td>
+		<td>1</td>
+		<td>seconds</td>
+		<td>linear</td>
+	</tr>
+	<tr>
+		<td>Decay</td>
+		<td>0</td>
+		<td>10</td>
+		<td>seconds</td>
+		<td>squared</td>
+	</tr>
+	<tr>
+		<td>Sustain</td>
+		<td>0</td>
+		<td>100</td>
+		<td>% of max level</td>
+		<td>linear</td>
+	</tr>
+	<tr>
+		<td>Release</td>
+		<td>0</td>
+		<td>10</td>
+		<td>seconds</td>
+		<td>squared</td>
+	</tr>
+	<tr>
+		<td>Min</td>
+		<td>0</td>
+		<td>1</td>
+		<td>wave amplitude</td>
+		<td>cubed</td>
+	</tr>
+	<tr>
+		<td>Max</td>
+		<td>0</td>
+		<td>1</td>
+		<td>wave amplitude</td>
+		<td>cubed</td>
+	</tr>
+	<tr>
+		<td rowspan="1">(+) Melody</td>
+		<td>Voices</td>
+		<td>1</td>
+		<td>10</td>
+		<td>voices</td>
+		<td>linear</td>
+	</tr>
+	<tr>
+		<td rowspan="1">(+) Arpeggiator</td>
+		<td>Type</td>
+		<td>0 (Up)</td>
+		<td>3 (Down Up)</td>
+		<td>-</td>
+		<td>linear</td>
+	</tr>
+	<tr>
+		<td rowspan="2">(+) Pan</td>
+		<td>Balance</td>
+		<td>-100</td>
+		<td>100</td>
+		<td>% of volume imbalance</td>
+		<td>linear</td>
+	</tr>
+	<tr>
+		<td>Modulation</td>
+		<td>0</td>
+		<td>100</td>
+		<td>% of balance range</td>
+		<td>linear</td>
+	</tr>
+	<tr>
+		<td rowspan="3">(+) Compressor</td>
+		<td>Amount</td>
+		<td>0</td>
+		<td>50</td>
+		<td>% volume reduction</td>
+		<td>linear</td>
+	</tr>
+	<tr>
+		<td>Delay</td>
+		<td>0</td>
+		<td>1</td>
+		<td>seconds before volume restored</td>
+		<td>linear</td>
+	</tr>
+	<tr>
+		<td>Gain</td>
+		<td>0</td>
+		<td>10</td>
+		<td>times input volume</td>
+		<td>linear</td>
+	</tr>
+	<tr>
+		<td rowspan="3">(+) Reverb</td>
+		<td>Amount</td>
+		<td>0</td>
+		<td>100</td>
+		<td>% of reverb vs original</td>
+		<td>linear</td>
+	</tr>
+	<tr>
+		<td>Depth</td>
+		<td>0</td>
+		<td>1</td>
+		<td>average delay in seconds</td>
+		<td>linear</td>
+	</tr>
+	<tr>
+		<td>Tone</td>
+		<td>10</td>
+		<td>0</td>
+		<td>approx db reduction at 500 hz</td>
+		<td>sqrt</td>
+	</tr>
+</table>

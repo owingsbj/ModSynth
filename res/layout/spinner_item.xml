@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView android:id="@+id/goggleDog" android:layout_width="fill_parent" android:layout_height="wrap_content"
+	android:gravity="center" android:textColor="#000000" android:textSize="12sp" xmlns:android="http://schemas.android.com/apk/res/android"
+	android:textStyle="bold" />

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+	package="com.gallantrealm.modsynth" android:installLocation="auto"
+	android:versionCode="510" android:versionName="5.10">
+	<uses-sdk android:minSdkVersion="14" android:targetSdkVersion="27"/>
+	<!-- Warning: do not downgrade this to 22 or lower as app will fail to upgrade. 
+		See https://inthecheesefactory.com/blog/things-you-need-to-know-about-android-m-permission-developer-edition/en -->
+	<uses-permission android:name="com.android.vending.BILLING" />
+	<uses-permission android:name="android.permission.WAKE_LOCK" />
+	<uses-permission android:name="android.permission.INTERNET" />
+	<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+	<uses-feature android:name="android.hardware.audio.output"
+		android:required="true" />
+	<uses-feature android:name="android.hardware.audio.low_latency"
+		android:required="false" />
+	<uses-feature android:name="android.hardware.audio.pro"
+		android:required="false" />
+	<uses-feature android:name="android.hardware.usb.host"
+		android:required="false" />
+	<uses-feature android:name="android.software.midi"
+		android:required="false" />
+	<application android:allowBackup="true" android:icon="@mipmap/ic_launcher"
+		android:label="@string/app_name" android:largeHeap="true">
+		<activity android:name="com.gallantrealm.mysynth.GallantSplashActivity"
+			android:alwaysRetainTaskState="true" android:label="@string/app_name"
+			android:screenOrientation="sensorLandscape"
+			android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
+			<intent-filter>
+				<action android:name="android.intent.action.MAIN" />
+				<category android:name="android.intent.category.LAUNCHER" />
+			</intent-filter>
+			<intent-filter>
+				<action android:name="android.intent.action.VIEW" />
+				<action android:name="android.intent.action.EDIT" />
+				<action android:name="android.intent.action.PICK" />
+				<category android:name="android.intent.category.DEFAULT" />
+				<data android:host="*" android:mimeType="*/*"
+					android:pathPattern=".*\\.modsynth" android:scheme="file" />
+			</intent-filter>
+		</activity>
+		<activity android:name="com.gallantrealm.modsynth.MainActivity"
+			android:alwaysRetainTaskState="true" android:label="@string/app_name"
+			android:launchMode="singleTask" android:screenOrientation="sensorLandscape"
+			android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+			android:configChanges="orientation|screenSize|layoutDirection">
+			<intent-filter>
+			</intent-filter>
+		</activity>
+		<meta-data android:name="com.google.android.gms.version"
+			android:value="@integer/google_play_services_version" />
+		<activity android:name="com.google.android.gms.common.api.GoogleApiActivity"
+			android:theme="@android:style/Theme.Translucent.NoTitleBar"
+			android:exported="false" />
+		<provider android:name="com.gallantrealm.modsynth.SoundContentProvider"
+			android:authorities="com.gallantrealm.modsynth" android:exported="true"
+			android:grantUriPermissions="true">
+		</provider>
+	</application>
+</manifest>

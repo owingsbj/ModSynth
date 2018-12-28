@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="wrap_content"
+	android:layout_height="fill_parent"
+	android:orientation="vertical"
+	android:visibility="visible" >
+	<TableLayout
+		android:layout_width="fill_parent"
+		android:layout_height="fill_parent"
+		android:shrinkColumns="0"
+		android:stretchColumns="1" >
+		<TableRow
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_weight="1" >
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_gravity="center_vertical"
+				android:shadowColor="#80000000"
+				android:shadowDx="2"
+				android:shadowDy="2"
+				android:shadowRadius="1"
+				android:text="Wave Form"
+				android:textAppearance="?android:attr/textAppearanceMedium"
+				android:textSize="13sp" />
+			<Spinner
+				android:id="@+id/modulatorWaveForm"
+				android:layout_height="40dp"
+				android:layout_gravity="center_vertical"
+				android:layout_marginLeft="6dp"
+				android:layout_weight="1"
+				android:background="@drawable/btn_dropdown" />
+		</TableRow>
+		<TableRow
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_weight="1" >
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_gravity="center_vertical"
+				android:shadowColor="#80000000"
+				android:shadowDx="2"
+				android:shadowDy="2"
+				android:shadowRadius="1"
+				android:text="Octave"
+				android:textAppearance="?android:attr/textAppearanceMedium"
+				android:textSize="13sp" />
+
+			<com.gallantrealm.android.Slider
+			    android:id="@+id/modulatorOctave"
+			    android:layout_width="match_parent"
+			    android:layout_height="fill_parent"
+			    android:layout_gravity="center_vertical"
+			    android:layout_weight="1"
+			    android:max="11"
+			    android:progressDrawable="@drawable/progress_horizontal"
+			    android:thumb="@drawable/seek_thumb" />
+
+		</TableRow>
+		<TableRow
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_weight="1" >
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_gravity="center_vertical"
+				android:shadowColor="#80000000"
+				android:shadowDx="2"
+				android:shadowDy="2"
+				android:shadowRadius="1"
+				android:text="Pitch"
+				android:textAppearance="?android:attr/textAppearanceMedium"
+				android:textSize="13sp" />
+
+			<com.gallantrealm.android.Slider
+			    android:id="@+id/modulatorPitch"
+			    android:layout_width="match_parent"
+			    android:layout_height="fill_parent"
+			    android:layout_gravity="center_vertical"
+			    android:layout_weight="1"
+			    android:max="12"
+			    android:progressDrawable="@drawable/progress_horizontal"
+			    android:thumb="@drawable/seek_thumb" />
+
+		</TableRow>
+		<TableRow
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_weight="1" >
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_gravity="center_vertical"
+				android:shadowColor="#80000000"
+				android:shadowDx="2"
+				android:shadowDy="2"
+				android:shadowRadius="1"
+				android:text="Detune"
+				android:textAppearance="?android:attr/textAppearanceMedium"
+				android:textSize="13sp" />
+
+			<com.gallantrealm.android.Slider
+			    android:id="@+id/modulatorDetune"
+			    android:layout_width="match_parent"
+			    android:layout_height="fill_parent"
+			    android:layout_gravity="center_vertical"
+			    android:layout_weight="1"
+			    android:max="100"
+			    android:progressDrawable="@drawable/progress_horizontal"
+			    android:thumb="@drawable/seek_thumb" />
+
+		</TableRow>
+	</TableLayout>
+</LinearLayout>

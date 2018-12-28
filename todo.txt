@@ -1,0 +1,39 @@
+Todo's for ModSynth
+
+6.0:
+- Rebase on MySynth synthesizer engine
+- Additional parallelism in sound generation
+- Save as JSON (using javason)
+- Cloud sharing of instruments
+
+6.1
+- Improve labels
+- Glide module enhancements (glide pressed/released, return to biased position)
+
+6.2:
+- MIDI on sequencer
+- Sysex patch transfer.
+
+6.3:
+
+6.4:
+- bpm sync on Delay, Envelopes?
+
+- Add ability to set variables on function module
+- What's new dialog
+- Tune for Chromebook (full keyboard control)
+- Additional MIDI controls (such as pitch bend sensitivity and modulation)
+
+- Modulator on envelope that changes delay based on pitch
+- Add ability to create/delete folders and move instruments to them for organizing instruments
+- Port VST to MAC
+- Add UI onto the VST and sell 
+- A chord generator module (with a grid of popular chords)
+- Other visualizations on output
+
+Probably never:
+- Add multi-track looper
+- Tilt control (full?)
+- Multiple keyboard modules (split or stack) (full)
+- Compound module (full)
+- Animations when entering edit mode,

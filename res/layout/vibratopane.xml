@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:id="@+id/vibratoPane" android:layout_width="200dp" android:layout_height="match_parent"
+	android:orientation="vertical" android:visibility="gone">
+	<TableLayout android:layout_width="match_parent" android:layout_height="fill_parent"
+		android:shrinkColumns="0" android:stretchColumns="1">
+		<TableRow android:id="@+id/TableRow21" android:layout_width="wrap_content" android:layout_height="wrap_content"
+			android:layout_weight="1">
+			<TextView android:id="@+id/TextView43" android:layout_width="wrap_content" android:layout_height="wrap_content"
+				android:layout_gravity="center_vertical" android:text="Type" android:textAppearance="?android:attr/textAppearanceMedium"
+				android:textSize="13sp" android:shadowColor="#80000000" android:shadowDx="2" android:shadowDy="2"
+				android:shadowRadius="1" />
+			<LinearLayout android:layout_width="wrap_content" android:layout_height="40dp" android:layout_gravity="center_vertical">
+				<Spinner android:id="@+id/vibratoDestinationSpinner" android:layout_width="100dp" android:layout_height="40dp"
+					android:layout_weight="1" android:background="@drawable/btn_dropdown" android:paddingBottom="0dp"
+					android:paddingTop="0dp" />
+				<TextView android:id="@+id/TextView14" android:layout_width="wrap_content" android:layout_height="wrap_content"
+					android:layout_gravity="center" android:shadowColor="#80000000" android:shadowDx="2" android:shadowDy="2"
+					android:shadowRadius="1" android:text="  Shape " android:textAppearance="?android:attr/textAppearanceMedium"
+					android:textSize="13sp" />
+				<Spinner android:id="@+id/vibratoTypeSpinner" android:layout_width="100dp" android:layout_height="40dp"
+					android:layout_weight="1" android:background="@drawable/btn_dropdown" android:paddingBottom="0dp"
+					android:paddingTop="0dp" />
+			</LinearLayout>
+		</TableRow>
+		<TableRow android:id="@+id/TableRow03" android:layout_width="wrap_content" android:layout_height="wrap_content"
+			android:layout_weight="1">
+			<TextView android:id="@+id/TextView33" android:layout_width="wrap_content" android:layout_height="wrap_content"
+				android:layout_gravity="center_vertical" android:text="Amount  " android:textAppearance="?android:attr/textAppearanceMedium"
+				android:textSize="13sp" android:shadowColor="#80000000" android:shadowDx="2" android:shadowDy="2"
+				android:shadowRadius="1" />
+			<com.gallantrealm.android.Slider android:id="@+id/vibratoAmount" android:layout_width="fill_parent" android:layout_height="wrap_content"
+				android:layout_gravity="center_vertical" android:max="100" android:progress="0" android:progressDrawable="@drawable/progress_horizontal"
+				android:thumb="@drawable/seek_thumb" />
+		</TableRow>
+		<TableRow android:id="@+id/TableRow06" android:layout_width="wrap_content" android:layout_height="wrap_content"
+			android:layout_weight="1">
+			<TextView android:id="@+id/TextView30" android:layout_width="wrap_content" android:layout_height="wrap_content"
+				android:layout_gravity="center_vertical" android:text="Rate" android:textAppearance="?android:attr/textAppearanceMedium"
+				android:textSize="13sp" android:shadowColor="#80000000" android:shadowDx="2" android:shadowDy="2"
+				android:shadowRadius="1" />
+			<com.gallantrealm.android.Slider android:id="@+id/vibratoRate" android:layout_width="match_parent" android:layout_height="wrap_content"
+				android:layout_gravity="center_vertical" android:max="100" android:progressDrawable="@drawable/progress_horizontal"
+				android:thumb="@drawable/seek_thumb" />
+			<CheckBox android:id="@+id/vibratoSyncCheckBox" android:layout_width="wrap_content" android:layout_height="30dp"
+				android:text="Sync" android:button="@drawable/btn_check" android:shadowColor="#80000000" android:shadowDx="2"
+				android:shadowDy="2" android:shadowRadius="1" />
+		</TableRow>
+		<TableRow android:id="@+id/TableRow24" android:layout_width="wrap_content" android:layout_height="wrap_content"
+			android:layout_weight="1">
+			<TextView android:id="@+id/TextView34" android:layout_width="wrap_content" android:layout_height="wrap_content"
+				android:layout_gravity="center_vertical" android:text="Attack" android:textAppearance="?android:attr/textAppearanceMedium"
+				android:textSize="13sp" android:shadowColor="#80000000" android:shadowDx="2" android:shadowDy="2"
+				android:shadowRadius="1" />
+			<LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content"
+				android:layout_gravity="center_vertical">
+				<com.gallantrealm.android.Slider android:id="@+id/vibratoAttack" android:layout_width="match_parent" android:layout_height="wrap_content"
+					android:layout_weight="1" android:max="100" android:progressDrawable="@drawable/progress_horizontal"
+					android:thumb="@drawable/seek_thumb" />
+				<CheckBox android:id="@+id/vibratoAttackOnGlide" android:layout_width="wrap_content"
+					android:layout_height="30dp" android:layout_marginLeft="5dp" android:text="on Glide" android:button="@drawable/btn_check"
+					android:textSize="13sp" android:visibility="gone" />
+			</LinearLayout>
+		</TableRow>
+		<TableRow android:id="@+id/TableRow25" android:layout_width="wrap_content" android:layout_height="wrap_content"
+			android:layout_weight="1">
+			<TextView android:id="@+id/TextView49" android:layout_width="wrap_content" android:layout_height="wrap_content"
+				android:layout_gravity="center_vertical" android:text="Decay" android:textAppearance="?android:attr/textAppearanceMedium"
+				android:textSize="13sp" android:shadowColor="#80000000" android:shadowDx="2" android:shadowDy="2"
+				android:shadowRadius="1" />
+			<com.gallantrealm.android.Slider android:id="@+id/vibratoDecay" android:layout_width="match_parent" android:layout_height="wrap_content"
+				android:layout_gravity="center_vertical" android:max="100" android:progressDrawable="@drawable/progress_horizontal"
+				android:thumb="@drawable/seek_thumb" />
+		</TableRow>
+	</TableLayout>
+</LinearLayout>
+
