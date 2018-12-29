@@ -1,5 +1,6 @@
 package com.gallantrealm.modsynth.viewer;
 
+import com.gallantrealm.modsynth.Instrument;
 import com.gallantrealm.modsynth.MainActivity;
 import com.gallantrealm.modsynth.MidiControlDialog;
 import com.gallantrealm.modsynth.R;
@@ -7,8 +8,6 @@ import com.gallantrealm.modsynth.module.Mixer;
 import com.gallantrealm.modsynth.module.Mixer.MixFunction;
 import com.gallantrealm.modsynth.module.Module;
 import com.gallantrealm.mysynth.ClientModel;
-import com.gallantrealm.mysynth.MySynth;
-
 import android.graphics.Canvas;
 import android.graphics.Paint.Style;
 import android.view.View;
@@ -21,8 +20,8 @@ public class MixerViewer extends ModuleViewer {
 
 	Mixer module;
 
-	public MixerViewer(Module module, MySynth synth) {
-		super(module, synth);
+	public MixerViewer(Module module, Instrument instrument) {
+		super(module, instrument);
 		this.module = (Mixer) module;
 	}
 
@@ -68,7 +67,7 @@ public class MixerViewer extends ModuleViewer {
 			public void onItemSelected(AdapterView av, View v, int arg2, long arg3) {
 				if (module.mixFunction != (MixFunction) typeSpinner.getSelectedItem()) {
 					module.mixFunction = (MixFunction) typeSpinner.getSelectedItem();
-					synth.moduleUpdated(module);
+					instrument.moduleUpdated(module);
 					mainActivity.modGraph.invalidate();
 				}
 			}
@@ -89,7 +88,7 @@ public class MixerViewer extends ModuleViewer {
 				}
 				public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 					module.level1 = (progress / 100.0) * (progress / 100.0);
-					synth.moduleUpdated(module);
+					instrument.moduleUpdated(module);
 				}
 			});
 			((View) mixerLevel1.getParent()).setOnLongClickListener(MidiControlDialog.newLongClickListener(module.level1CC));
@@ -107,7 +106,7 @@ public class MixerViewer extends ModuleViewer {
 				}
 				public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 					module.level2 = (progress / 100.0) * (progress / 100.0);
-					synth.moduleUpdated(module);
+					instrument.moduleUpdated(module);
 				}
 			});
 			((View) mixerLevel2.getParent()).setOnLongClickListener(MidiControlDialog.newLongClickListener(module.level2CC));
@@ -125,7 +124,7 @@ public class MixerViewer extends ModuleViewer {
 				}
 				public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 					module.level3 = (progress / 100.0) * (progress / 100.0);
-					synth.moduleUpdated(module);
+					instrument.moduleUpdated(module);
 				}
 			});
 			((View) mixerLevel3.getParent()).setOnLongClickListener(MidiControlDialog.newLongClickListener(module.level3CC));
@@ -141,7 +140,7 @@ public class MixerViewer extends ModuleViewer {
 				}
 				public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 					module.bias = progress / 100.0;
-					synth.moduleUpdated(module);
+					instrument.moduleUpdated(module);
 				}
 			});
 			((View) mixerBias.getParent()).setOnLongClickListener(MidiControlDialog.newLongClickListener(module.biasCC));
@@ -163,7 +162,7 @@ public class MixerViewer extends ModuleViewer {
 				}
 				public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 					module.modulation = progress / 100.0;
-					synth.moduleUpdated(module);
+					instrument.moduleUpdated(module);
 				}
 			});
 			((View) mixerModulation.getParent()).setOnLongClickListener(MidiControlDialog.newLongClickListener(module.modulationCC));

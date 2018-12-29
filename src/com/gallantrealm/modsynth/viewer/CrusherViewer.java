@@ -1,12 +1,11 @@
 package com.gallantrealm.modsynth.viewer;
 
+import com.gallantrealm.modsynth.Instrument;
 import com.gallantrealm.modsynth.MainActivity;
 import com.gallantrealm.modsynth.MidiControlDialog;
 import com.gallantrealm.modsynth.R;
 import com.gallantrealm.modsynth.module.Crusher;
 import com.gallantrealm.modsynth.module.Module;
-import com.gallantrealm.mysynth.MySynth;
-
 import android.graphics.Canvas;
 import android.view.View;
 import android.widget.CheckBox;
@@ -17,8 +16,8 @@ public class CrusherViewer extends ModuleViewer {
 	
 	private Crusher module;
 
-	public CrusherViewer(Module module, MySynth synth) {
-		super(module, synth);
+	public CrusherViewer(Module module, Instrument instrument) {
+		super(module, instrument);
 		this.module = (Crusher)module;
 	}
 
@@ -58,7 +57,7 @@ public class CrusherViewer extends ModuleViewer {
 			}
 			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 				module.level = progress / 100.0;
-				synth.moduleUpdated(module);
+				instrument.moduleUpdated(module);
 			}
 		});
 		((View)crusherLevels.getParent()).setOnLongClickListener(MidiControlDialog.newLongClickListener(module.levelCC));
@@ -72,7 +71,7 @@ public class CrusherViewer extends ModuleViewer {
 			}
 			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 				module.rate = Math.pow(progress / 100.0, 0.1);
-				synth.moduleUpdated(module);
+				instrument.moduleUpdated(module);
 			}
 		});
 		((View)crusherRate.getParent()).setOnLongClickListener(MidiControlDialog.newLongClickListener(module.rateCC));
@@ -91,7 +90,7 @@ public class CrusherViewer extends ModuleViewer {
 				}
 				public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 					module.modulation = (progress / 100.0) * (progress / 100.0);
-					synth.moduleUpdated(module);
+					instrument.moduleUpdated(module);
 				}
 			});
 			((View)crusherModulation.getParent().getParent()).setOnLongClickListener(MidiControlDialog.newLongClickListener(module.modulationCC));
@@ -100,7 +99,7 @@ public class CrusherViewer extends ModuleViewer {
 			crusherModRate.setOnCheckedChangeListener(new CheckBox.OnCheckedChangeListener() {
 				public void onCheckedChanged(CompoundButton arg0, boolean checked) {
 					module.modulateRate = checked;
-					synth.moduleUpdated(module);
+					instrument.moduleUpdated(module);
 				}
 			});
 		}

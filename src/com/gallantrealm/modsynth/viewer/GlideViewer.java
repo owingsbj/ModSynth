@@ -1,12 +1,11 @@
 package com.gallantrealm.modsynth.viewer;
 
+import com.gallantrealm.modsynth.Instrument;
 import com.gallantrealm.modsynth.MainActivity;
 import com.gallantrealm.modsynth.MidiControlDialog;
 import com.gallantrealm.modsynth.R;
 import com.gallantrealm.modsynth.module.Glide;
 import com.gallantrealm.modsynth.module.Module;
-import com.gallantrealm.mysynth.MySynth;
-
 import android.graphics.Canvas;
 import android.view.View;
 import android.widget.CheckBox;
@@ -18,8 +17,8 @@ public class GlideViewer extends ModuleViewer {
 	
 	Glide module;
 
-	public GlideViewer(Module module, MySynth synth) {
-		super(module, synth);
+	public GlideViewer(Module module, Instrument instrument) {
+		super(module, instrument);
 		this.module = (Glide)module;
 	}
 
@@ -49,7 +48,7 @@ public class GlideViewer extends ModuleViewer {
 			}
 			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 				module.glideUp = progress / 100.0f; //progress * progress / 10000.0f;
-				synth.moduleUpdated(module);
+				instrument.moduleUpdated(module);
 			}
 		});
 		((View)envAttack.getParent()).setOnLongClickListener(MidiControlDialog.newLongClickListener(module.glideUpCC));
@@ -63,7 +62,7 @@ public class GlideViewer extends ModuleViewer {
 			}
 			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 				module.glideDown = progress / 100.0f;  //* progress / 10000.0f;
-				synth.moduleUpdated(module);
+				instrument.moduleUpdated(module);
 			}
 		});
 		((View)envDecay.getParent()).setOnLongClickListener(MidiControlDialog.newLongClickListener(module.glideDownCC));
@@ -73,7 +72,7 @@ public class GlideViewer extends ModuleViewer {
 		glideAudioCheckBox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 				module.audioSpeed = isChecked;
-				synth.moduleUpdated(module);
+				instrument.moduleUpdated(module);
 			}
 		});
 

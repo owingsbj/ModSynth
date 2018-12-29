@@ -24,8 +24,8 @@ public class KeyboardViewer extends ModuleViewer {
 	
 	Keyboard module;
 
-	public KeyboardViewer(Module module, MySynth synth) {
-		super(module, synth);
+	public KeyboardViewer(Module module, Instrument instrument) {
+		super(module, instrument);
 		this.module = (Keyboard)module;
 	}
 
@@ -66,7 +66,7 @@ public class KeyboardViewer extends ModuleViewer {
 			public void onItemSelected(AdapterView av, View v, int arg2, long arg3) {
 				if (module.voices != voicesSpinner.getSelectedItemPosition()) {
 					module.voices = voicesSpinner.getSelectedItemPosition();
-					synth.moduleUpdated(module);
+					instrument.moduleUpdated(module);
 				}
 			}
 			public void onNothingSelected(AdapterView av) {
@@ -79,7 +79,7 @@ public class KeyboardViewer extends ModuleViewer {
 		octavePicker.setOnChangeListener(new NumberPicker.OnChangedListener() {
 			public void onChanged(NumberPicker picker, int oldVal, int newVal) {
 				module.octave = octavePicker.getCurrent();
-				synth.moduleUpdated(module);
+				instrument.moduleUpdated(module);
 			}
 		});
 		((View) octavePicker.getParent()).setOnLongClickListener(MidiControlDialog.newLongClickListener(module.octaveCC));
@@ -96,7 +96,7 @@ public class KeyboardViewer extends ModuleViewer {
 				public void onItemSelected(AdapterView av, View v, int arg2, long arg3) {
 					if (module.tuning != tuningSpinner.getSelectedItemPosition()) {
 						module.tuning = tuningSpinner.getSelectedItemPosition();
-						synth.moduleUpdated(module);
+						instrument.moduleUpdated(module);
 					}
 				}
 				public void onNothingSelected(AdapterView av) {
@@ -116,7 +116,7 @@ public class KeyboardViewer extends ModuleViewer {
 			}
 			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 				module.portamento = Math.pow(progress / 100.0, 0.1);
-				synth.moduleUpdated(module);
+				instrument.moduleUpdated(module);
 			}
 		});
 		((View)keyboardPortamento.getParent()).setOnLongClickListener(MidiControlDialog.newLongClickListener(module.portamentoCC));

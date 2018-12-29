@@ -1,12 +1,11 @@
 package com.gallantrealm.modsynth.viewer;
 
+import com.gallantrealm.modsynth.Instrument;
 import com.gallantrealm.modsynth.MainActivity;
 import com.gallantrealm.modsynth.MidiControlDialog;
 import com.gallantrealm.modsynth.R;
 import com.gallantrealm.modsynth.module.Amp;
 import com.gallantrealm.modsynth.module.Module;
-import com.gallantrealm.mysynth.MySynth;
-
 import android.graphics.Canvas;
 import android.view.View;
 import android.widget.CheckBox;
@@ -17,8 +16,8 @@ public class AmpViewer extends ModuleViewer {
 
 	Amp module;
 
-	public AmpViewer(Module module, MySynth synth) {
-		super(module, synth);
+	public AmpViewer(Module module, Instrument instrument) {
+		super(module, instrument);
 		this.module = (Amp) module;
 	}
 
@@ -48,7 +47,7 @@ public class AmpViewer extends ModuleViewer {
 			}
 			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 				module.volume = progress / 100.0f;
-				synth.moduleUpdated(module);
+				instrument.moduleUpdated(module);
 			}
 		});
 		((View) ampVolume.getParent()).setOnLongClickListener(MidiControlDialog.newLongClickListener(module.volumeCC));
@@ -62,7 +61,7 @@ public class AmpViewer extends ModuleViewer {
 			}
 			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 				module.tone = Math.sqrt(1.0 - progress / 100.0);
-				synth.moduleUpdated(module);
+				instrument.moduleUpdated(module);
 			}
 		});
 		((View) ampTone.getParent()).setOnLongClickListener(MidiControlDialog.newLongClickListener(module.toneCC));
@@ -76,7 +75,7 @@ public class AmpViewer extends ModuleViewer {
 			}
 			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 				module.overdrive = progress / 10.0f;
-				synth.moduleUpdated(module);
+				instrument.moduleUpdated(module);
 			}
 		});
 		((View) ampOverdrive.getParent()).setOnLongClickListener(MidiControlDialog.newLongClickListener(module.overdriveCC));
@@ -86,7 +85,7 @@ public class AmpViewer extends ModuleViewer {
 		distortionCheckBox.setOnCheckedChangeListener(new CheckBox.OnCheckedChangeListener() {
 			public void onCheckedChanged(CompoundButton arg0, boolean checked) {
 				module.distortion = checked;
-				synth.moduleUpdated(module);
+				instrument.moduleUpdated(module);
 			}
 		});
 		distortionCheckBox.setOnLongClickListener(MidiControlDialog.newLongClickListener(module.distortionCC));

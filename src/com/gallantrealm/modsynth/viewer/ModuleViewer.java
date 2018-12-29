@@ -5,8 +5,6 @@ import com.gallantrealm.modsynth.Instrument;
 import com.gallantrealm.modsynth.MainActivity;
 import com.gallantrealm.modsynth.module.Module;
 import com.gallantrealm.modsynth.module.Module.Link;
-import com.gallantrealm.mysynth.MySynth;
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -29,14 +27,14 @@ public abstract class ModuleViewer {
 	public Module module;
 	public View view;
 	public String translatedTitle;
-	public MySynth synth;
+	public Instrument instrument;
 
 	protected static Paint paint, fillpaint, diagramPaint, linkpaint, selectedpaint, unselectedpaint, shadowpaint, titlepaint, subpaint;
 	protected static Path path;
 
-	public ModuleViewer(Module module, MySynth synth) {
+	public ModuleViewer(Module module, Instrument instrument) {
 		this.module = module;
-		this.synth = synth;
+		this.instrument = instrument;
 
 		paint = new Paint();
 		paint.setFlags(Paint.ANTI_ALIAS_FLAG);

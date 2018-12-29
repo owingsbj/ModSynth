@@ -4,13 +4,13 @@ import java.io.IOException;
 import java.net.URLDecoder;
 import com.gallantrealm.android.FileUtils;
 import com.gallantrealm.android.Translator;
+import com.gallantrealm.modsynth.Instrument;
 import com.gallantrealm.modsynth.MainActivity;
 import com.gallantrealm.modsynth.MidiControlDialog;
 import com.gallantrealm.modsynth.R;
 import com.gallantrealm.modsynth.module.Module;
 import com.gallantrealm.modsynth.module.PCM;
 import com.gallantrealm.mysynth.MessageDialog;
-import com.gallantrealm.mysynth.MySynth;
 import com.gallantrealm.mysynth.SelectItemDialog;
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -39,8 +39,8 @@ public class PCMViewer extends ModuleViewer {
 
 	PCM module;
 
-	public PCMViewer(Module module, MySynth synth) {
-		super(module, synth);
+	public PCMViewer(Module module, Instrument instrument) {
+		super(module, instrument);
 		this.module = (PCM) module;
 	}
 
@@ -148,7 +148,7 @@ public class PCMViewer extends ModuleViewer {
 			public void onItemSelected(AdapterView av, View v, int arg2, long arg3) {
 				if (module.patchNum != patchSpinner.getSelectedItemPosition()) {
 					module.patchNum = patchSpinner.getSelectedItemPosition();
-					synth.moduleUpdated(module);
+					instrument.moduleUpdated(module);
 					try {
 						module.loadSample();
 					} catch (Exception e) {
@@ -168,7 +168,7 @@ public class PCMViewer extends ModuleViewer {
 			}
 			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 				module.octave = progress - 5;
-				synth.moduleUpdated(module);
+				instrument.moduleUpdated(module);
 			}
 		});
 		((View) pcmOctave.getParent()).setOnLongClickListener(MidiControlDialog.newLongClickListener(module.octaveCC));
@@ -181,7 +181,7 @@ public class PCMViewer extends ModuleViewer {
 			}
 			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 				module.pitch = progress;
-				synth.moduleUpdated(module);
+				instrument.moduleUpdated(module);
 			}
 		});
 		((View) pcmPitch.getParent()).setOnLongClickListener(MidiControlDialog.newLongClickListener(module.pitchCC));
@@ -194,7 +194,7 @@ public class PCMViewer extends ModuleViewer {
 			}
 			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 				module.detune = progress - 50;
-				synth.moduleUpdated(module);
+				instrument.moduleUpdated(module);
 			}
 		});
 		((View) pcmDetune.getParent()).setOnLongClickListener(MidiControlDialog.newLongClickListener(module.detuneCC));

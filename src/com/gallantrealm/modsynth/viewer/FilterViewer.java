@@ -1,13 +1,12 @@
 package com.gallantrealm.modsynth.viewer;
 
 import com.gallantrealm.modsynth.BiQuadraticFilter;
+import com.gallantrealm.modsynth.Instrument;
 import com.gallantrealm.modsynth.MainActivity;
 import com.gallantrealm.modsynth.MidiControlDialog;
 import com.gallantrealm.modsynth.R;
 import com.gallantrealm.modsynth.module.Filter;
 import com.gallantrealm.modsynth.module.Module;
-import com.gallantrealm.mysynth.MySynth;
-
 import android.graphics.Canvas;
 import android.view.View;
 import android.widget.AdapterView;
@@ -19,8 +18,8 @@ public class FilterViewer extends ModuleViewer {
 
 	Filter module;
 
-	public FilterViewer(Module module, MySynth synth) {
-		super(module, synth);
+	public FilterViewer(Module module, Instrument instrument) {
+		super(module, instrument);
 		this.module = (Filter) module;
 	}
 
@@ -49,7 +48,7 @@ public class FilterViewer extends ModuleViewer {
 			public void onItemSelected(AdapterView av, View v, int arg2, long arg3) {
 				if (module.filterType != (BiQuadraticFilter.Type) typeSpinner.getSelectedItem()) {
 					module.filterType = (BiQuadraticFilter.Type) typeSpinner.getSelectedItem();
-					synth.moduleUpdated(module);
+					instrument.moduleUpdated(module);
 					module.setupFilters();
 				}
 			}
@@ -68,7 +67,7 @@ public class FilterViewer extends ModuleViewer {
 			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 				double v = progress / 10.0;
 				module.resonance = v * v;
-				synth.moduleUpdated(module);
+				instrument.moduleUpdated(module);
 			}
 		});
 		((View) filterResonance.getParent()).setOnLongClickListener(MidiControlDialog.newLongClickListener(module.resonanceCC));
@@ -83,7 +82,7 @@ public class FilterViewer extends ModuleViewer {
 			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 				// cutoff = progress / 100.0;
 				module.cutoff = (module.cutoff + progress / 100.0) * 0.5;
-				synth.moduleUpdated(module);
+				instrument.moduleUpdated(module);
 			}
 		});
 		((View) filterCutoff.getParent()).setOnLongClickListener(MidiControlDialog.newLongClickListener(module.cutoffCC));
@@ -102,7 +101,7 @@ public class FilterViewer extends ModuleViewer {
 				}
 				public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 					module.sweep = (progress / 100.0) * (progress / 100.0);
-					synth.moduleUpdated(module);
+					instrument.moduleUpdated(module);
 				}
 			});
 			((View) filterSweep.getParent()).setOnLongClickListener(MidiControlDialog.newLongClickListener(module.sweepCC));

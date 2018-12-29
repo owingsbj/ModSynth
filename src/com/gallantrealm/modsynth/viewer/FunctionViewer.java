@@ -1,12 +1,11 @@
 package com.gallantrealm.modsynth.viewer;
 
+import com.gallantrealm.modsynth.Instrument;
 import com.gallantrealm.modsynth.MainActivity;
 import com.gallantrealm.modsynth.MidiControlDialog;
 import com.gallantrealm.modsynth.R;
 import com.gallantrealm.modsynth.module.Function;
 import com.gallantrealm.modsynth.module.Module;
-import com.gallantrealm.mysynth.MySynth;
-
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -23,8 +22,8 @@ public class FunctionViewer extends ModuleViewer {
 
 	Function module;
 
-	public FunctionViewer(Module module, MySynth synth) {
-		super(module, synth);
+	public FunctionViewer(Module module, Instrument instrument) {
+		super(module, instrument);
 		this.module = (Function) module;
 	}
 
@@ -86,7 +85,7 @@ public class FunctionViewer extends ModuleViewer {
 			}
 			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 				module.a = progress / 100.0;
-				synth.moduleUpdated(module);
+				instrument.moduleUpdated(module);
 			}
 		});
 		((View) algControlA.getParent()).setOnLongClickListener(MidiControlDialog.newLongClickListener(module.aCC));
@@ -100,7 +99,7 @@ public class FunctionViewer extends ModuleViewer {
 			}
 			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 				module.b = progress / 100.0;
-				synth.moduleUpdated(module);
+				instrument.moduleUpdated(module);
 			}
 		});
 		((View) algControlB.getParent()).setOnLongClickListener(MidiControlDialog.newLongClickListener(module.bCC));
@@ -114,7 +113,7 @@ public class FunctionViewer extends ModuleViewer {
 			}
 			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 				module.c = progress / 100.0;
-				synth.moduleUpdated(module);
+				instrument.moduleUpdated(module);
 			}
 		});
 		((View) algControlC.getParent()).setOnLongClickListener(MidiControlDialog.newLongClickListener(module.cCC));

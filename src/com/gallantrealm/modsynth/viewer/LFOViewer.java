@@ -1,5 +1,6 @@
 package com.gallantrealm.modsynth.viewer;
 
+import com.gallantrealm.modsynth.Instrument;
 import com.gallantrealm.modsynth.MainActivity;
 import com.gallantrealm.modsynth.MidiControlDialog;
 import com.gallantrealm.modsynth.R;
@@ -9,8 +10,6 @@ import com.gallantrealm.modsynth.module.LFO.WaveForm;
 import com.gallantrealm.modsynth.module.Module;
 import com.gallantrealm.mysynth.ClientModel;
 import com.gallantrealm.mysynth.MessageDialog;
-import com.gallantrealm.mysynth.MySynth;
-
 import android.graphics.Canvas;
 import android.view.View;
 import android.widget.AdapterView;
@@ -25,8 +24,8 @@ public class LFOViewer extends ModuleViewer {
 
 	LFO module;
 
-	public LFOViewer(Module module, MySynth synth) {
-		super(module, synth);
+	public LFOViewer(Module module, Instrument instrument) {
+		super(module, instrument);
 		this.module = (LFO) module;
 	}
 
@@ -88,7 +87,7 @@ public class LFOViewer extends ModuleViewer {
 					} else {
 						waveFormEdit.setVisibility(View.GONE);
 					}
-					synth.moduleUpdated(module);
+					instrument.moduleUpdated(module);
 					module.updateWaveTable();
 				}
 			}
@@ -122,7 +121,7 @@ public class LFOViewer extends ModuleViewer {
 			}
 			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 				module.frequency = Math.max(0.0001, Math.pow(progress / 100.0, 2.0) * 20.0);
-				synth.moduleUpdated(module);
+				instrument.moduleUpdated(module);
 			}
 		});
 		((View) lfoPitch.getParent()).setOnLongClickListener(MidiControlDialog.newLongClickListener(module.frequencyCC));
@@ -139,7 +138,7 @@ public class LFOViewer extends ModuleViewer {
 				}
 				public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 					module.random = (progress / 100.0) * (progress / 100.0);
-					synth.moduleUpdated(module);
+					instrument.moduleUpdated(module);
 				}
 			});
 			((View) lfoRandom.getParent()).setOnLongClickListener(MidiControlDialog.newLongClickListener(module.randomCC));
@@ -154,7 +153,7 @@ public class LFOViewer extends ModuleViewer {
 				}
 				public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 					module.fadeIn = Math.pow(progress / 100.0, 0.25);
-					synth.moduleUpdated(module);
+					instrument.moduleUpdated(module);
 				}
 			});
 			((View) lfoFadeIn.getParent()).setOnLongClickListener(MidiControlDialog.newLongClickListener(module.fadeInCC));

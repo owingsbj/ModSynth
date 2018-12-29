@@ -2,6 +2,7 @@ package com.gallantrealm.modsynth.viewer;
 
 import java.util.ArrayList;
 import com.gallantrealm.android.RangeSlider;
+import com.gallantrealm.modsynth.Instrument;
 import com.gallantrealm.modsynth.MainActivity;
 import com.gallantrealm.modsynth.R;
 import com.gallantrealm.modsynth.XYControl;
@@ -9,8 +10,6 @@ import com.gallantrealm.modsynth.module.Module;
 import com.gallantrealm.modsynth.module.Pad;
 import com.gallantrealm.modsynth.module.Pad.PadType;
 import com.gallantrealm.mysynth.ClientModel;
-import com.gallantrealm.mysynth.MySynth;
-
 import android.graphics.Canvas;
 import android.view.MotionEvent;
 import android.view.View;
@@ -30,8 +29,8 @@ public class PadViewer extends ModuleViewer {
 	private transient int nextVoice;
 	private transient int lastAction;
 
-	public PadViewer(Module module, MySynth synth) {
-		super(module, synth);
+	public PadViewer(Module module, Instrument instrument) {
+		super(module, instrument);
 		this.module = (Pad)module;
 		indexToKey = new ArrayList<Integer>();
 		nextVoice = 0;
@@ -154,7 +153,7 @@ public class PadViewer extends ModuleViewer {
 			public void onItemSelected(AdapterView av, View v, int arg2, long arg3) {
 				if (module.voices != voicesSpinner.getSelectedItemPosition() + 1) {
 					module.voices = voicesSpinner.getSelectedItemPosition() + 1;
-					synth.moduleUpdated(module);
+					instrument.moduleUpdated(module);
 				}
 			}
 			public void onNothingSelected(AdapterView av) {
@@ -168,7 +167,7 @@ public class PadViewer extends ModuleViewer {
 			public void rangeChanged(int thumb1Value, int thumb2Value) {
 				module.xMin = thumb1Value / 100.0;
 				module.xMax = thumb2Value / 100.0;
-				synth.moduleUpdated(module);
+				instrument.moduleUpdated(module);
 				updateXYControl();
 			}
 		});
@@ -180,7 +179,7 @@ public class PadViewer extends ModuleViewer {
 			public void rangeChanged(int thumb1Value, int thumb2Value) {
 				module.yMin = thumb1Value / 100.0;
 				module.yMax = thumb2Value / 100.0;
-				synth.moduleUpdated(module);
+				instrument.moduleUpdated(module);
 				updateXYControl();
 			}
 		});
@@ -197,7 +196,7 @@ public class PadViewer extends ModuleViewer {
 			public void onItemSelected(AdapterView av, View v, int arg2, long arg3) {
 				if (module.xType != (PadType) xTypeSpinner.getSelectedItem()) {
 					module.xType = (PadType) xTypeSpinner.getSelectedItem();
-					synth.moduleUpdated(module);
+					instrument.moduleUpdated(module);
 					updateXYControl();
 				}
 			}
@@ -217,7 +216,7 @@ public class PadViewer extends ModuleViewer {
 			public void onItemSelected(AdapterView av, View v, int arg2, long arg3) {
 				if (module.yType != (PadType) yTypeSpinner.getSelectedItem()) {
 					module.yType = (PadType) yTypeSpinner.getSelectedItem();
-					synth.moduleUpdated(module);
+					instrument.moduleUpdated(module);
 					updateXYControl();
 				}
 			}

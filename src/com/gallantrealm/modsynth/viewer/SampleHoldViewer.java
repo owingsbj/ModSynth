@@ -1,16 +1,15 @@
 package com.gallantrealm.modsynth.viewer;
 
+import com.gallantrealm.modsynth.Instrument;
 import com.gallantrealm.modsynth.MainActivity;
 import com.gallantrealm.modsynth.R;
 import com.gallantrealm.modsynth.module.Module;
-import com.gallantrealm.mysynth.MySynth;
-
 import android.graphics.Canvas;
 
 public class SampleHoldViewer extends ModuleViewer {
 
-	public SampleHoldViewer(Module module, MySynth synth) {
-		super(module, synth);
+	public SampleHoldViewer(Module module, Instrument instrument) {
+		super(module, instrument);
 	}
 
 	public void drawDiagram(Canvas canvas, float x, float y) {

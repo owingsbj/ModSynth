@@ -20,8 +20,8 @@ public class SpectralFilterViewer extends ModuleViewer {
 	SpectralFilter module;
 	int currentStep;
 
-	public SpectralFilterViewer(Module module, MySynth synth) {
-		super(module, synth);
+	public SpectralFilterViewer(Module module, Instrument instrument) {
+		super(module, instrument);
 		this.module = (SpectralFilter) module;
 	}
 
@@ -107,7 +107,7 @@ public class SpectralFilterViewer extends ModuleViewer {
 			}
 			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 				module.resonance = (progress / 100.0) * (progress / 100.0);
-				synth.moduleUpdated(module);
+				instrument.moduleUpdated(module);
 				module.setupFilters(Instrument.MAX_VOICES);
 			}
 		});
@@ -121,7 +121,7 @@ public class SpectralFilterViewer extends ModuleViewer {
 			}
 			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 				module.spread = (progress / 100.0);
-				synth.moduleUpdated(module);
+				instrument.moduleUpdated(module);
 			}
 		});
 		((View) sfSpread.getParent()).setOnLongClickListener(MidiControlDialog.newLongClickListener(module.spreadCC));
@@ -134,7 +134,7 @@ public class SpectralFilterViewer extends ModuleViewer {
 			}
 			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 				module.modulation = (progress / 100.0) * (progress / 100.0);
-				synth.moduleUpdated(module);
+				instrument.moduleUpdated(module);
 			}
 		});
 		((View) sfModulation.getParent()).setOnLongClickListener(MidiControlDialog.newLongClickListener(module.modulationCC));

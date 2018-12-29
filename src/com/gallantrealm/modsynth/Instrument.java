@@ -1,6 +1,5 @@
 package com.gallantrealm.modsynth;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import com.gallantrealm.modsynth.module.Arpeggiator;
 import com.gallantrealm.modsynth.module.Compressor;
@@ -9,6 +8,7 @@ import com.gallantrealm.modsynth.module.Function;
 import com.gallantrealm.modsynth.module.Keyboard;
 import com.gallantrealm.modsynth.module.Melody;
 import com.gallantrealm.modsynth.module.Module;
+import com.gallantrealm.modsynth.module.Module.Link;
 import com.gallantrealm.modsynth.module.MultiOsc;
 import com.gallantrealm.modsynth.module.Operator;
 import com.gallantrealm.modsynth.module.Output;
@@ -17,6 +17,7 @@ import com.gallantrealm.modsynth.module.Reverb;
 import com.gallantrealm.modsynth.module.SampleHold;
 import com.gallantrealm.modsynth.module.SpectralFilter;
 import com.gallantrealm.modsynth.module.Unison;
+import com.gallantrealm.modsynth.viewer.ModuleViewer;
 
 public class Instrument extends com.gallantrealm.mysynth.Instrument implements Stringifiable {
 	private static final long serialVersionUID = 1L;
@@ -30,9 +31,19 @@ public class Instrument extends com.gallantrealm.mysynth.Instrument implements S
 	public ArrayList<Module> modules = new ArrayList<Module>();
 	public Module selectedModule;
 
+	// --- Transient fields
 	public transient boolean initialized;
 	public transient boolean editing;
 	public transient boolean dirty;
+	public transient Keyboard keyboardModule;
+	public transient boolean scopeShowing;
+	transient Module[] synthesisModules;
+	transient Module[] envelopeModules;
+	transient int synthesisModuleCount;
+	transient int moduleCount;
+	transient int voiceCount;
+	transient Output outputModule;
+
 
 	public void stringify(Stringifier s) {
 		s.add("nmodules", modules.size());
@@ -172,8 +183,9 @@ public class Instrument extends com.gallantrealm.mysynth.Instrument implements S
 	public synchronized void setEditing(boolean edit) {
 		this.editing = edit;
 		if (!editing) {
+			// reinitialize after editing
 			initialized = false;
-			initialize();
+			initialize(sampleRate);
 		}
 	}
 	
@@ -193,27 +205,49 @@ public class Instrument extends com.gallantrealm.mysynth.Instrument implements S
 	}
 
 	private transient int sampleRate;
+	private transient int SAMPLERATE_DIV_ENVELOPERATE;
 
 	public synchronized void initialize(int sampleRate) {
 		this.sampleRate = sampleRate;
-		initialize();
-	}
-
-	private synchronized void initialize() {
-		System.out.println(">>Instrument.initialize");
+		SAMPLERATE_DIV_ENVELOPERATE = sampleRate / ENVELOPE_RATE;
+		System.out.println(">>initialize");
 		if (!initialized) {
 			orderModules();
 			for (int m = 0; m < modules.size(); m++) {
 				Module module = modules.get(m);
 				module.initialize(MAX_VOICES, sampleRate); // use MAX_VOICES so modules don't have to be reinitialized if voicecount changes
 			}
+
+			this.keyboardModule = getKeyboardModule();
+			moduleCount = modules.size();
+			envelopeModules = new Module[moduleCount];
+			synthesisModuleCount = 0;
+			for (Module m : modules) {
+				if (m.doesSynthesis()) {
+					synthesisModuleCount += 1;
+				}
+			}
+			synthesisModules = new Module[synthesisModuleCount];
+			int mod = 0;
+			int smod = 0;
+			for (Module m : modules) {
+				envelopeModules[mod] = m;
+				mod += 1;
+				if (m.doesSynthesis()) {
+					synthesisModules[smod] = m;
+					smod += 1;
+				}
+			}
+			voiceCount = getVoices();
+			outputModule = getOutputModule();
+
 			initialized = true;
 		}
-		System.out.println("<<Instrument.initialize");
+		System.out.println("<<initialize");
 	}
 
 	public synchronized void terminate() {
-		System.out.println(">>Instrument.terminate");
+		System.out.println(">>terminate");
 		if (initialized) {
 			for (int m = 0; m < modules.size(); m++) {
 				Module module = modules.get(m);
@@ -221,13 +255,21 @@ public class Instrument extends com.gallantrealm.mysynth.Instrument implements S
 			}
 			initialized = false;
 		}
-		System.out.println("<<Instrument.terminate");
+		System.out.println("<<terminate");
 	}
 
 	public synchronized void addModule(Module module) {
 		modules.add(module);
 		module.initialize(MAX_VOICES, sampleRate);
 		dirty = true;
+	}
+
+	public void moduleUpdated(Module module) {
+		module.dirty = true;
+	}
+
+	public void setScopeShowing(boolean scopeShowing) {
+		this.scopeShowing = scopeShowing;
 	}
 
 	public boolean isSounding() {
@@ -297,6 +339,129 @@ public class Instrument extends com.gallantrealm.mysynth.Instrument implements S
 				}
 			}
 		}
+	}
+	
+	@Override
+	public void setSustaining(boolean sustaining) {
+		if (keyboardModule != null) {
+			keyboardModule.setSustaining(sustaining);
+		}
+	}
+	
+	@Override
+	public boolean isSustaining() {
+		if (keyboardModule != null) {
+			return keyboardModule.getSustaining();
+		}
+		return false;
+	}
+	
+	@Override
+	public void notePress(int note, float velocity) {
+		if (keyboardModule != null) {
+			keyboardModule.notePress(note, velocity);
+			doEnvelopes(); // for immediate response
+			doEnvelopes();
+		}
+	}
+
+	@Override
+	public void noteRelease(int note) {
+		if (keyboardModule != null) {
+			keyboardModule.noteRelease(note);
+			doEnvelopes(); // for immediate response
+			doEnvelopes();
+		}
+	}
+
+	@Override
+	public void pitchBend(float bend) {
+		if (keyboardModule != null) {
+			keyboardModule.pitchBend(bend);
+		}
+	}
+
+	@Override
+	public void expression(float amount) {
+		// TODO
+	}
+
+	@Override
+	public void pressure(int voice, float amount) {
+		if (keyboardModule != null) {
+			keyboardModule.pressure(voice, amount);
+		}
+	}
+
+	@Override
+	public void pressure(float amount) {
+		if (keyboardModule != null) {
+			keyboardModule.pressure(amount);
+		}
+	}
+
+	public void updateCC(int control, double value) {
+		int moduleCount = modules.size();
+		for (int m = 0; m < moduleCount; m++) {
+			Module module = modules.get(m);
+			module.updateCC(control, value);
+			if (module.viewer != null && ((ModuleViewer) module.viewer).view != null) {
+				((ModuleViewer) module.viewer).updateCC(control, value);
+			}
+		}
+	}
+	
+	@Override
+	public void midiclock() {
+		int moduleCount = modules.size();
+		for (int m = 0; m < moduleCount; m++) {
+			Module module = modules.get(m);
+			module.midiClock();
+		}
+	}
+	
+	private transient int t;
+	private transient int u;
+	
+	public void generate(float[] output) {
+			voiceCount = getVoices(); // need to update this every so often just in case it changes
+				t++;
+				outputModule.fleft = 0.0f;
+				outputModule.fright = 0.0f;
+				for (int m = 0; m < synthesisModuleCount; m++) {
+					Module module = synthesisModules[m];
+					module.doSynthesis(0, voiceCount-1);
+				}
+				output[0] = outputModule.fleft;
+				output[1] = outputModule.fright;
+				if (t >= SAMPLERATE_DIV_ENVELOPERATE) {
+					t = 0;
+					for (int m = 0; m < moduleCount; m++) {
+						Module module = envelopeModules[m];
+						Link link = module.getOutput(module.getOutputCount() - 1);
+						if (link == null) {
+							link = module.getInput(0);
+						}
+						for (int voice = 0; voice < voiceCount; voice++) {
+							module.doEnvelope(voice);
+							module.max = Math.max(module.max, link.value[voice]);
+							module.min = Math.min(module.min, link.value[voice]);
+						}
+					}
+					u += 1;
+					if (u % 10 == 0) {
+						for (Module module : modules) {
+							module.lastmin = module.min;
+							module.lastmax = module.max;
+							module.min = 0.0;
+							module.max = 0.0;
+						}
+// TODO enable callbacks for modsynth only
+//						if (callbacks != null) {
+//							callbacks.updateLevels();
+//						}
+					}
+				}
 	}
 
 }

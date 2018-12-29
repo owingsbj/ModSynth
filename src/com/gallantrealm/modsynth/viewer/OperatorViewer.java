@@ -1,12 +1,11 @@
 package com.gallantrealm.modsynth.viewer;
 
+import com.gallantrealm.modsynth.Instrument;
 import com.gallantrealm.modsynth.MainActivity;
 import com.gallantrealm.modsynth.MidiControlDialog;
 import com.gallantrealm.modsynth.R;
 import com.gallantrealm.modsynth.module.Module;
 import com.gallantrealm.modsynth.module.Operator;
-import com.gallantrealm.mysynth.MySynth;
-
 import android.graphics.Canvas;
 import android.graphics.Paint.Style;
 import android.view.View;
@@ -21,8 +20,8 @@ public class OperatorViewer extends ModuleViewer {
 	
 	Operator module;
 
-	public OperatorViewer(Module module, MySynth synth) {
-		super(module, synth);
+	public OperatorViewer(Module module, Instrument instrument) {
+		super(module, instrument);
 		this.module = (Operator)module;
 	}
 
@@ -49,7 +48,7 @@ public class OperatorViewer extends ModuleViewer {
 			}
 			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 				module.octave = progress - 5;
-				synth.moduleUpdated(module);
+				instrument.moduleUpdated(module);
 			}
 		});
 		((View) opOctave.getParent()).setOnLongClickListener(MidiControlDialog.newLongClickListener(module.octaveCC));
@@ -63,7 +62,7 @@ public class OperatorViewer extends ModuleViewer {
 			}
 			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 				module.pitch = progress;
-				synth.moduleUpdated(module);
+				instrument.moduleUpdated(module);
 			}
 		});
 		((View) opPitch.getParent()).setOnLongClickListener(MidiControlDialog.newLongClickListener(module.pitchCC));
@@ -77,7 +76,7 @@ public class OperatorViewer extends ModuleViewer {
 			}
 			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 				module.detune = (progress - 50);
-				synth.moduleUpdated(module);
+				instrument.moduleUpdated(module);
 			}
 		});
 		((View) opDetune.getParent()).setOnLongClickListener(MidiControlDialog.newLongClickListener(module.detuneCC));
@@ -91,7 +90,7 @@ public class OperatorViewer extends ModuleViewer {
 			}
 			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 				module.feedback = progress / 100.0;
-				synth.moduleUpdated(module);
+				instrument.moduleUpdated(module);
 			}
 		});
 		((View) opFeedback.getParent()).setOnLongClickListener(MidiControlDialog.newLongClickListener(module.feedbackCC));
@@ -105,7 +104,7 @@ public class OperatorViewer extends ModuleViewer {
 			}
 			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 				module.delay = progress / 100.0;
-				synth.moduleUpdated(module);
+				instrument.moduleUpdated(module);
 			}
 		});
 		((View) opDelay.getParent()).setOnLongClickListener(MidiControlDialog.newLongClickListener(module.delayCC));
@@ -119,7 +118,7 @@ public class OperatorViewer extends ModuleViewer {
 			}
 			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 				module.attack = progress / 100.0 * progress / 100.0;
-				synth.moduleUpdated(module);
+				instrument.moduleUpdated(module);
 			}
 		});
 		((View) opAttack.getParent()).setOnLongClickListener(MidiControlDialog.newLongClickListener(module.attackCC));
@@ -133,7 +132,7 @@ public class OperatorViewer extends ModuleViewer {
 			}
 			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 				module.hold = progress / 100.0;
-				synth.moduleUpdated(module);
+				instrument.moduleUpdated(module);
 			}
 		});
 		((View) opHold.getParent()).setOnLongClickListener(MidiControlDialog.newLongClickListener(module.holdCC));
@@ -147,7 +146,7 @@ public class OperatorViewer extends ModuleViewer {
 			}
 			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 				module.decay = progress / 100.0 * progress / 100.0;
-				synth.moduleUpdated(module);
+				instrument.moduleUpdated(module);
 			}
 		});
 		((View) opDecay.getParent()).setOnLongClickListener(MidiControlDialog.newLongClickListener(module.decayCC));
@@ -161,7 +160,7 @@ public class OperatorViewer extends ModuleViewer {
 			}
 			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 				module.sustain = progress / 100.0 * progress / 100.0;
-				synth.moduleUpdated(module);
+				instrument.moduleUpdated(module);
 			}
 		});
 		((View) opSustain.getParent()).setOnLongClickListener(MidiControlDialog.newLongClickListener(module.sustainCC));
@@ -175,7 +174,7 @@ public class OperatorViewer extends ModuleViewer {
 			}
 			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 				module.release = progress / 100.0 * progress / 100.0;
-				synth.moduleUpdated(module);
+				instrument.moduleUpdated(module);
 			}
 		});
 		((View) opRelease.getParent()).setOnLongClickListener(MidiControlDialog.newLongClickListener(module.releaseCC));
@@ -189,7 +188,7 @@ public class OperatorViewer extends ModuleViewer {
 			}
 			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 				module.min = progress / 100.0 * progress / 100.0 * progress / 100.0;
-				synth.moduleUpdated(module);
+				instrument.moduleUpdated(module);
 			}
 		});
 		((View) opMin.getParent()).setOnLongClickListener(MidiControlDialog.newLongClickListener(module.minCC));
@@ -203,7 +202,7 @@ public class OperatorViewer extends ModuleViewer {
 			}
 			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 				module.max = progress / 100.0 * progress / 100.0 * progress / 100.0;
-				synth.moduleUpdated(module);
+				instrument.moduleUpdated(module);
 			}
 		});
 		((View) opMax.getParent()).setOnLongClickListener(MidiControlDialog.newLongClickListener(module.maxCC));
@@ -216,7 +215,7 @@ public class OperatorViewer extends ModuleViewer {
 			public void onItemSelected(AdapterView av, View v, int arg2, long arg3) {
 				if (module.slopeType != (Operator.SlopeType) slopeTypeSpinner.getSelectedItem()) {
 					module.slopeType = (Operator.SlopeType) slopeTypeSpinner.getSelectedItem();
-					synth.moduleUpdated(module);
+					instrument.moduleUpdated(module);
 				}
 			}
 			public void onNothingSelected(AdapterView av) {
@@ -228,7 +227,7 @@ public class OperatorViewer extends ModuleViewer {
 		velocitySensitiveCheckBox.setOnCheckedChangeListener(new CheckBox.OnCheckedChangeListener() {
 			public void onCheckedChanged(CompoundButton arg0, boolean checked) {
 				module.velocitySensitive = checked;
-				synth.moduleUpdated(module);
+				instrument.moduleUpdated(module);
 			}
 		});
 		
@@ -237,7 +236,7 @@ public class OperatorViewer extends ModuleViewer {
 		keyScaleCheckBox.setOnCheckedChangeListener(new CheckBox.OnCheckedChangeListener() {
 			public void onCheckedChanged(CompoundButton arg0, boolean checked) {
 				module.keyScale = checked;
-				synth.moduleUpdated(module);
+				instrument.moduleUpdated(module);
 			}
 		});
 		

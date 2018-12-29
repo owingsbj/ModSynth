@@ -1,12 +1,11 @@
 package com.gallantrealm.modsynth.viewer;
 
+import com.gallantrealm.modsynth.Instrument;
 import com.gallantrealm.modsynth.MainActivity;
 import com.gallantrealm.modsynth.MidiControlDialog;
 import com.gallantrealm.modsynth.R;
 import com.gallantrealm.modsynth.module.Module;
 import com.gallantrealm.modsynth.module.Pan;
-import com.gallantrealm.mysynth.MySynth;
-
 import android.graphics.Canvas;
 import android.view.View;
 import android.widget.SeekBar;
@@ -15,8 +14,8 @@ public class PanViewer extends ModuleViewer {
 	
 	Pan module;
 
-	public PanViewer(Module module, MySynth synth) {
-		super(module, synth);
+	public PanViewer(Module module, Instrument instrument) {
+		super(module, instrument);
 		this.module = (Pan)module;
 	}
 
@@ -46,7 +45,7 @@ public class PanViewer extends ModuleViewer {
 			}
 			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 				module.balance = progress / 100.0;
-				synth.moduleUpdated(module);
+				instrument.moduleUpdated(module);
 			}
 		});
 		((View) mixerBalance.getParent()).setOnLongClickListener(MidiControlDialog.newLongClickListener(module.balanceCC));
@@ -65,7 +64,7 @@ public class PanViewer extends ModuleViewer {
 				}
 				public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 					module.modulation = progress / 100.0;
-					synth.moduleUpdated(module);
+					instrument.moduleUpdated(module);
 				}
 			});
 			((View) mixerModulation.getParent()).setOnLongClickListener(MidiControlDialog.newLongClickListener(module.modulationCC));

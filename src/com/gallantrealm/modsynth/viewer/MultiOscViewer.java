@@ -1,12 +1,11 @@
 package com.gallantrealm.modsynth.viewer;
 
+import com.gallantrealm.modsynth.Instrument;
 import com.gallantrealm.modsynth.MainActivity;
 import com.gallantrealm.modsynth.MidiControlDialog;
 import com.gallantrealm.modsynth.R;
 import com.gallantrealm.modsynth.module.Module;
 import com.gallantrealm.modsynth.module.MultiOsc;
-import com.gallantrealm.mysynth.MySynth;
-
 import android.graphics.Canvas;
 import android.view.View;
 import android.widget.SeekBar;
@@ -15,8 +14,8 @@ public class MultiOscViewer extends OscillatorViewer {
 	
 	MultiOsc module;
 
-	public MultiOscViewer(Module module, MySynth synth) {
-		super(module, synth);
+	public MultiOscViewer(Module module, Instrument instrument) {
+		super(module, instrument);
 		this.module = (MultiOsc)module;
 	}
 
@@ -62,7 +61,7 @@ public class MultiOscViewer extends OscillatorViewer {
 			}
 			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 				module.chorusWidth = 12.0 * Math.pow(Math.max(1, progress) / 100.0, 2.0);
-				synth.moduleUpdated(module);
+				instrument.moduleUpdated(module);
 			}
 		});
 		((View)oscWidth.getParent()).setOnLongClickListener(MidiControlDialog.newLongClickListener(module.chorusWidthCC));

@@ -1,12 +1,11 @@
 package com.gallantrealm.modsynth.viewer;
 
+import com.gallantrealm.modsynth.Instrument;
 import com.gallantrealm.modsynth.MainActivity;
 import com.gallantrealm.modsynth.MidiControlDialog;
 import com.gallantrealm.modsynth.R;
 import com.gallantrealm.modsynth.module.Delay;
 import com.gallantrealm.modsynth.module.Module;
-import com.gallantrealm.mysynth.MySynth;
-
 import android.view.View;
 import android.widget.SeekBar;
 
@@ -14,8 +13,8 @@ public class DelayViewer extends ModuleViewer {
 	
 	Delay module;
 
-	public DelayViewer(Module module, MySynth synth) {
-		super(module, synth);
+	public DelayViewer(Module module, Instrument instrument) {
+		super(module, instrument);
 		this.module = (Delay)module;
 	}
 
@@ -36,7 +35,7 @@ public class DelayViewer extends ModuleViewer {
 			}
 			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 				module.delayLevel = progress / 100.0;
-				synth.moduleUpdated(module);
+				instrument.moduleUpdated(module);
 			}
 		});
 		((View)delayLevelBar.getParent()).setOnLongClickListener(MidiControlDialog.newLongClickListener(module.delayLevelCC));
@@ -50,7 +49,7 @@ public class DelayViewer extends ModuleViewer {
 			}
 			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 				module.delayTime = progress / 100.0 * progress / 100.0;
-				synth.moduleUpdated(module);
+				instrument.moduleUpdated(module);
 			}
 		});
 		((View)delayTimeBar.getParent()).setOnLongClickListener(MidiControlDialog.newLongClickListener(module.delayTimeCC));
@@ -64,7 +63,7 @@ public class DelayViewer extends ModuleViewer {
 			}
 			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 				module.feedback = progress / 100.0;
-				synth.moduleUpdated(module);
+				instrument.moduleUpdated(module);
 			}
 		});
 		((View)feedbackBar.getParent()).setOnLongClickListener(MidiControlDialog.newLongClickListener(module.feedbackCC));
@@ -83,7 +82,7 @@ public class DelayViewer extends ModuleViewer {
 				}
 				public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 					module.flangeAmount = progress / 100.0;
-					synth.moduleUpdated(module);
+					instrument.moduleUpdated(module);
 				}
 			});
 			((View)flangeAmountBar.getParent()).setOnLongClickListener(MidiControlDialog.newLongClickListener(module.flangeAmountCC));

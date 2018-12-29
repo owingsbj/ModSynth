@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import com.gallantrealm.android.FileUtils;
 import com.gallantrealm.android.Translator;
+import com.gallantrealm.modsynth.Instrument;
 import com.gallantrealm.modsynth.MainActivity;
 import com.gallantrealm.modsynth.MelodyEditor;
 import com.gallantrealm.modsynth.Note;
@@ -14,7 +15,6 @@ import com.gallantrealm.modsynth.module.Melody;
 import com.gallantrealm.modsynth.module.Module;
 import com.gallantrealm.mysynth.ClientModel;
 import com.gallantrealm.mysynth.MessageDialog;
-import com.gallantrealm.mysynth.MySynth;
 import com.leff.midi.MidiFile;
 import com.leff.midi.MidiTrack;
 import com.leff.midi.event.MidiEvent;
@@ -39,8 +39,8 @@ public class MelodyViewer extends ModuleViewer {
 	Melody module;
 	boolean maximized;
 
-	public MelodyViewer(Module module, MySynth synth) {
-		super(module, synth);
+	public MelodyViewer(Module module, Instrument instrument) {
+		super(module, instrument);
 		this.module = (Melody) module;
 	}
 
@@ -170,7 +170,7 @@ public class MelodyViewer extends ModuleViewer {
 			public void onItemSelected(AdapterView av, View v, int arg2, long arg3) {
 				if (module.voices != voicesSpinner.getSelectedItemPosition() + 1) {
 					module.voices = voicesSpinner.getSelectedItemPosition() + 1;
-					synth.moduleUpdated(module);
+					instrument.moduleUpdated(module);
 				}
 			}
 			public void onNothingSelected(AdapterView av) {

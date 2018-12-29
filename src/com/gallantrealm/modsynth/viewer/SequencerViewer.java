@@ -1,13 +1,12 @@
 package com.gallantrealm.modsynth.viewer;
 
 import com.gallantrealm.android.VerticalBalanceSlider;
+import com.gallantrealm.modsynth.Instrument;
 import com.gallantrealm.modsynth.MainActivity;
 import com.gallantrealm.modsynth.R;
 import com.gallantrealm.modsynth.module.Module;
 import com.gallantrealm.modsynth.module.Sequencer;
 import com.gallantrealm.mysynth.ClientModel;
-import com.gallantrealm.mysynth.MySynth;
-
 import android.annotation.SuppressLint;
 import android.graphics.Canvas;
 import android.view.View;
@@ -29,8 +28,8 @@ public class SequencerViewer extends ModuleViewer {
 	ToggleButton[] buttons;
 	private transient boolean maximized;
 
-	public SequencerViewer(Module module, MySynth synth) {
-		super(module, synth);
+	public SequencerViewer(Module module, Instrument instrument) {
+		super(module, instrument);
 		this.module = (Sequencer) module;
 	}
 
@@ -66,7 +65,7 @@ public class SequencerViewer extends ModuleViewer {
 			public void onItemSelected(AdapterView av, View v, int arg2, long arg3) {
 				if (module.voices != voicesSpinner.getSelectedItemPosition() + 1) {
 					module.voices = voicesSpinner.getSelectedItemPosition() + 1;
-					synth.moduleUpdated(module);
+					instrument.moduleUpdated(module);
 				}
 			}
 			public void onNothingSelected(AdapterView av) {
@@ -83,7 +82,7 @@ public class SequencerViewer extends ModuleViewer {
 			public void onItemSelected(AdapterView av, View v, int arg2, long arg3) {
 				if (module.activeSteps != lengthSpinner.getSelectedItemPosition() + 1) {
 					module.activeSteps = lengthSpinner.getSelectedItemPosition() + 1;
-					synth.moduleUpdated(module);
+					instrument.moduleUpdated(module);
 					updateSequenceControls();
 				}
 			}
@@ -100,7 +99,7 @@ public class SequencerViewer extends ModuleViewer {
 			}
 			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 				module.octave = progress - 5;
-				synth.moduleUpdated(module);
+				instrument.moduleUpdated(module);
 			}
 		});
 		
@@ -109,7 +108,7 @@ public class SequencerViewer extends ModuleViewer {
 		loopCheckBox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 				module.looping = isChecked;
-				synth.moduleUpdated(module);
+				instrument.moduleUpdated(module);
 			}
 		});
 
@@ -118,7 +117,7 @@ public class SequencerViewer extends ModuleViewer {
 		randomCheckBox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 				module.random = isChecked;
-				synth.moduleUpdated(module);
+				instrument.moduleUpdated(module);
 			}
 		});
 		ClientModel clientModel = ClientModel.getClientModel();
@@ -135,7 +134,7 @@ public class SequencerViewer extends ModuleViewer {
 		retriggerCheckBox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 				module.retrigger = isChecked;
-				synth.moduleUpdated(module);
+				instrument.moduleUpdated(module);
 			}
 		});
 
@@ -183,7 +182,7 @@ public class SequencerViewer extends ModuleViewer {
 			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 				for (int i = 0; i < Sequencer.MAXSTEPS; i++) {
 					module.sequence[i] = seekBars[i].getProgress();
-					synth.moduleUpdated(module);
+					instrument.moduleUpdated(module);
 					if (module.sequenceOn[i]) {
 						module.activeSteps = Math.max(module.activeSteps, i + 1);
 						buttons[i].setChecked(true);

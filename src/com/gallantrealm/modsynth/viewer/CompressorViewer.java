@@ -1,12 +1,11 @@
 package com.gallantrealm.modsynth.viewer;
 
+import com.gallantrealm.modsynth.Instrument;
 import com.gallantrealm.modsynth.MainActivity;
 import com.gallantrealm.modsynth.MidiControlDialog;
 import com.gallantrealm.modsynth.R;
 import com.gallantrealm.modsynth.module.Compressor;
 import com.gallantrealm.modsynth.module.Module;
-import com.gallantrealm.mysynth.MySynth;
-
 import android.graphics.Canvas;
 import android.view.View;
 import android.widget.SeekBar;
@@ -15,8 +14,8 @@ public class CompressorViewer extends ModuleViewer {
 	
 	private Compressor module;
 
-	public CompressorViewer(Module module, MySynth synth) {
-		super(module, synth);
+	public CompressorViewer(Module module, Instrument instrument) {
+		super(module, instrument);
 		this.module = (Compressor)module;
 	}
 
@@ -52,7 +51,7 @@ public class CompressorViewer extends ModuleViewer {
 			}
 			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 				module.amount = progress / 10.0f;
-				synth.moduleUpdated(module);
+				instrument.moduleUpdated(module);
 			}
 		});
 		((View)compressorAmount.getParent()).setOnLongClickListener(MidiControlDialog.newLongClickListener(module.amountCC));
@@ -66,7 +65,7 @@ public class CompressorViewer extends ModuleViewer {
 			}
 			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 				module.delay = progress / 100.0f;
-				synth.moduleUpdated(module);
+				instrument.moduleUpdated(module);
 			}
 		});
 		((View)compressorDelay.getParent()).setOnLongClickListener(MidiControlDialog.newLongClickListener(module.delayCC));
@@ -80,7 +79,7 @@ public class CompressorViewer extends ModuleViewer {
 			}
 			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 				module.gain = progress / 10.0;
-				synth.moduleUpdated(module);
+				instrument.moduleUpdated(module);
 			}
 		});
 		((View)compressorGain.getParent()).setOnLongClickListener(MidiControlDialog.newLongClickListener(module.gainCC));

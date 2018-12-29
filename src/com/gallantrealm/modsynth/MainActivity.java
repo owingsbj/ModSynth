@@ -60,9 +60,9 @@ import com.gallantrealm.mysynth.ClientModelChangedListener;
 import com.gallantrealm.mysynth.FastMath;
 import com.gallantrealm.mysynth.InputDialog;
 import com.gallantrealm.mysynth.MessageDialog;
+import com.gallantrealm.mysynth.MySynth;
 import com.gallantrealm.mysynth.MySynthAAudio;
 import com.gallantrealm.mysynth.MySynthOpenSL;
-import com.gallantrealm.mysynth.MySynth;
 import com.gallantrealm.mysynth.SelectItemDialog;
 //import com.google.android.gms.common.ConnectionResult;
 //import com.google.android.gms.common.api.GoogleApiClient;
@@ -388,7 +388,7 @@ public class MainActivity extends AbstractSingleMidiActivity implements OnTouchL
 		// set up the modgraph selection handler
 		modGraph.setOnSelectionListener(new ModGraph.OnSelectionListener() {
 			public void selected(Module module) {
-//				if (!clientModel.isFullVersion() && !clientModel.isGoggleDogPass() && synth.getInstrument().hasAdvancedModules()) {
+//				if (!clientModel.isFullVersion() && !clientModel.isGoggleDogPass() && ((Instrument)synth.getInstrument()).hasAdvancedModules()) {
 //					MessageDialog dialog = new MessageDialog(MainActivity.this, "Full Version", "Full version is needed to edit this instrument.", new String[] {"OK"});
 //					dialog.show();
 //					return;
@@ -402,7 +402,7 @@ public class MainActivity extends AbstractSingleMidiActivity implements OnTouchL
 			@Override
 			public void onClick(View v) {
 				if (!modGraph.isEditing()) {
-					if (!clientModel.isFullVersion() && !clientModel.isGoggleDogPass() && synth.getInstrument() != null && synth.getInstrument().hasAdvancedModules()) {
+					if (!clientModel.isFullVersion() && !clientModel.isGoggleDogPass() && ((Instrument)synth.getInstrument()) != null && ((Instrument)synth.getInstrument()).hasAdvancedModules()) {
 						MessageDialog dialog = new MessageDialog(MainActivity.this, "Full Version", "Full version is needed to edit this instrument.", new String[] { "OK" });
 						dialog.show();
 						return;
@@ -521,8 +521,8 @@ public class MainActivity extends AbstractSingleMidiActivity implements OnTouchL
 					Toast.makeText(this, "Custom background could not be opened.  Try a different image", Toast.LENGTH_LONG).show();
 				}
 			}
-		} else if (data != null && synth != null && synth.getInstrument() != null && synth.getInstrument().selectedModule != null) {
-			((ModuleViewer) synth.getInstrument().selectedModule.getViewer(synth)).onActivityResult(requestCode, resultCode, data);
+		} else if (data != null && synth != null && ((Instrument)synth.getInstrument()) != null && ((Instrument)synth.getInstrument()).selectedModule != null) {
+			((ModuleViewer) ((Instrument)synth.getInstrument()).selectedModule.getViewer(synth)).onActivityResult(requestCode, resultCode, data);
 			return;
 		}
 
@@ -767,11 +767,11 @@ public class MainActivity extends AbstractSingleMidiActivity implements OnTouchL
 			}
 		} else if (v == deleteModuleButton) {
 			if (modGraph.isEditing()) {
-				if (synth.getInstrument().selectedModule == null) {
+				if (((Instrument)synth.getInstrument()).selectedModule == null) {
 					new MessageDialog(this, "Delete", "No module selected.", null).show();
 					return;
 				}
-				if (synth.getInstrument().selectedModule instanceof Output) {
+				if (((Instrument)synth.getInstrument()).selectedModule instanceof Output) {
 					new MessageDialog(this, "Delete", "You cannot delete the Output module.", null).show();
 				} else {
 					final MessageDialog promptForDelete = new MessageDialog(this, "Delete", "Delete module?", new String[] { "OK", "Cancel" });
@@ -779,7 +779,7 @@ public class MainActivity extends AbstractSingleMidiActivity implements OnTouchL
 						@Override
 						public void onDismiss(DialogInterface dialog) {
 							if (promptForDelete.getButtonPressed() == 0) {
-								modGraph.deleteModule(synth.getInstrument().selectedModule);
+								modGraph.deleteModule(((Instrument)synth.getInstrument()).selectedModule);
 							}
 						}
 					});
@@ -927,10 +927,10 @@ public class MainActivity extends AbstractSingleMidiActivity implements OnTouchL
 	}
 
 	public void saveInstrument() {
-		if (synth == null || synth.getInstrument() == null) {
+		if (synth == null || ((Instrument)synth.getInstrument()) == null) {
 			return;
 		}
-		if (!clientModel.isFullVersion() && !clientModel.isGoggleDogPass() && synth.getInstrument().hasAdvancedModules()) {
+		if (!clientModel.isFullVersion() && !clientModel.isGoggleDogPass() && ((Instrument)synth.getInstrument()).hasAdvancedModules()) {
 			MessageDialog dialog = new MessageDialog(MainActivity.this, "Full Version", "Full version is needed to save this instrument.", new String[] { "OK" });
 			dialog.show();
 			return;
@@ -960,9 +960,9 @@ public class MainActivity extends AbstractSingleMidiActivity implements OnTouchL
 				final String soundName = promptForName.getValue();
 				if (promptForName.getButtonPressed() == 0) {
 					clientModel.setContext(MainActivity.this);
-					clientModel.saveObject(synth.getInstrument(), soundName + ".modsynth", true);
-					if (synth != null && synth.getInstrument() != null) {
-						synth.getInstrument().clearDirty();
+					clientModel.saveObject(((Instrument)synth.getInstrument()), soundName + ".modsynth", true);
+					if (synth != null && ((Instrument)synth.getInstrument()) != null) {
+						((Instrument)synth.getInstrument()).clearDirty();
 					}
 					System.out.println("Saved sound as " + soundName + ".modsynth");
 
@@ -1005,7 +1005,7 @@ public class MainActivity extends AbstractSingleMidiActivity implements OnTouchL
 											}
 											OutputStream outputStream = ftpClient.storeFileStream(fileName);
 											ObjectOutputStream instrumentStream = new ObjectOutputStream(outputStream);
-											instrumentStream.writeObject(synth.getInstrument());
+											instrumentStream.writeObject(((Instrument)synth.getInstrument()));
 											outputStream.close();
 											ftpClient.completePendingCommand();
 											ftpClient.disconnect();
@@ -1040,7 +1040,7 @@ public class MainActivity extends AbstractSingleMidiActivity implements OnTouchL
 	public void sendSound() {
 		final String soundName = soundSelector.getText().toString();
 		try {
-			File file = clientModel.exportObject(synth.getInstrument(), soundName + ".modsynth");
+			File file = clientModel.exportObject(((Instrument)synth.getInstrument()), soundName + ".modsynth");
 			System.out.println("Exported sound as " + soundName + ".modsynth");
 
 			Intent intent = new Intent(Intent.ACTION_SEND);
@@ -1123,11 +1123,11 @@ public class MainActivity extends AbstractSingleMidiActivity implements OnTouchL
 							if (lastSelectedModView != null) {
 								lastSelectedModView.setVisibility(View.GONE);
 							}
-							if (synth != null && synth.getInstrument() != null) {
-								if (synth.getInstrument().selectedModule != null) {
-									selectModule(synth.getInstrument().selectedModule);
+							if (synth != null && ((Instrument)synth.getInstrument()) != null) {
+								if (((Instrument)synth.getInstrument()).selectedModule != null) {
+									selectModule(((Instrument)synth.getInstrument()).selectedModule);
 								} else {
-									Module outputModule = synth.getInstrument().getOutputModule();
+									Module outputModule = ((Instrument)synth.getInstrument()).getOutputModule();
 									if (outputModule != null) {
 										selectModule(outputModule);
 									}
@@ -1291,8 +1291,8 @@ public class MainActivity extends AbstractSingleMidiActivity implements OnTouchL
 			break;
 		case REQUEST_PERMISSION_READ_PCM_EXTERNAL_STORAGE:
 			if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-				if (synth.getInstrument().selectedModule != null) {
-					((PCMViewer) synth.getInstrument().selectedModule.getViewer(synth)).onContinuePCMSelect(this);
+				if (((Instrument)synth.getInstrument()).selectedModule != null) {
+					((PCMViewer) ((Instrument)synth.getInstrument()).selectedModule.getViewer(synth)).onContinuePCMSelect(this);
 					return;
 				}
 			} else {
@@ -1414,15 +1414,15 @@ public class MainActivity extends AbstractSingleMidiActivity implements OnTouchL
 			@Override
 			public void run() {
 				applyingASound = true;
-				for (Module module : synth.getInstrument().modules) {
+				for (Module module : ((Instrument)synth.getInstrument()).modules) {
 					((ModuleViewer) module.getViewer(synth)).dropView();
 				}
-				if (synth.getInstrument().getKeyboardModule() == null) {
+				if (((Instrument)synth.getInstrument()).getKeyboardModule() == null) {
 					keyboardPane.setVisibility(View.GONE);
 				} else if (!midiDeviceAttached) {
 					keyboardPane.setVisibility(View.VISIBLE);
 				}
-				selectModule(synth.getInstrument().selectedModule);
+				selectModule(((Instrument)synth.getInstrument()).selectedModule);
 				applyingASound = false;
 			}
 		});
@@ -1541,8 +1541,8 @@ public class MainActivity extends AbstractSingleMidiActivity implements OnTouchL
 	private final boolean[] keyPressed = new boolean[32];
 
 	public void updateKeysPressed() {
-		if (synth != null && synth.getInstrument() != null) {
-			Keyboard keyboard = synth.getInstrument().getKeyboardModule();
+		if (synth != null && ((Instrument)synth.getInstrument()) != null) {
+			Keyboard keyboard = ((Instrument)synth.getInstrument()).getKeyboardModule();
 			if (keyboard != null) {
 				for (int i = 0; i < 32; i++) {
 					if (!keyPressed[i] && keyboard.isPlaying(i + 48)) {
@@ -1876,7 +1876,7 @@ public class MainActivity extends AbstractSingleMidiActivity implements OnTouchL
 //		} else if (function == 2) { // breath controller
 //			synth.pressure(0, value); // assumed monophonic
 //		} else if (function == 3) { // chorus (pulse) width
-//			// synth.getInstrument().chorusWidth = value / 128.0f;
+//			// ((Instrument)synth.getInstrument()).chorusWidth = value / 128.0f;
 //			// TODO determine what to do with pulse width
 //			updateControls();
 //		} else if (function == 7) { // overall volume

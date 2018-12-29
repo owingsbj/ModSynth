@@ -1,12 +1,11 @@
 package com.gallantrealm.modsynth.viewer;
 
+import com.gallantrealm.modsynth.Instrument;
 import com.gallantrealm.modsynth.MainActivity;
 import com.gallantrealm.modsynth.MidiControlDialog;
 import com.gallantrealm.modsynth.R;
 import com.gallantrealm.modsynth.module.Arpeggiator;
 import com.gallantrealm.modsynth.module.Module;
-import com.gallantrealm.mysynth.MySynth;
-
 import android.graphics.Canvas;
 import android.view.View;
 import android.widget.AdapterView;
@@ -19,8 +18,8 @@ public class ArpeggiatorViewer extends ModuleViewer {
 	
 	private Arpeggiator module;
 
-	public ArpeggiatorViewer(Module module, MySynth synth) {
-		super(module, synth);
+	public ArpeggiatorViewer(Module module, Instrument instrument) {
+		super(module, instrument);
 		this.module = (Arpeggiator)module;
 	}
 
@@ -53,7 +52,7 @@ public class ArpeggiatorViewer extends ModuleViewer {
 			public void onItemSelected(AdapterView av, View v, int arg2, long arg3) {
 				if (module.type != (Arpeggiator.Type) typeSpinner.getSelectedItem()) {
 					module.type = (Arpeggiator.Type) typeSpinner.getSelectedItem();
-					synth.moduleUpdated(module);
+					instrument.moduleUpdated(module);
 				}
 			}
 			public void onNothingSelected(AdapterView av) {
@@ -66,7 +65,7 @@ public class ArpeggiatorViewer extends ModuleViewer {
 		repeatBox.setOnCheckedChangeListener(new CheckBox.OnCheckedChangeListener() {
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 				module.looping = isChecked;
-				synth.moduleUpdated(module);
+				instrument.moduleUpdated(module);
 			}
 		});
 		repeatBox.setOnLongClickListener(MidiControlDialog.newLongClickListener(module.loopingCC));
@@ -76,7 +75,7 @@ public class ArpeggiatorViewer extends ModuleViewer {
 		bypassBox.setOnCheckedChangeListener(new CheckBox.OnCheckedChangeListener() {
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 				module.bypass = isChecked;
-				synth.moduleUpdated(module);
+				instrument.moduleUpdated(module);
 			}
 		});
 		bypassBox.setOnLongClickListener(MidiControlDialog.newLongClickListener(module.bypassCC));

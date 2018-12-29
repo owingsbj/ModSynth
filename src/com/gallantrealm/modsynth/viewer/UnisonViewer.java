@@ -1,12 +1,11 @@
 package com.gallantrealm.modsynth.viewer;
 
+import com.gallantrealm.modsynth.Instrument;
 import com.gallantrealm.modsynth.MainActivity;
 import com.gallantrealm.modsynth.MidiControlDialog;
 import com.gallantrealm.modsynth.R;
 import com.gallantrealm.modsynth.module.Module;
 import com.gallantrealm.modsynth.module.Unison;
-import com.gallantrealm.mysynth.MySynth;
-
 import android.graphics.Canvas;
 import android.view.View;
 import android.widget.AdapterView;
@@ -18,8 +17,8 @@ public class UnisonViewer extends ModuleViewer {
 	
 	Unison module;
 
-	public UnisonViewer(Module module, MySynth synth) {
-		super(module, synth);
+	public UnisonViewer(Module module, Instrument instrument) {
+		super(module, instrument);
 		this.module = (Unison)module;
 	}
 
@@ -55,7 +54,7 @@ public class UnisonViewer extends ModuleViewer {
 			public void onItemSelected(AdapterView av, View v, int arg2, long arg3) {
 				if (module.voices != voicesSpinner.getSelectedItemPosition() + 2) {
 					module.voices = voicesSpinner.getSelectedItemPosition() + 2;
-					synth.moduleUpdated(module);
+					instrument.moduleUpdated(module);
 				}
 			}
 			public void onNothingSelected(AdapterView av) {
@@ -71,7 +70,7 @@ public class UnisonViewer extends ModuleViewer {
 			public void onItemSelected(AdapterView av, View v, int arg2, long arg3) {
 				if (module.polyphony != polySpinner.getSelectedItemPosition() + 1) {
 					module.polyphony = polySpinner.getSelectedItemPosition() + 1;
-					synth.moduleUpdated(module);
+					instrument.moduleUpdated(module);
 				}
 			}
 			public void onNothingSelected(AdapterView av) {
@@ -87,7 +86,7 @@ public class UnisonViewer extends ModuleViewer {
 			}
 			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 				module.chorusWidth = progress / 100.0;
-				synth.moduleUpdated(module);
+				instrument.moduleUpdated(module);
 			}
 		});
 		((View)unisonWidth.getParent()).setOnLongClickListener(MidiControlDialog.newLongClickListener(module.chorusWidthCC));
@@ -101,7 +100,7 @@ public class UnisonViewer extends ModuleViewer {
 			}
 			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 				module.chorusSpread = progress / 100.0;
-				synth.moduleUpdated(module);
+				instrument.moduleUpdated(module);
 			}
 		});
 		((View)unisonSpread.getParent()).setOnLongClickListener(MidiControlDialog.newLongClickListener(module.chorusSpreadCC));

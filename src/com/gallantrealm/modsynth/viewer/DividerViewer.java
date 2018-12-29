@@ -1,11 +1,10 @@
 package com.gallantrealm.modsynth.viewer;
 
+import com.gallantrealm.modsynth.Instrument;
 import com.gallantrealm.modsynth.MainActivity;
 import com.gallantrealm.modsynth.R;
 import com.gallantrealm.modsynth.module.Divider;
 import com.gallantrealm.modsynth.module.Module;
-import com.gallantrealm.mysynth.MySynth;
-
 import android.graphics.Canvas;
 import android.graphics.Paint.Style;
 import android.widget.CheckBox;
@@ -17,8 +16,8 @@ public class DividerViewer extends ModuleViewer {
 
 	Divider module;
 
-	public DividerViewer(Module module, MySynth synth) {
-		super(module, synth);
+	public DividerViewer(Module module, Instrument instrument) {
+		super(module, instrument);
 		this.module = (Divider) module;
 	}
 
@@ -44,7 +43,7 @@ public class DividerViewer extends ModuleViewer {
 		delayLevelBar.setOnChangeListener(new NumberPicker.OnChangedListener() {
 			public void onChanged(NumberPicker picker, int oldVal, int newVal) {
 				module.divisor = newVal;
-				synth.moduleUpdated(module);
+				instrument.moduleUpdated(module);
 			}
 		});
 //		((View)delayLevelBar.getParent()).setOnLongClickListener(MidiControlDialog.newLongClickListener(module.divisorlCC));
@@ -54,7 +53,7 @@ public class DividerViewer extends ModuleViewer {
 		delayTimeBar.setOnChangeListener(new NumberPicker.OnChangedListener() {
 			public void onChanged(NumberPicker picker, int oldVal, int newVal) {
 				module.phase = newVal;
-				synth.moduleUpdated(module);
+				instrument.moduleUpdated(module);
 			}
 		});
 //		((View)delayTimeBar.getParent()).setOnLongClickListener(MidiControlDialog.newLongClickListener(module.phaseCC));
@@ -64,7 +63,7 @@ public class DividerViewer extends ModuleViewer {
 		dutyTimeBar.setOnChangeListener(new NumberPicker.OnChangedListener() {
 			public void onChanged(NumberPicker picker, int oldVal, int newVal) {
 				module.duty = newVal;
-				synth.moduleUpdated(module);
+				instrument.moduleUpdated(module);
 			}
 		});
 //		((View)delayTimeBar.getParent()).setOnLongClickListener(MidiControlDialog.newLongClickListener(module.phaseCC));
@@ -74,7 +73,7 @@ public class DividerViewer extends ModuleViewer {
 		positiveCheckBox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 				module.positive = isChecked;
-				synth.moduleUpdated(module);
+				instrument.moduleUpdated(module);
 			}
 		});
 		

@@ -1,5 +1,6 @@
 package com.gallantrealm.modsynth.viewer;
 
+import com.gallantrealm.modsynth.Instrument;
 import com.gallantrealm.modsynth.MainActivity;
 import com.gallantrealm.modsynth.MidiControlDialog;
 import com.gallantrealm.modsynth.R;
@@ -8,8 +9,6 @@ import com.gallantrealm.modsynth.module.Oscillator;
 import com.gallantrealm.modsynth.module.Oscillator.WaveForm;
 import com.gallantrealm.mysynth.ClientModel;
 import com.gallantrealm.mysynth.MessageDialog;
-import com.gallantrealm.mysynth.MySynth;
-
 import android.graphics.Canvas;
 import android.view.View;
 import android.widget.AdapterView;
@@ -22,8 +21,8 @@ public class OscillatorViewer extends ModuleViewer {
 
 	Oscillator module;
 
-	public OscillatorViewer(Module module, MySynth synth) {
-		super(module, synth);
+	public OscillatorViewer(Module module, Instrument instrument) {
+		super(module, instrument);
 		this.module = (Oscillator) module;
 	}
 
@@ -121,7 +120,7 @@ public class OscillatorViewer extends ModuleViewer {
 					} else {
 						waveFormEdit.setVisibility(View.GONE);
 					}
-					synth.moduleUpdated(module);
+					instrument.moduleUpdated(module);
 					module.updateWaveTable();
 				}
 			}
@@ -155,7 +154,7 @@ public class OscillatorViewer extends ModuleViewer {
 			}
 			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 				module.octave = progress - 5;
-				synth.moduleUpdated(module);
+				instrument.moduleUpdated(module);
 			}
 		});
 		((View) oscOctave.getParent()).setOnLongClickListener(MidiControlDialog.newLongClickListener(module.octaveCC));
@@ -167,7 +166,7 @@ public class OscillatorViewer extends ModuleViewer {
 			}
 			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 				module.pitch = progress;
-				synth.moduleUpdated(module);
+				instrument.moduleUpdated(module);
 			}
 		});
 		((View) oscPitch.getParent()).setOnLongClickListener(MidiControlDialog.newLongClickListener(module.pitchCC));
@@ -180,7 +179,7 @@ public class OscillatorViewer extends ModuleViewer {
 			}
 			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 				module.detune = progress - 50;
-				synth.moduleUpdated(module);
+				instrument.moduleUpdated(module);
 			}
 		});
 		((View) oscDetune.getParent()).setOnLongClickListener(MidiControlDialog.newLongClickListener(module.detuneCC));
@@ -197,7 +196,7 @@ public class OscillatorViewer extends ModuleViewer {
 				}
 				public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 					module.noise = (progress / 100.0) * (progress / 100.0);
-					synth.moduleUpdated(module);
+					instrument.moduleUpdated(module);
 				}
 			});
 			((View) oscNoise.getParent()).setOnLongClickListener(MidiControlDialog.newLongClickListener(module.noiseCC));
@@ -215,7 +214,7 @@ public class OscillatorViewer extends ModuleViewer {
 				}
 				public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 					module.modulation = (progress / 100.0) * (progress / 100.0);
-					synth.moduleUpdated(module);
+					instrument.moduleUpdated(module);
 				}
 			});
 			((View) oscModulation.getParent()).setOnLongClickListener(MidiControlDialog.newLongClickListener(module.modulationCC));
@@ -297,7 +296,7 @@ public class OscillatorViewer extends ModuleViewer {
 						Math.pow(harmonic30.getProgress(), 2.0) / 10000.0, //
 						Math.pow(harmonic31.getProgress(), 2.0) / 10000.0, //
 						Math.pow(harmonic32.getProgress(), 2.0) / 10000.0 };
-				synth.moduleUpdated(module);
+				instrument.moduleUpdated(module);
 				module.updateWaveTable();
 			}
 		};

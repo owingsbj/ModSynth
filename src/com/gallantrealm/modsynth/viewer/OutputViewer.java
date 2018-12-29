@@ -1,12 +1,11 @@
 package com.gallantrealm.modsynth.viewer;
 
+import com.gallantrealm.modsynth.Instrument;
 import com.gallantrealm.modsynth.MainActivity;
 import com.gallantrealm.modsynth.R;
 import com.gallantrealm.modsynth.Scope;
 import com.gallantrealm.modsynth.module.Module;
 import com.gallantrealm.modsynth.module.Output;
-import com.gallantrealm.mysynth.MySynth;
-
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
@@ -22,8 +21,8 @@ public class OutputViewer extends ModuleViewer {
 	
 	public Paint clippingPaint;
 
-	public OutputViewer(Module module, MySynth synth) {
-		super(module, synth);
+	public OutputViewer(Module module, Instrument instrument) {
+		super(module, instrument);
 		clippingPaint = new Paint();
 		clippingPaint.setFlags(Paint.ANTI_ALIAS_FLAG);
 		clippingPaint.setColor(0xFFE00000);

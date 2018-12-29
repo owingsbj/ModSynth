@@ -1,13 +1,12 @@
 package com.gallantrealm.modsynth.viewer;
 
+import com.gallantrealm.modsynth.Instrument;
 import com.gallantrealm.modsynth.MainActivity;
 import com.gallantrealm.modsynth.MidiControlDialog;
 import com.gallantrealm.modsynth.R;
 import com.gallantrealm.modsynth.module.Envelope;
 import com.gallantrealm.modsynth.module.Module;
 import com.gallantrealm.mysynth.ClientModel;
-import com.gallantrealm.mysynth.MySynth;
-
 import android.graphics.Canvas;
 import android.view.View;
 import android.widget.AdapterView;
@@ -21,8 +20,8 @@ public class EnvelopeViewer extends ModuleViewer {
 
 	Envelope module;
 
-	public EnvelopeViewer(Module module, MySynth synth) {
-		super(module, synth);
+	public EnvelopeViewer(Module module, Instrument instrument) {
+		super(module, instrument);
 		this.module = (Envelope) module;
 	}
 
@@ -59,7 +58,7 @@ public class EnvelopeViewer extends ModuleViewer {
 				}
 				public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 					module.delay = progress / 100.0;
-					synth.moduleUpdated(module);
+					instrument.moduleUpdated(module);
 				}
 			});
 			((View) envDelay.getParent()).setOnLongClickListener(MidiControlDialog.newLongClickListener(module.delayCC));
@@ -76,7 +75,7 @@ public class EnvelopeViewer extends ModuleViewer {
 			}
 			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 				module.attack = progress * progress / 10000.0f;
-				synth.moduleUpdated(module);
+				instrument.moduleUpdated(module);
 			}
 		});
 		((View) envAttack.getParent()).setOnLongClickListener(MidiControlDialog.newLongClickListener(module.attackCC));
@@ -93,7 +92,7 @@ public class EnvelopeViewer extends ModuleViewer {
 				}
 				public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 					module.hold = progress / 100.0;
-					synth.moduleUpdated(module);
+					instrument.moduleUpdated(module);
 				}
 			});
 			((View) envHold.getParent()).setOnLongClickListener(MidiControlDialog.newLongClickListener(module.holdCC));
@@ -110,7 +109,7 @@ public class EnvelopeViewer extends ModuleViewer {
 			}
 			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 				module.decay = progress * progress / 10000.0f;
-				synth.moduleUpdated(module);
+				instrument.moduleUpdated(module);
 			}
 		});
 		((View) envDecay.getParent()).setOnLongClickListener(MidiControlDialog.newLongClickListener(module.decayCC));
@@ -124,7 +123,7 @@ public class EnvelopeViewer extends ModuleViewer {
 			}
 			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 				module.sustain = progress / 100.0f;
-				synth.moduleUpdated(module);
+				instrument.moduleUpdated(module);
 			}
 		});
 		((View) envSustain.getParent()).setOnLongClickListener(MidiControlDialog.newLongClickListener(module.sustainCC));
@@ -138,7 +137,7 @@ public class EnvelopeViewer extends ModuleViewer {
 			}
 			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 				module.release = progress * progress / 10000.0f;
-				synth.moduleUpdated(module);
+				instrument.moduleUpdated(module);
 			}
 		});
 		((View) envRelease.getParent()).setOnLongClickListener(MidiControlDialog.newLongClickListener(module.releaseCC));
@@ -155,7 +154,7 @@ public class EnvelopeViewer extends ModuleViewer {
 				public void onItemSelected(AdapterView av, View v, int arg2, long arg3) {
 					if (module.slopeType != (Envelope.SlopeType) slopeTypeSpinner.getSelectedItem()) {
 						module.slopeType = (Envelope.SlopeType) slopeTypeSpinner.getSelectedItem();
-						synth.moduleUpdated(module);
+						instrument.moduleUpdated(module);
 					}
 				}
 				public void onNothingSelected(AdapterView av) {
@@ -168,7 +167,7 @@ public class EnvelopeViewer extends ModuleViewer {
 			velocitySensitiveCheckBox.setOnCheckedChangeListener(new CheckBox.OnCheckedChangeListener() {
 				public void onCheckedChanged(CompoundButton arg0, boolean checked) {
 					module.velocitySensitive = checked;
-					synth.moduleUpdated(module);
+					instrument.moduleUpdated(module);
 				}
 			});
 			velocitySensitiveCheckBox.setOnLongClickListener(MidiControlDialog.newLongClickListener(module.velocitySensitiveCC));
