@@ -17,8 +17,6 @@ import com.gallantrealm.mysynth.ClientModel;
 import com.gallantrealm.mysynth.GallantDialog;
 import com.gallantrealm.mysynth.MessageDialog;
 import com.gallantrealm.mysynth.SelectItemDialog;
-import com.zeemote.zc.event.ButtonEvent;
-import com.zeemote.zc.event.IButtonListener;
 import android.content.DialogInterface;
 import android.graphics.Typeface;
 import android.media.AudioManager;
@@ -38,7 +36,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import de.viktorreiser.toolbox.widget.NumberPicker;
 
-public class SettingsDialog extends GallantDialog implements IButtonListener {
+public class SettingsDialog extends GallantDialog {
 	ClientModel clientModel = ClientModel.getClientModel();
 
 	Spinner languageSpinner;
@@ -91,7 +89,7 @@ public class SettingsDialog extends GallantDialog implements IButtonListener {
 			chooseBackgroundButton.setTypeface(typeface);
 		}
 
-		ArrayAdapter<CharSequence> languageAdapter = new ArrayAdapter(activity, R.layout.spinner_item, new String[] { "Default", "English", "français", "Deutsche", "Español", "русский" });
+		ArrayAdapter<CharSequence> languageAdapter = new ArrayAdapter(activity, R.layout.spinner_item, new String[] { "Default", "English", "franÃ§ais", "Deutsche", "EspaÃ±ol", "Ñ€ÑƒÑ�Ñ�ÐºÐ¸Ð¹" });
 		languageAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		languageSpinner.setAdapter(languageAdapter);
 		languageSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -288,29 +286,6 @@ public class SettingsDialog extends GallantDialog implements IButtonListener {
 	@Override
 	public void dismiss() {
 		super.dismiss();
-	}
-
-	boolean controllerWasPressed;
-
-	@Override
-	public void buttonPressed(ButtonEvent buttonEvent) {
-		controllerWasPressed = true;
-	}
-
-	@Override
-	public void buttonReleased(ButtonEvent buttonEvent) {
-		if (controllerWasPressed) {
-			controllerWasPressed = false;
-			if (buttonEvent.getButtonGameAction() == ButtonEvent.BUTTON_A) {
-				buttonPressed = 0;
-				SettingsDialog.this.dismiss();
-				SettingsDialog.this.cancel();
-			} else if (buttonEvent.getButtonGameAction() == ButtonEvent.BUTTON_B) {
-				buttonPressed = options.length - 1;
-				SettingsDialog.this.dismiss();
-				SettingsDialog.this.cancel();
-			}
-		}
 	}
 
 	public void chooseBackground() {

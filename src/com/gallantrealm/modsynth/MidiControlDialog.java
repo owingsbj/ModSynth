@@ -5,8 +5,6 @@ import com.gallantrealm.android.Translator;
 import com.gallantrealm.modsynth.module.CC;
 import com.gallantrealm.mysynth.ClientModel;
 import com.gallantrealm.mysynth.GallantDialog;
-import com.zeemote.zc.event.ButtonEvent;
-import com.zeemote.zc.event.IButtonListener;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Typeface;
@@ -18,7 +16,7 @@ import android.view.Window;
 import android.widget.Button;
 import de.viktorreiser.toolbox.widget.NumberPicker;
 
-public class MidiControlDialog extends GallantDialog implements IButtonListener {
+public class MidiControlDialog extends GallantDialog {
 
 	public static MidiControlDialog lastMidiControlDialog;
 
@@ -136,29 +134,6 @@ public class MidiControlDialog extends GallantDialog implements IButtonListener 
 	public void dismiss() {
 		super.dismiss();
 		lastMidiControlDialog = null;
-	}
-
-	boolean controllerWasPressed;
-
-	@Override
-	public void buttonPressed(ButtonEvent buttonEvent) {
-		controllerWasPressed = true;
-	}
-
-	@Override
-	public void buttonReleased(ButtonEvent buttonEvent) {
-		if (controllerWasPressed) {
-			controllerWasPressed = false;
-			if (buttonEvent.getButtonGameAction() == ButtonEvent.BUTTON_A) {
-//				buttonPressed = 0;
-				MidiControlDialog.this.dismiss();
-				MidiControlDialog.this.cancel();
-			} else if (buttonEvent.getButtonGameAction() == ButtonEvent.BUTTON_B) {
-//				buttonPressed = options.length - 1;
-				MidiControlDialog.this.dismiss();
-				MidiControlDialog.this.cancel();
-			}
-		}
 	}
 
 }
