@@ -4,3 +4,12 @@ A modular synthesizer for Android.  See https://play.google.com/store/apps/detai
 
 This synthesizer is based on the MySynth synthesizer engine.   At this time, portions of ModSynth are being generalized and moved to MySynth.  Once that completes,
 MySynth will be made public and you can use it to build your own synthesizer for Android.
+
+The source for ModSynth is available here for your examination and suggestion for improvement.  You could also create derived works of course, as it is allowed by the license.
+However, I wouldn't suggest making another duplicate or slightly modified ModSynth application and releasing it on Google Play, since
+
+1. There already is one.
+2. You won't make much money at it.  I never did nor did I ever intend to.
+3. You could more easily assist in the development of the existing ModSynth.
+
+Feel free to email me at bj@gallantrealm.com if you have questions about the source.  I intend to improve its comments to make it easier to understand.
