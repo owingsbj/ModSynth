@@ -1,7 +1,6 @@
 package com.gallantrealm.modsynth.module;
 
 import com.gallantrealm.modsynth.BiQuadraticFilter;
-import com.gallantrealm.modsynth.Stringifier;
 
 public class Filter extends Module {
 	private static final long serialVersionUID = 1L;
@@ -17,15 +16,6 @@ public class Filter extends Module {
 	public CC sweepCC;
 
 	private transient BiQuadraticFilter[] filter;
-
-	@Override
-	public void stringify(Stringifier s) {
-		super.stringify(s);
-		s.add("filterType", filterType.ordinal());
-		s.add("resonance", resonance);
-		s.add("cutoff", cutoff);
-		s.add("sweep", sweep);
-	}
 
 	@Override
 	public int getInputCount() {

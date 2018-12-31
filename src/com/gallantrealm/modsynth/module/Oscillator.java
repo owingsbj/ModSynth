@@ -2,7 +2,6 @@ package com.gallantrealm.modsynth.module;
 
 import java.io.Serializable;
 import com.gallantrealm.android.Translator;
-import com.gallantrealm.modsynth.Stringifier;
 import com.gallantrealm.mysynth.FastMath;
 
 public class Oscillator extends Module {
@@ -76,19 +75,6 @@ public class Oscillator extends Module {
 	transient double smoothModulation; // debounce modulation
 
 	public Oscillator() {
-	}
-
-	@Override
-	public void stringify(Stringifier s) {
-		super.stringify(s);
-		s.add("waveForm", waveForm.ordinal());
-		s.add("duty", duty);
-		s.add("octave", octave);
-		s.add("pitch", pitch);
-		s.add("detune", detune);
-		s.add("modulation", modulation);
-		s.add("harmonics", harmonics);
-		s.add("noise", noise);
 	}
 
 	@Override

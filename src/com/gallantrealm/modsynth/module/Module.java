@@ -2,10 +2,8 @@ package com.gallantrealm.modsynth.module;
 
 import java.io.Serializable;
 import com.gallantrealm.modsynth.Instrument;
-import com.gallantrealm.modsynth.Stringifiable;
-import com.gallantrealm.modsynth.Stringifier;
 
-public abstract class Module implements Serializable, Stringifiable {
+public abstract class Module implements Serializable {
 	private static final long serialVersionUID = 1L;
 	public static final float C0 = 16.352f;
 	public static final int NOTES_PER_VOLT = 100;   // NOTE: don't change this unless you provide a new option!!
@@ -61,15 +59,6 @@ public abstract class Module implements Serializable, Stringifiable {
 	public Link output3 = new Link(this, 3);
 
 	public Module() {
-	}
-
-	public void stringify(Stringifier s) {
-		s.add("type", this.getClass().getSimpleName());
-		s.add("input1", input1);
-		s.add("input2", input2);
-		s.add("input3", input3);
-		s.add("mod2", mod2);
-		// Note: outputs are always there and are static in values. They are really for inputs to point to.
 	}
 
 	public final boolean isOnModule(float x, float y) {

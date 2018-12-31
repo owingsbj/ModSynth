@@ -1,7 +1,5 @@
 package com.gallantrealm.modsynth.module;
 
-import com.gallantrealm.modsynth.Stringifier;
-
 public class Amp extends Module {
 	private static final long serialVersionUID = 1L;
 
@@ -18,14 +16,6 @@ public class Amp extends Module {
 	private transient float tone2;
 	private transient float[] smoothAmp;
 	private transient float[] lastFilteredValue;
-
-	@Override
-	public void stringify(Stringifier s) {
-		super.stringify(s);
-		s.add("overdrive", overdrive);
-		s.add("volume", volume);
-		s.add("tone", tone);
-	}
 
 	@Override
 	public int getInputCount() {

@@ -3,7 +3,6 @@ package com.gallantrealm.modsynth.module;
 import java.io.Serializable;
 import com.gallantrealm.android.Translator;
 import com.gallantrealm.modsynth.Instrument;
-import com.gallantrealm.modsynth.Stringifier;
 
 public class LFO extends Module {
 	private static final long serialVersionUID = 1L;
@@ -66,18 +65,6 @@ public class LFO extends Module {
 	transient float bpm;
 
 	public LFO() {
-	}
-
-	@Override
-	public void stringify(Stringifier s) {
-		super.stringify(s);
-		s.add("waveForm", waveForm.ordinal());
-		s.add("exponent", octave);
-		s.add("frequency", frequency);
-		s.add("positive", positive);
-		s.add("pulse", pulse);
-		s.add("waveTable", waveTable);
-		s.add("random", random);
 	}
 
 	@Override

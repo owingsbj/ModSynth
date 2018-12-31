@@ -20,7 +20,7 @@ import com.gallantrealm.modsynth.module.Unison;
 import com.gallantrealm.modsynth.viewer.ModuleViewer;
 import com.gallantrealm.mysynth.AbstractInstrument;
 
-public class Instrument extends AbstractInstrument implements Stringifiable {
+public class Instrument extends AbstractInstrument {
 	private static final long serialVersionUID = 1L;
 
 	public static final int MAX_VOICES = 10;
@@ -45,19 +45,6 @@ public class Instrument extends AbstractInstrument implements Stringifiable {
 	transient int voiceCount;
 	transient Output outputModule;
 
-
-	public void stringify(Stringifier s) {
-		s.add("nmodules", modules.size());
-		s.add("nvoices", getVoices());
-		s.add("sampleRate", sampleRate);
-		for (int i = 0; i < modules.size(); i++) {
-			Module module = modules.get(i);
-			module.stringifyId = i;
-		}
-		for (Module module : modules) {
-			s.add("module", module);
-		}
-	}
 
 	private synchronized void orderModules() {
 		ArrayList<Module> newModules = new ArrayList<Module>();

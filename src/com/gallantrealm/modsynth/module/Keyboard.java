@@ -2,7 +2,6 @@ package com.gallantrealm.modsynth.module;
 
 import com.gallantrealm.modsynth.Instrument;
 import com.gallantrealm.modsynth.Settings;
-import com.gallantrealm.modsynth.Stringifier;
 
 public class Keyboard extends Module {
 	private static final long serialVersionUID = 1L;
@@ -36,16 +35,6 @@ public class Keyboard extends Module {
 	private transient int[] noteForVoice;
 	public transient boolean sliding; // used to determine when to apply legato
 	public transient float[] noteVelocities;
-
-	@Override
-	public void stringify(Stringifier s) {
-		super.stringify(s);
-		s.add("tuning", tuning);
-		s.add("octave", octave);
-		s.add("key", key);
-		s.add("portamento", portamento);
-		s.add("voices", voices);
-	}
 
 	@Override
 	public int getInputCount() {

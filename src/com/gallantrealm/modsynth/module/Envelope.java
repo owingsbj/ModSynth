@@ -2,7 +2,6 @@ package com.gallantrealm.modsynth.module;
 
 import com.gallantrealm.android.Translator;
 import com.gallantrealm.modsynth.Instrument;
-import com.gallantrealm.modsynth.Stringifier;
 
 public class Envelope extends Module {
 	private static final long serialVersionUID = 1L;
@@ -44,17 +43,6 @@ public class Envelope extends Module {
 
 	private transient Phase[] envPhase;
 	private transient float[] envTime;
-
-	@Override
-	public void stringify(Stringifier s) {
-		super.stringify(s);
-		s.add("attack", attack);
-		s.add("decay", decay);
-		s.add("sustain", sustain);
-		s.add("release", release);
-		s.add("slopeType", slopeType == null ? 0 : slopeType.ordinal());
-		s.add("velocitySensitive", velocitySensitive);
-	}
 
 	@Override
 	public int getInputCount() {

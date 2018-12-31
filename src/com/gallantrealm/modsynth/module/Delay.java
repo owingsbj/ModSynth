@@ -1,7 +1,5 @@
 package com.gallantrealm.modsynth.module;
 
-import com.gallantrealm.modsynth.Stringifier;
-
 public class Delay extends Module {
 	private static final long serialVersionUID = 1L;
 
@@ -14,19 +12,6 @@ public class Delay extends Module {
 	public CC flangeAmountCC;
 	public CC delayLevelCC;
 	public CC feedbackCC;
-
-	@Override
-	public void stringify(Stringifier s) {
-		super.stringify(s);
-		if (!respectdelayLevel) {
-			delayLevel = 1.0;
-			respectdelayLevel = true;
-		}
-		s.add("delayTime", delayTime);
-		s.add("flangeAmount", flangeAmount);
-		s.add("delayLevel", delayLevel);
-		s.add("feedback", feedback);
-	}
 
 	@Override
 	public int getInputCount() {

@@ -2,7 +2,6 @@ package com.gallantrealm.modsynth.module;
 
 import com.gallantrealm.modsynth.Instrument;
 import com.gallantrealm.modsynth.PentaBandpassFilter;
-import com.gallantrealm.modsynth.Stringifier;
 
 public class SpectralFilter extends Module {
 	private static final long serialVersionUID = 1L;
@@ -24,12 +23,6 @@ public class SpectralFilter extends Module {
 	private transient PentaBandpassFilter[][] filter;
 	private transient double[][] smoothLevels;
 	private transient int[] step, lastStep, subStep;
-
-	@Override
-	public void stringify(Stringifier s) {
-		super.stringify(s);
-		// TODO need to stringify
-	}
 
 	@Override
 	public int getInputCount() {

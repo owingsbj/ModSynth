@@ -1,7 +1,6 @@
 package com.gallantrealm.modsynth.module;
 
 import com.gallantrealm.android.Translator;
-import com.gallantrealm.modsynth.Stringifier;
 
 public class Mixer extends Module {
 	private static final long serialVersionUID = 1L;
@@ -41,26 +40,6 @@ public class Mixer extends Module {
 	public double level3 = 1.0;
 	public CC level3CC;
 	public CC mixFunctionCC;
-
-	@Override
-	public void stringify(Stringifier s) {
-		super.stringify(s);
-		s.add("modulation", modulation);
-		s.add("mixFunction", mixFunction.ordinal());
-		s.add("bias", bias);
-		if (!usingLevels) {
-			if (input1 != null) {
-				level1 = 1.0 - balance;
-			}
-			if (input2 != null) {
-				level2 = balance;
-			}
-			usingLevels = true;
-		}
-		s.add("level1", level1);
-		s.add("level2", level2);
-		s.add("level3", level3);
-	}
 
 	@Override
 	public int getInputCount() {
