@@ -1,9 +1,9 @@
 package com.gallantrealm.modsynth.viewer;
 
+import com.gallantrealm.android.Scope;
 import com.gallantrealm.modsynth.Instrument;
 import com.gallantrealm.modsynth.MainActivity;
 import com.gallantrealm.modsynth.R;
-import com.gallantrealm.modsynth.Scope;
 import com.gallantrealm.modsynth.module.Module;
 import com.gallantrealm.modsynth.module.Output;
 import android.graphics.Canvas;
