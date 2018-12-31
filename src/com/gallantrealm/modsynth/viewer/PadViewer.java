@@ -2,10 +2,10 @@ package com.gallantrealm.modsynth.viewer;
 
 import java.util.ArrayList;
 import com.gallantrealm.android.RangeSlider;
+import com.gallantrealm.android.XYControl;
 import com.gallantrealm.modsynth.Instrument;
 import com.gallantrealm.modsynth.MainActivity;
 import com.gallantrealm.modsynth.R;
-import com.gallantrealm.modsynth.XYControl;
 import com.gallantrealm.modsynth.module.Module;
 import com.gallantrealm.modsynth.module.Pad;
 import com.gallantrealm.modsynth.module.Pad.PadType;

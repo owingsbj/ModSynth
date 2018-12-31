@@ -1,10 +1,10 @@
 package com.gallantrealm.modsynth.viewer;
 
+import com.gallantrealm.android.WaveEditor;
 import com.gallantrealm.modsynth.Instrument;
 import com.gallantrealm.modsynth.MainActivity;
 import com.gallantrealm.modsynth.MidiControlDialog;
 import com.gallantrealm.modsynth.R;
-import com.gallantrealm.modsynth.WaveEditor;
 import com.gallantrealm.modsynth.module.LFO;
 import com.gallantrealm.modsynth.module.LFO.WaveForm;
 import com.gallantrealm.modsynth.module.Module;

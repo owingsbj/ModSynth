@@ -224,7 +224,7 @@
 		    android:textColor="@android:color/primary_text_light"
 		    android:textSize="13sp" />
 
-		<com.gallantrealm.modsynth.WaveEditor
+		<com.gallantrealm.android.WaveEditor
 		    android:id="@+id/lfoWaveEditor"
 		    android:layout_width="match_parent"
 		    android:layout_height="match_parent"
