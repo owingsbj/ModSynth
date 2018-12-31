@@ -61,8 +61,6 @@ import com.gallantrealm.mysynth.FastMath;
 import com.gallantrealm.mysynth.InputDialog;
 import com.gallantrealm.mysynth.MessageDialog;
 import com.gallantrealm.mysynth.MySynth;
-import com.gallantrealm.mysynth.MySynthAAudio;
-import com.gallantrealm.mysynth.MySynthOpenSL;
 import com.gallantrealm.mysynth.SelectItemDialog;
 //import com.google.android.gms.common.ConnectionResult;
 //import com.google.android.gms.common.api.GoogleApiClient;
@@ -219,22 +217,10 @@ public class MainActivity extends AbstractSingleMidiActivity implements OnTouchL
 			getWindow().setSustainedPerformanceMode(true);
 		}
 
-		// Determine if AAudio is available and stable. If so, use ModSynthAAudio. Else use ModSynthOpenSL
-		if (Build.VERSION.SDK_INT >= 27) {
-			int sampleRateReducer = Math.max(0, clientModel.getSampleRateReducer());
-			int nbuffers = clientModel.getNBuffers();
-			if (nbuffers == 0) {
-				nbuffers = 5;
-			}
-			synth = new MySynthAAudio(sampleRateReducer, nbuffers);
-		} else {
-			int sampleRateReducer = Math.max(0, clientModel.getSampleRateReducer());
-			int nbuffers = clientModel.getNBuffers();
-			if (nbuffers == 0) {
-				nbuffers = 5;
-			}
-			synth = new MySynthOpenSL(sampleRateReducer, nbuffers);
-		}
+		// Create the synthesizer
+		int sampleRateReducer = Math.max(0, clientModel.getSampleRateReducer());
+		int nbuffers = clientModel.getNBuffers();
+		synth = MySynth.create(sampleRateReducer, nbuffers);
 		synth.setCallbacks(new MySynth.Callbacks() {
 			@Override
 			public void updateLevels() {
@@ -243,7 +229,6 @@ public class MainActivity extends AbstractSingleMidiActivity implements OnTouchL
 				}
 			}
 		});
-//		}
 
 		Settings.tuningCents = clientModel.getTuningCents();
 
