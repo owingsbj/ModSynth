@@ -1,10 +1,9 @@
 package com.gallantrealm.modsynth.module;
 
 import java.io.Serializable;
-
+import com.gallantrealm.modsynth.Instrument;
 import com.gallantrealm.modsynth.Stringifiable;
 import com.gallantrealm.modsynth.Stringifier;
-import com.gallantrealm.mysynth.MySynth;
 
 public abstract class Module implements Serializable, Stringifiable {
 	private static final long serialVersionUID = 1L;
@@ -134,11 +133,11 @@ public abstract class Module implements Serializable, Stringifiable {
 		return yPosition + getHeight() / getOutputCount() * (n + 0.5f);
 	}
 
-	public Object getViewer(MySynth synth) {
+	public Object getViewer(Instrument instrument) {
 		if (viewer == null) {
 			try {
 				Class viewerClass = getClass().getClassLoader().loadClass("com.gallantrealm.modsynth.viewer." + getClass().getSimpleName() + "Viewer");
-				viewer = viewerClass.getConstructor(Module.class, MySynth.class).newInstance(this, synth);
+				viewer = viewerClass.getConstructor(Module.class, Instrument.class).newInstance(this, instrument);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

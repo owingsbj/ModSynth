@@ -522,7 +522,7 @@ public class MainActivity extends AbstractSingleMidiActivity implements OnTouchL
 				}
 			}
 		} else if (data != null && synth != null && ((Instrument)synth.getInstrument()) != null && ((Instrument)synth.getInstrument()).selectedModule != null) {
-			((ModuleViewer) ((Instrument)synth.getInstrument()).selectedModule.getViewer(synth)).onActivityResult(requestCode, resultCode, data);
+			((ModuleViewer) ((Instrument)synth.getInstrument()).selectedModule.getViewer((Instrument)synth.getInstrument())).onActivityResult(requestCode, resultCode, data);
 			return;
 		}
 
@@ -1292,7 +1292,7 @@ public class MainActivity extends AbstractSingleMidiActivity implements OnTouchL
 		case REQUEST_PERMISSION_READ_PCM_EXTERNAL_STORAGE:
 			if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 				if (((Instrument)synth.getInstrument()).selectedModule != null) {
-					((PCMViewer) ((Instrument)synth.getInstrument()).selectedModule.getViewer(synth)).onContinuePCMSelect(this);
+					((PCMViewer) ((Instrument)synth.getInstrument()).selectedModule.getViewer((Instrument)synth.getInstrument())).onContinuePCMSelect(this);
 					return;
 				}
 			} else {
@@ -1414,10 +1414,11 @@ public class MainActivity extends AbstractSingleMidiActivity implements OnTouchL
 			@Override
 			public void run() {
 				applyingASound = true;
-				for (Module module : ((Instrument)synth.getInstrument()).modules) {
-					((ModuleViewer) module.getViewer(synth)).dropView();
+				Instrument instrument = (Instrument)synth.getInstrument();
+				for (Module module : instrument.modules) {
+					((ModuleViewer) module.getViewer(instrument)).dropView();
 				}
-				if (((Instrument)synth.getInstrument()).getKeyboardModule() == null) {
+				if (instrument.getKeyboardModule() == null) {
 					keyboardPane.setVisibility(View.GONE);
 				} else if (!midiDeviceAttached) {
 					keyboardPane.setVisibility(View.VISIBLE);
@@ -1776,7 +1777,7 @@ public class MainActivity extends AbstractSingleMidiActivity implements OnTouchL
 					}
 					if (module != null) {
 						noModSelectedText.setVisibility(View.GONE);
-						lastSelectedModView = ((ModuleViewer) module.getViewer(synth)).getView(MainActivity.this, modViewGroup);
+						lastSelectedModView = ((ModuleViewer) module.getViewer((Instrument)synth.getInstrument())).getView(MainActivity.this, modViewGroup);
 						lastSelectedModView.setVisibility(View.VISIBLE);
 					} else {
 						noModSelectedText.setVisibility(View.VISIBLE);

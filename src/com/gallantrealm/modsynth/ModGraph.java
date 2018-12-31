@@ -3,7 +3,6 @@ package com.gallantrealm.modsynth;
 import com.gallantrealm.modsynth.module.Module;
 import com.gallantrealm.modsynth.viewer.ModuleViewer;
 import com.gallantrealm.mysynth.MySynth;
-
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.Resources;
@@ -448,7 +447,7 @@ public class ModGraph extends View implements View.OnTouchListener, View.OnClick
 		// draw modules (which also draws the links)
 		if (instrument != null) {
 			for (Module module : instrument.modules) {
-				((ModuleViewer) module.getViewer(synth)).draw(instrument, getContext().getResources(), canvas, editing, colorIcons);
+				((ModuleViewer) module.getViewer(instrument)).draw(instrument, getContext().getResources(), canvas, editing, colorIcons);
 			}
 		}
 

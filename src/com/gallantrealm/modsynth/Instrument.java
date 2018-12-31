@@ -18,8 +18,9 @@ import com.gallantrealm.modsynth.module.SampleHold;
 import com.gallantrealm.modsynth.module.SpectralFilter;
 import com.gallantrealm.modsynth.module.Unison;
 import com.gallantrealm.modsynth.viewer.ModuleViewer;
+import com.gallantrealm.mysynth.AbstractInstrument;
 
-public class Instrument extends com.gallantrealm.mysynth.Instrument implements Stringifiable {
+public class Instrument extends AbstractInstrument implements Stringifiable {
 	private static final long serialVersionUID = 1L;
 
 	public static final int MAX_VOICES = 10;
