@@ -136,11 +136,10 @@
         </FrameLayout>
     </LinearLayout>
 
-    <include
+    <com.gallantrealm.android.KeyboardControl
         android:id="@+id/keyboardPane"
         android:layout_width="match_parent"
         android:layout_height="100dp"
-        android:layout_weight="1"
-        layout="@layout/screenkeyboard" />
+        android:layout_weight="1" />
 
 </LinearLayout>

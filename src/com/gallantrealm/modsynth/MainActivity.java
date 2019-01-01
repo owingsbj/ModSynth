@@ -12,6 +12,7 @@ import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
 import com.gallantrealm.android.ContentUriUtil;
 import com.gallantrealm.android.FileSelectorDialog;
+import com.gallantrealm.android.KeyboardControl;
 import com.gallantrealm.android.Translator;
 import com.gallantrealm.modsynth.module.Amp;
 import com.gallantrealm.modsynth.module.Arpeggiator;
@@ -62,18 +63,6 @@ import com.gallantrealm.mysynth.InputDialog;
 import com.gallantrealm.mysynth.MessageDialog;
 import com.gallantrealm.mysynth.MySynth;
 import com.gallantrealm.mysynth.SelectItemDialog;
-//import com.google.android.gms.common.ConnectionResult;
-//import com.google.android.gms.common.api.GoogleApiClient;
-//import com.google.android.gms.common.api.PendingResult;
-//import com.google.android.gms.common.api.ResultCallback;
-//import com.google.android.gms.drive.Drive;
-//import com.google.android.gms.drive.DriveApi;
-//import com.google.android.gms.drive.DriveApi.DriveContentsResult;
-//import com.google.android.gms.drive.DriveApi.DriveIdResult;
-//import com.google.android.gms.drive.DriveContents;
-//import com.google.android.gms.drive.DriveFile;
-//import com.google.android.gms.drive.DriveId;
-//import com.google.android.gms.drive.OpenFileActivityBuilder;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -98,7 +87,6 @@ import android.provider.Settings.Secure;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -107,9 +95,7 @@ import android.widget.Toast;
 import jp.kshoji.driver.midi.activity.AbstractSingleMidiActivity;
 import jp.kshoji.driver.midi.device.MidiInputDevice;
 
-public class MainActivity extends AbstractSingleMidiActivity implements OnTouchListener, View.OnClickListener, ClientModelChangedListener //
-//		,GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener 
-{
+public class MainActivity extends AbstractSingleMidiActivity implements View.OnClickListener, ClientModelChangedListener {
 
 	public ClientModel clientModel = ClientModel.getClientModel();
 
@@ -120,7 +106,7 @@ public class MainActivity extends AbstractSingleMidiActivity implements OnTouchL
 	public View modGraphPane;
 	public ModGraph modGraph;
 
-	public View keyboardPane;
+	public KeyboardControl keyboardPane;
 
 	Button settingsButton;
 
@@ -143,43 +129,6 @@ public class MainActivity extends AbstractSingleMidiActivity implements OnTouchL
 	ViewGroup modViewGroup;
 	TextView noModSelectedText;
 
-	View keyboard;
-	int keyboardLocation[];
-	Button key1;
-	Button key2;
-	Button key3;
-	Button key4;
-	Button key5;
-	Button key6;
-	Button key7;
-	Button key8;
-	Button key9;
-	Button key10;
-	Button key11;
-	Button key12;
-	Button key13;
-	Button key14;
-	Button key15;
-	Button key16;
-	Button key17;
-	Button key18;
-	Button key19;
-	Button key20;
-	Button key21;
-	Button key22;
-	Button key23;
-	Button key24;
-	Button key25;
-	Button key26;
-	Button key27;
-	Button key28;
-	Button key29;
-	Button key30;
-	Button key31;
-	Button key32;
-
-	int[] keyvoice = new int[25];
-
 	MySynth synth;
 
 	int myMidiChannel;
@@ -188,8 +137,6 @@ public class MainActivity extends AbstractSingleMidiActivity implements OnTouchL
 
 	String builtinSeparatorText;
 	String customSeparatorText;
-
-//	SapaService sapaService; // Samsung Professional Audio
 
 	ArrayAdapter<CharSequence> soundAdapter;
 
@@ -268,40 +215,6 @@ public class MainActivity extends AbstractSingleMidiActivity implements OnTouchL
 		modViewGroup = (ViewGroup) findViewById(R.id.modViewGroup);
 		noModSelectedText = (TextView) findViewById(R.id.noModSelectedText);
 
-		keyboard = keyboardPane.findViewById(R.id.keyboard);
-		key1 = (Button) keyboardPane.findViewById(R.id.key1);
-		key2 = (Button) keyboardPane.findViewById(R.id.key2);
-		key3 = (Button) keyboardPane.findViewById(R.id.key3);
-		key4 = (Button) keyboardPane.findViewById(R.id.key4);
-		key5 = (Button) keyboardPane.findViewById(R.id.key5);
-		key6 = (Button) keyboardPane.findViewById(R.id.key6);
-		key7 = (Button) keyboardPane.findViewById(R.id.key7);
-		key8 = (Button) keyboardPane.findViewById(R.id.key8);
-		key9 = (Button) keyboardPane.findViewById(R.id.key9);
-		key10 = (Button) keyboardPane.findViewById(R.id.key10);
-		key11 = (Button) keyboardPane.findViewById(R.id.key11);
-		key12 = (Button) keyboardPane.findViewById(R.id.key12);
-		key13 = (Button) keyboardPane.findViewById(R.id.key13);
-		key14 = (Button) keyboardPane.findViewById(R.id.key14);
-		key15 = (Button) keyboardPane.findViewById(R.id.key15);
-		key16 = (Button) keyboardPane.findViewById(R.id.key16);
-		key17 = (Button) keyboardPane.findViewById(R.id.key17);
-		key18 = (Button) keyboardPane.findViewById(R.id.key18);
-		key19 = (Button) keyboardPane.findViewById(R.id.key19);
-		key20 = (Button) keyboardPane.findViewById(R.id.key20);
-		key21 = (Button) keyboardPane.findViewById(R.id.key21);
-		key22 = (Button) keyboardPane.findViewById(R.id.key22);
-		key23 = (Button) keyboardPane.findViewById(R.id.key23);
-		key24 = (Button) keyboardPane.findViewById(R.id.key24);
-		key25 = (Button) keyboardPane.findViewById(R.id.key25);
-		key26 = (Button) keyboardPane.findViewById(R.id.key26);
-		key27 = (Button) keyboardPane.findViewById(R.id.key27);
-		key28 = (Button) keyboardPane.findViewById(R.id.key28);
-		key29 = (Button) keyboardPane.findViewById(R.id.key29);
-		key30 = (Button) keyboardPane.findViewById(R.id.key30);
-		key31 = (Button) keyboardPane.findViewById(R.id.key31);
-		key32 = (Button) keyboardPane.findViewById(R.id.key32);
-
 		// personalize
 		setTheme(clientModel.getBackgroundName(), clientModel.getCustomBackgroundPath());
 		Typeface tf = clientModel.getTypeface(this);
@@ -330,7 +243,7 @@ public class MainActivity extends AbstractSingleMidiActivity implements OnTouchL
 		}
 		loadInstrument(soundName);
 
-		setKeyboardSize(clientModel.getKeyboardSize());
+		keyboardPane.setKeyboardSize(clientModel.getKeyboardSize());
 
 		setMidiChannel(clientModel.getMidiChannel());
 
@@ -348,7 +261,6 @@ public class MainActivity extends AbstractSingleMidiActivity implements OnTouchL
 		saveRecordingButton.setOnClickListener(this);
 		addModuleButton.setOnClickListener(this);
 		deleteModuleButton.setOnClickListener(this);
-		keyboard.setOnTouchListener(this);
 
 		if (clientModel.isFullVersion() || clientModel.isGoggleDogPass() || clientModel.isFree()) {
 			fullVersionButton.setVisibility(View.GONE);
@@ -373,11 +285,6 @@ public class MainActivity extends AbstractSingleMidiActivity implements OnTouchL
 		// set up the modgraph selection handler
 		modGraph.setOnSelectionListener(new ModGraph.OnSelectionListener() {
 			public void selected(Module module) {
-//				if (!clientModel.isFullVersion() && !clientModel.isGoggleDogPass() && ((Instrument)synth.getInstrument()).hasAdvancedModules()) {
-//					MessageDialog dialog = new MessageDialog(MainActivity.this, "Full Version", "Full version is needed to edit this instrument.", new String[] {"OK"});
-//					dialog.show();
-//					return;
-//				}
 				selectModule(module);
 			}
 		});
@@ -439,10 +346,20 @@ public class MainActivity extends AbstractSingleMidiActivity implements OnTouchL
 
 		modViewGroup.setClickable(true);
 		modViewGroup.setOnTouchListener(new View.OnTouchListener() {
-
-			@Override
 			public boolean onTouch(View v, MotionEvent event) {
 				return true;
+			}
+		});
+		
+		keyboardPane.setListener(new KeyboardControl.Listener() {
+			public void onNotePressed(int note, float velocity) {
+				synth.notePress(note, velocity);
+			}
+			public void onNoteReleased(int note) {
+				synth.noteRelease(note);
+			}
+			public void onNoteAftertouch(int note, float pressure) {
+				//synth.pressure(note, pressure);
 			}
 		});
 
@@ -468,10 +385,6 @@ public class MainActivity extends AbstractSingleMidiActivity implements OnTouchL
 		synth.stop();
 		synth.destroy();
 		synth = null;
-//		if (sapaService != null) {
-//			System.out.println("Stopping SapaService");
-//			sapaService.stop(true);
-//		}
 		super.onDestroy();
 		System.out.println("<<MainActivity.onDestroy");
 	}
@@ -539,55 +452,6 @@ public class MainActivity extends AbstractSingleMidiActivity implements OnTouchL
 			Toast.makeText(MainActivity.this, "Custom background could not be loaded.", Toast.LENGTH_SHORT).show();
 		}
 	}
-
-	// private void setDefaultSound() {
-	// System.out.println("Setting default sound");
-	// Instrument instrument = new Instrument();
-	//
-	// Keyboard keyboardModule = new Keyboard();
-	// keyboardModule.xPosition = 50;
-	// keyboardModule.yPosition = 100;
-	//
-	// Oscillator oscModule = new Oscillator();
-	// oscModule.waveForm = WaveForm.SAWTOOTH_WAVE;
-	// oscModule.xPosition = 200;
-	// oscModule.yPosition = 50;
-	// oscModule.link(1, keyboardModule, 1);
-	//
-	// Envelope envelopeModule = new Envelope();
-	// envelopeModule.xPosition = 200;
-	// envelopeModule.yPosition = 200;
-	// envelopeModule.link(1, keyboardModule, 2);
-	//
-	// Filter filterModule = new Filter();
-	// filterModule.xPosition = 350;
-	// filterModule.yPosition = 50;
-	// filterModule.resonance = 8;
-	// filterModule.cutoff = 50;
-	// filterModule.sweep = 50;
-	// filterModule.link(1, oscModule, 1);
-	// filterModule.link(2, envelopeModule, 1);
-	//
-	// Amp ampModule = new Amp();
-	// ampModule.xPosition = 500;
-	// ampModule.yPosition = 50;
-	// ampModule.link(1, filterModule, 1);
-	// ampModule.link(2, envelopeModule, 1);
-	//
-	// Output outputModule = new Output();
-	// outputModule.xPosition = 650;
-	// outputModule.yPosition = 50;
-	// outputModule.link(1, ampModule, 1);
-	//
-	// instrument.modules.add(keyboardModule);
-	// instrument.modules.add(oscModule);
-	// instrument.modules.add(filterModule);
-	// instrument.modules.add(envelopeModule);
-	// instrument.modules.add(ampModule);
-	// instrument.modules.add(outputModule);
-	//
-	// applySound(instrument);
-	// }
 
 	boolean stopUpdateThread;
 	UpdateThread updateThread;
@@ -787,101 +651,9 @@ public class MainActivity extends AbstractSingleMidiActivity implements OnTouchL
 	}
 
 	public void setKeyboardSize(int keysSelection) {
-		if (keysSelection == 0) { // 13
-			key14.setVisibility(View.GONE);
-			key15.setVisibility(View.GONE);
-			key16.setVisibility(View.GONE);
-			keyboardPane.findViewById(R.id.key16spacer).setVisibility(View.GONE);
-			key17.setVisibility(View.GONE);
-			key18.setVisibility(View.GONE);
-			key19.setVisibility(View.GONE);
-			key20.setVisibility(View.GONE);
-			key21.setVisibility(View.GONE);
-			key22.setVisibility(View.GONE);
-			key23.setVisibility(View.GONE);
-			keyboardPane.findViewById(R.id.key23spacer).setVisibility(View.GONE);
-			key24.setVisibility(View.GONE);
-			key25.setVisibility(View.GONE);
-			key26.setVisibility(View.GONE);
-			key27.setVisibility(View.GONE);
-			key28.setVisibility(View.GONE);
-			keyboardPane.findViewById(R.id.key28spacer).setVisibility(View.GONE);
-			key29.setVisibility(View.GONE);
-			key30.setVisibility(View.GONE);
-			key31.setVisibility(View.GONE);
-			key32.setVisibility(View.GONE);
-		} else if (keysSelection == 1) { // 20
-			key14.setVisibility(View.VISIBLE);
-			key15.setVisibility(View.VISIBLE);
-			key16.setVisibility(View.VISIBLE);
-			keyboardPane.findViewById(R.id.key16spacer).setVisibility(View.VISIBLE);
-			key17.setVisibility(View.VISIBLE);
-			key18.setVisibility(View.VISIBLE);
-			key19.setVisibility(View.VISIBLE);
-			key20.setVisibility(View.VISIBLE);
-			key21.setVisibility(View.GONE);
-			key22.setVisibility(View.GONE);
-			key23.setVisibility(View.GONE);
-			keyboardPane.findViewById(R.id.key23spacer).setVisibility(View.GONE);
-			key24.setVisibility(View.GONE);
-			key25.setVisibility(View.GONE);
-			key26.setVisibility(View.GONE);
-			key27.setVisibility(View.GONE);
-			key28.setVisibility(View.GONE);
-			keyboardPane.findViewById(R.id.key28spacer).setVisibility(View.GONE);
-			key29.setVisibility(View.GONE);
-			key30.setVisibility(View.GONE);
-			key31.setVisibility(View.GONE);
-			key32.setVisibility(View.GONE);
-		} else if (keysSelection == 2) { // 25
-			key14.setVisibility(View.VISIBLE);
-			key15.setVisibility(View.VISIBLE);
-			key16.setVisibility(View.VISIBLE);
-			keyboardPane.findViewById(R.id.key16spacer).setVisibility(View.VISIBLE);
-			key17.setVisibility(View.VISIBLE);
-			key18.setVisibility(View.VISIBLE);
-			key19.setVisibility(View.VISIBLE);
-			key20.setVisibility(View.VISIBLE);
-			key21.setVisibility(View.VISIBLE);
-			key22.setVisibility(View.VISIBLE);
-			key23.setVisibility(View.VISIBLE);
-			keyboardPane.findViewById(R.id.key23spacer).setVisibility(View.VISIBLE);
-			key24.setVisibility(View.VISIBLE);
-			key25.setVisibility(View.VISIBLE);
-			key26.setVisibility(View.GONE);
-			key27.setVisibility(View.GONE);
-			key28.setVisibility(View.GONE);
-			keyboardPane.findViewById(R.id.key28spacer).setVisibility(View.GONE);
-			key29.setVisibility(View.GONE);
-			key30.setVisibility(View.GONE);
-			key31.setVisibility(View.GONE);
-			key32.setVisibility(View.GONE);
-		} else if (keysSelection == 3) { // 32
-			key14.setVisibility(View.VISIBLE);
-			key15.setVisibility(View.VISIBLE);
-			key16.setVisibility(View.VISIBLE);
-			keyboardPane.findViewById(R.id.key16spacer).setVisibility(View.VISIBLE);
-			key17.setVisibility(View.VISIBLE);
-			key18.setVisibility(View.VISIBLE);
-			key19.setVisibility(View.VISIBLE);
-			key20.setVisibility(View.VISIBLE);
-			key21.setVisibility(View.VISIBLE);
-			key22.setVisibility(View.VISIBLE);
-			key23.setVisibility(View.VISIBLE);
-			keyboardPane.findViewById(R.id.key23spacer).setVisibility(View.VISIBLE);
-			key24.setVisibility(View.VISIBLE);
-			key25.setVisibility(View.VISIBLE);
-			key26.setVisibility(View.VISIBLE);
-			key27.setVisibility(View.VISIBLE);
-			key28.setVisibility(View.VISIBLE);
-			keyboardPane.findViewById(R.id.key28spacer).setVisibility(View.VISIBLE);
-			key29.setVisibility(View.VISIBLE);
-			key30.setVisibility(View.VISIBLE);
-			key31.setVisibility(View.VISIBLE);
-			key32.setVisibility(View.VISIBLE);
-		}
+		keyboardPane.setKeyboardSize(keysSelection);
 	}
-
+	
 	public void setLanguage(int language) {
 		System.out.println("Setting language to " + language);
 		Translator translator = new ModSynthTranslator();
@@ -1344,24 +1116,6 @@ public class MainActivity extends AbstractSingleMidiActivity implements OnTouchL
 						}
 					});
 
-					// Intent intent = new Intent(Intent.ACTION_SEND);
-					// intent.setType("audio/wav");
-					// Uri uri = Uri.fromFile(file);
-					// intent.putExtra(Intent.EXTRA_STREAM, uri);
-					// intent.putExtra(Intent.EXTRA_SUBJECT, recordname +
-					// ".wav");
-					// intent.putExtra(Intent.EXTRA_TEXT, "Sharing a recording
-					// with you. I made it LIVE using ModSynth!");
-					// try {
-					// clientModel.getContext().startActivity(intent);
-					// } catch (Exception e) {
-					// MessageDialog message = new
-					// MessageDialog(MainActivity.this, null, "Recording saved
-					// at " + filename + ". You will need to use a file manager
-					// app to access the file.", new String[] { "OK" });
-					// message.show();
-					// }
-
 				}
 			}
 		});
@@ -1481,271 +1235,18 @@ public class MainActivity extends AbstractSingleMidiActivity implements OnTouchL
 		super.onConfigurationChanged(newConfig);
 	}
 
-	int[] lastNote = new int[20]; // 20 fingers max
-
-	private static final int PRESS = 1;
-	private static final int RELEASE = 2;
-	private static final int SLIDE = 0;
-
-	private float lastTouchDownX;
-	private float lastTouchDownY;
-
-	@Override
-	public boolean onTouch(View v, MotionEvent event) {
-		int index = event.getActionIndex();
-		int pointerCount = event.getPointerCount();
-
-		float x = event.getX(index);
-		float y = event.getY(index);
-		if (keyboardLocation == null) {
-			keyboardLocation = new int[2];
-			keyboard.getLocationOnScreen(keyboardLocation);
-		}
-		x += keyboardLocation[0];
-		y += keyboardLocation[1];
-		if (event.getActionMasked() == MotionEvent.ACTION_DOWN || event.getActionMasked() == MotionEvent.ACTION_POINTER_DOWN) {
-			doKey(event.getPointerId(index) + 1, x, y, PRESS, pointerCount);
-			lastTouchDownX = x;
-			lastTouchDownY = y;
-		} else if (event.getActionMasked() == MotionEvent.ACTION_MOVE) {
-			for (int i = 0; i < pointerCount; i++) {
-				int historySize = event.getHistorySize();
-				for (int h = 0; h < historySize; h++) {
-					doKey(event.getPointerId(i) + 1, event.getHistoricalX(i, h) + keyboardLocation[0], Math.max(0, event.getHistoricalY(i, h) + keyboardLocation[1]), SLIDE, pointerCount);
-				}
-				doKey(event.getPointerId(i) + 1, event.getX(i) + keyboardLocation[0], Math.max(0, event.getY(i) + keyboardLocation[1]), SLIDE, pointerCount);
-			}
-		} else if (event.getActionMasked() == MotionEvent.ACTION_UP || event.getActionMasked() == MotionEvent.ACTION_POINTER_UP) {
-			doKey(event.getPointerId(index) + 1, x, y, RELEASE, pointerCount);
-		}
-		return true;
-	}
-
-	private float initialX; // for pitch bend
-	private float initialY; // for expression
-
-	private final boolean[] keyPressed = new boolean[32];
-
 	public void updateKeysPressed() {
 		if (synth != null && ((Instrument)synth.getInstrument()) != null) {
 			Keyboard keyboard = ((Instrument)synth.getInstrument()).getKeyboardModule();
 			if (keyboard != null) {
 				for (int i = 0; i < 32; i++) {
-					if (!keyPressed[i] && keyboard.isPlaying(i + 48)) {
-						getKeyForNote(i).setPressed(true);
-						keyPressed[i] = true;
-					} else if (keyPressed[i] && !keyboard.isPlaying(i + 48)) {
-						getKeyForNote(i).setPressed(false);
-						keyPressed[i] = false;
+					if (!keyboardPane.isKeyPressed(i) && keyboard.isPlaying(i + 48)) {
+						keyboardPane.setKeyPressed(i, true);
+					} else if (keyboardPane.isKeyPressed(i) && !keyboard.isPlaying(i + 48)) {
+						keyboardPane.setKeyPressed(i, false);
 					}
 				}
 			}
-		}
-	}
-
-	@SuppressLint("NewApi")
-	private void doKey(int finger, float x, float y, int type, int fingers) {
-
-		if (!isPointInsideView(x, y, keyboard)) {
-			int[] location = new int[2];
-			keyboard.getLocationInWindow(location);
-			y = location[1] + 4;
-		}
-
-		// test black keys first, then white
-		int key = -1;
-		while (key == -1) {
-			if (isPointInsideView(x, y, key2)) {
-				key = 1;
-			} else if (isPointInsideView(x, y, key4)) {
-				key = 3;
-			} else if (isPointInsideView(x, y, key7)) {
-				key = 6;
-			} else if (isPointInsideView(x, y, key9)) {
-				key = 8;
-			} else if (isPointInsideView(x, y, key11)) {
-				key = 10;
-			} else if (isPointInsideView(x, y, key14)) {
-				key = 13;
-			} else if (isPointInsideView(x, y, key16)) {
-				key = 15;
-			} else if (isPointInsideView(x, y, key19)) {
-				key = 18;
-			} else if (isPointInsideView(x, y, key21)) {
-				key = 20;
-			} else if (isPointInsideView(x, y, key23)) {
-				key = 22;
-			} else if (x <= 0 || isPointInsideView(x, y, key1)) {
-				key = 0;
-			} else if (isPointInsideView(x, y, key3)) {
-				key = 2;
-			} else if (isPointInsideView(x, y, key5)) {
-				key = 4;
-			} else if (isPointInsideView(x, y, key6)) {
-				key = 5;
-			} else if (isPointInsideView(x, y, key8)) {
-				key = 7;
-			} else if (isPointInsideView(x, y, key10)) {
-				key = 9;
-			} else if (isPointInsideView(x, y, key12)) {
-				key = 11;
-			} else if (isPointInsideView(x, y, key13)) {
-				key = 12;
-			} else if (isPointInsideView(x, y, key15)) {
-				key = 14;
-			} else if (isPointInsideView(x, y, key17)) {
-				key = 16;
-			} else if (isPointInsideView(x, y, key18)) {
-				key = 17;
-			} else if (isPointInsideView(x, y, key20)) {
-				key = 19;
-			} else if (isPointInsideView(x, y, key21)) {
-				key = 20;
-			} else if (isPointInsideView(x, y, key22)) {
-				key = 21;
-			} else if (isPointInsideView(x, y, key24)) {
-				key = 23;
-			} else if (isPointInsideView(x, y, key25)) {
-				key = 24;
-			} else if (isPointInsideView(x, y, key26)) {
-				key = 25;
-			} else if (isPointInsideView(x, y, key27)) {
-				key = 26;
-			} else if (isPointInsideView(x, y, key28)) {
-				key = 27;
-			} else if (isPointInsideView(x, y, key29)) {
-				key = 28;
-			} else if (isPointInsideView(x, y, key30)) {
-				key = 29;
-			} else if (isPointInsideView(x, y, key31)) {
-				key = 30;
-			} else if (isPointInsideView(x, y, key32)) {
-				key = 31;
-			} else {
-				// fudge x a bit and try again
-				x = x - 4;
-			}
-		}
-		int note = key + 60 - 12;
-
-		int[] coords = new int[2];
-		keyboard.getLocationOnScreen(coords);
-		float velocity = Math.min(1.0f, 4.0f - 4.0f * (y - coords[1]) / keyboard.getHeight());
-
-		int voice = 0;
-
-		if (type == PRESS) {
-//				sendMidiNoteOn(0, note, (int)(127.0 * velocity));
-			synth.notePress(note, velocity);
-		} else if (type == RELEASE) {
-//				sendMidiNoteOff(0, note, 0);
-			synth.noteRelease(note);
-		} else if (type == SLIDE) {
-			if (lastNote[finger] != note) {
-//					sendMidiNoteOff(0, lastNote[finger], 0);
-				synth.noteRelease(lastNote[finger]);
-//					sendMidiNoteOn(0, note, (int)(127.0 * velocity));
-				synth.notePress(note, velocity);
-			} else {
-				synth.pressure(voice, velocity);
-			}
-		}
-		lastNote[finger] = note;
-
-		// if the action is up, remove the upped finger from the lastnote array
-		if (type == RELEASE) {
-			for (int i = finger; i < lastNote.length - 1; i++) {
-				lastNote[finger] = lastNote[finger + 1];
-			}
-		}
-
-		updateKeysPressed();
-	}
-
-	private View getKeyForNote(int note) {
-		if (note <= 0) {
-			return key1;
-		} else if (note == 1) {
-			return key2;
-		} else if (note == 2) {
-			return key3;
-		} else if (note == 3) {
-			return key4;
-		} else if (note == 4) {
-			return key5;
-		} else if (note == 5) {
-			return key6;
-		} else if (note == 6) {
-			return key7;
-		} else if (note == 7) {
-			return key8;
-		} else if (note == 8) {
-			return key9;
-		} else if (note == 9) {
-			return key10;
-		} else if (note == 10) {
-			return key11;
-		} else if (note == 11) {
-			return key12;
-		} else if (note == 12) {
-			return key13;
-		} else if (note == 13) {
-			return key14;
-		} else if (note == 14) {
-			return key15;
-		} else if (note == 15) {
-			return key16;
-		} else if (note == 16) {
-			return key17;
-		} else if (note == 17) {
-			return key18;
-		} else if (note == 18) {
-			return key19;
-		} else if (note == 19) {
-			return key20;
-		} else if (note == 20) {
-			return key21;
-		} else if (note == 21) {
-			return key22;
-		} else if (note == 22) {
-			return key23;
-		} else if (note == 23) {
-			return key24;
-		} else if (note == 24) {
-			return key25;
-		} else if (note == 25) {
-			return key26;
-		} else if (note == 26) {
-			return key27;
-		} else if (note == 27) {
-			return key28;
-		} else if (note == 28) {
-			return key29;
-		} else if (note == 29) {
-			return key30;
-		} else if (note == 30) {
-			return key31;
-		} else if (note == 31) {
-			return key32;
-		} else {
-			return key32;
-		}
-	}
-
-	private boolean isPointInsideView(float x, float y, View view) {
-		if (view.getVisibility() == View.GONE) {
-			return false;
-		}
-		int location[] = new int[2];
-		view.getLocationOnScreen(location);
-		int viewX = location[0];
-		int viewY = location[1];
-
-		// point is inside view bounds
-		if ((x > viewX && x < (viewX + view.getWidth())) && (y > viewY && y < (viewY + view.getHeight()))) {
-			return true;
-		} else {
-			return false;
 		}
 	}
 
@@ -2103,7 +1604,6 @@ public class MainActivity extends AbstractSingleMidiActivity implements OnTouchL
 		if (note >= 0 && upperOctave) {
 			note += 12;
 		}
-//		int note = midinote - 60 + 12;
 		int midiNote = note + 60 - 12;
 		return midiNote;
 	}
