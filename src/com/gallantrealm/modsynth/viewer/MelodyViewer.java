@@ -192,7 +192,7 @@ public class MelodyViewer extends ModuleViewer {
 			}
 		});
 		final Button midiLoadButton = (Button) view.findViewById(R.id.melodyLoad);
-		if (!ClientModel.getClientModel().isGoggleDogPass()) {
+		if (!ClientModel.getClientModel().isGoggleDogPass() && !ClientModel.getClientModel().isFullVersion()) {
 			midiLoadButton.setVisibility(View.GONE);
 		}
 		midiLoadButton.setOnClickListener(new View.OnClickListener() {
