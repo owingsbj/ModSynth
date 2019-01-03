@@ -58,13 +58,13 @@ import com.gallantrealm.modsynth.viewer.PCMViewer;
 import com.gallantrealm.mysynth.ClientModel;
 import com.gallantrealm.mysynth.ClientModelChangedEvent;
 import com.gallantrealm.mysynth.ClientModelChangedListener;
-import com.gallantrealm.mysynth.FastMath;
 import com.gallantrealm.mysynth.InputDialog;
 import com.gallantrealm.mysynth.MessageDialog;
 import com.gallantrealm.mysynth.MySynth;
 import com.gallantrealm.mysynth.SelectItemDialog;
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnDismissListener;
@@ -75,7 +75,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
-import android.hardware.usb.UsbDevice;
 import android.media.AudioManager;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -92,10 +91,8 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-import jp.kshoji.driver.midi.activity.AbstractSingleMidiActivity;
-import jp.kshoji.driver.midi.device.MidiInputDevice;
 
-public class MainActivity extends AbstractSingleMidiActivity implements View.OnClickListener, ClientModelChangedListener {
+public class MainActivity extends Activity implements View.OnClickListener, ClientModelChangedListener {
 
 	public ClientModel clientModel = ClientModel.getClientModel();
 
@@ -131,8 +128,6 @@ public class MainActivity extends AbstractSingleMidiActivity implements View.OnC
 
 	MySynth synth;
 
-	int myMidiChannel;
-
 	PowerManager.WakeLock wakelock;
 
 	String builtinSeparatorText;
@@ -167,7 +162,7 @@ public class MainActivity extends AbstractSingleMidiActivity implements View.OnC
 		// Create the synthesizer
 		int sampleRateReducer = Math.max(0, clientModel.getSampleRateReducer());
 		int nbuffers = clientModel.getNBuffers();
-		synth = MySynth.create(sampleRateReducer, nbuffers);
+		synth = MySynth.create(this, sampleRateReducer, nbuffers);
 		synth.setCallbacks(new MySynth.Callbacks() {
 			@Override
 			public void updateLevels() {
@@ -313,7 +308,7 @@ public class MainActivity extends AbstractSingleMidiActivity implements View.OnC
 					addModuleButton.setVisibility(View.VISIBLE);
 					deleteModuleButton.setVisibility(View.VISIBLE);
 				} else {
-					if (!midiDeviceAttached) {
+					if (!synth.isMidiDeviceAttached()) {
 						keyboardPane.setVisibility(View.VISIBLE);
 					}
 					// keyboardPane.startAnimation(new ScaleAnimation(1.0f,
@@ -639,15 +634,6 @@ public class MainActivity extends AbstractSingleMidiActivity implements View.OnC
 			final SettingsDialog settingsDialog = new SettingsDialog(this);
 			settingsDialog.show();
 		}
-
-		// } else if (v == recordStartButton) {
-		// startRecording();
-		// } else if (v == recordStopButton) {
-		// stopRecording();
-		// } else if (v == recordPlayButton) {
-		// playbackRecording();
-		// } else if (v == recordSaveButton) {
-		// saveRecording();
 	}
 
 	public void setKeyboardSize(int keysSelection) {
@@ -676,7 +662,7 @@ public class MainActivity extends AbstractSingleMidiActivity implements View.OnC
 	}
 
 	public void setMidiChannel(int midiChannel) {
-		this.myMidiChannel = midiChannel;
+		synth.setMidiChannel(midiChannel);
 	}
 
 	public void setTuningCents(int cents) {
@@ -1159,7 +1145,7 @@ public class MainActivity extends AbstractSingleMidiActivity implements View.OnC
 				}
 				if (instrument.getKeyboardModule() == null) {
 					keyboardPane.setVisibility(View.GONE);
-				} else if (!midiDeviceAttached) {
+				} else if (!synth.isMidiDeviceAttached()) {
 					keyboardPane.setVisibility(View.VISIBLE);
 				}
 				selectModule(((Instrument)synth.getInstrument()).selectedModule);
@@ -1275,231 +1261,6 @@ public class MainActivity extends AbstractSingleMidiActivity implements View.OnC
 			}
 		});
 	}
-
-	// --- MIDI ----
-
-	public boolean midiDeviceAttached;
-
-	@Override
-	public void onDeviceAttached(UsbDevice usbDevice) {
-		System.out.println("USB Device Attached: Vendor:" + usbDevice.getVendorId() + " Device: " + usbDevice.getDeviceId());
-		keyboardPane.setVisibility(View.GONE);
-		midiDeviceAttached = true;
-	}
-
-	@Override
-	public void onDeviceDetached(UsbDevice usbDevice) {
-		System.out.println("USB Device Detached: Vendor:" + usbDevice.getVendorId() + " Device: " + usbDevice.getDeviceId());
-		keyboardPane.setVisibility(View.VISIBLE);
-		midiDeviceAttached = false;
-	}
-
-	@Override
-	public void onMidiMiscellaneousFunctionCodes(MidiInputDevice sender, int cable, int byte1, int byte2, int byte3) {
-	}
-
-	@Override
-	public void onMidiCableEvents(MidiInputDevice sender, int cable, int byte1, int byte2, int byte3) {
-	}
-
-	@Override
-	public void onMidiSystemCommonMessage(MidiInputDevice sender, int cable, byte[] bytes) {
-	}
-
-	@Override
-	public void onMidiSystemExclusive(MidiInputDevice sender, int cable, byte[] systemExclusive) {
-	}
-
-	@Override
-	public void onMidiNoteOn(MidiInputDevice sender, int cable, int channel, int midinote, int midivelocity) {
-		if (midivelocity == 0) {
-			onMidiNoteOff(sender, cable, channel, midinote, midivelocity);
-			return;
-		}
-		if (myMidiChannel != 0 && channel != myMidiChannel) {
-			return;
-		}
-		//System.out.println("MIDI Note On: " + midinote + " velocity " + midivelocity);
-		float velocity = FastMath.min(1.0f, (midivelocity + 1) / 128.0f); // TODO add a sensitivity option
-		if (synth != null) {
-			synth.notePress(midinote, velocity);
-		}
-	}
-
-	@Override
-	public void onMidiNoteOff(MidiInputDevice sender, int cable, int channel, int midinote, int midivelocity) {
-		if (myMidiChannel != 0 && channel != myMidiChannel) {
-			return;
-		}
-		//System.out.println("MIDI Note Off: " + midinote + " velocity " + midivelocity);
-		if (synth != null) {
-			synth.noteRelease(midinote);
-		}
-	}
-
-	@Override
-	public void onMidiPolyphonicAftertouch(MidiInputDevice sender, int cable, int channel, int midinote, int pressure) {
-		if (myMidiChannel != 0 && channel != myMidiChannel) {
-			return;
-		}
-		//System.out.println("MIDI Poly Aftertouch: " + midinote + " pressure " + pressure);
-	}
-
-	@Override
-	public void onMidiControlChange(MidiInputDevice sender, int cable, int channel, int function, int value) {
-		if (myMidiChannel != 0 && channel != myMidiChannel) {
-			return;
-		}
-		//System.out.println("MIDI CC " + function + " " + value);
-		if (function != 0 && synth != null) {
-			synth.updateCC(function, value / 127.0f);
-		}
-		MidiControlDialog.controlChanged(this, function);
-
-//		if (function == 0) { // ?
-//		} else if (function == 1) { // modulation amount
-//			// float currentVibratoAmount = progress * progress / 25000.0f;
-//			synth.expression(value / 128.0f);
-//		} else if (function == 2) { // breath controller
-//			synth.pressure(0, value); // assumed monophonic
-//		} else if (function == 3) { // chorus (pulse) width
-//			// ((Instrument)synth.getInstrument()).chorusWidth = value / 128.0f;
-//			// TODO determine what to do with pulse width
-//			updateControls();
-//		} else if (function == 7) { // overall volume
-//			AudioManager am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-//			am.setStreamVolume(AudioManager.STREAM_MUSIC, (int) ((value / 128.0f) * am.getStreamMaxVolume(AudioManager.STREAM_MUSIC)), 0);
-//		} else if (function == 10) { // pan
-//			// doesn't exist
-//		} else if (function == 14) { // amp level
-//			AudioManager am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-//			am.setStreamVolume(AudioManager.STREAM_MUSIC, (int) ((value / 128.0f) * am.getStreamMaxVolume(AudioManager.STREAM_MUSIC)), 0);
-//		} else if (function == 16) { // vibrato rate
-//			// synth.vibratoRate = value;
-//			updateControls();
-//		} else if (function == 17) { // tremelo rate (actually lfo2)
-//			// doesn't exist
-//		} else if (function == 18) { // vibrato amount
-//			// synth.vibratoAmount = value / 128.0f;
-//			updateControls();
-//		} else if (function == 22) { // tremelo amount (actually lfo2)
-//			// doesn't exist
-//		} else if (function == 28) { // filter sustain
-//			// synth.filterEnvSustain = value / 128.0f;
-//			updateControls();
-//		} else if (function == 29) { // filter release
-//			// synth.filterEnvRelease = value;
-//			updateControls();
-//		} else if (function == 31) { // amp sustain
-//			// synth.ampSustain = value / 128.0f;
-//			updateControls();
-//		} else if (function == 64) { // damper pedal
-//			if (value > 0) {
-//				synth.damper(true);
-//			} else {
-//				synth.damper(false);
-//			}
-//		} else if (function == 70) {
-//
-//		} else if (function == 71) { // filter resonance
-//			// synth.filterResonance = value / 128.0f;
-//			updateControls();
-//		} else if (function == 72) { // amp release
-//			// synth.ampRelease = value;
-//			updateControls();
-//		} else if (function == 73) { // amp attack
-//			// synth.ampAttack = value;
-//			updateControls();
-//		} else if (function == 74) { // filter cutoff
-//			// synth.filterLow = value / 128.0f;
-//			updateControls();
-//		} else if (function == 75) { // amp decay
-//			// synth.ampDecay = value;
-//			updateControls();
-//		} else if (function == 76) { // vibrato rate
-//			// synth.vibratoRate = value / 128.0f;
-//			updateControls();
-//		} else if (function == 77) { // vibrato amount
-//			// synth.vibratoAmount = value / 128.0f;
-//			updateControls();
-//		} else if (function == 78) { // vibrato attack
-//			// synth.vibratoAttack = value;
-//			updateControls();
-//		} else if (function == 81) { // filter depth
-//			// synth.filterHigh = value / 128.0f;
-//			updateControls();
-//		} else if (function == 82) { // filter attack
-//			// synth.filterEnvAttack = value;
-//			updateControls();
-//		} else if (function == 83) { // filter decay
-//			// synth.filterEnvDecay = value;
-//			updateControls();
-//		} else if (function == 91) { // reverb amount
-//			// synth.echoFeedback = value / 128.0f;
-//			updateControls();
-//		} else if (function == 93) { // chorus amount
-//			// synth.echoAmount = value / 128.0f;
-//			updateControls();
-//		}
-//
-//		// Special commands
-//		else if (function == 120) { // all sound off
-//			synth.allSoundOff();
-//		} else if (function == 121) { // reset all controllers
-//			// not implemented
-//		} else if (function == 122) { // local control
-//			// not implemented
-//		} else if (function == 123) { // all notes off
-//			// todo
-//		} else if (function == 124) { // omni mode off
-//			// not supported
-//		} else if (function == 125) { // omni mode on
-//			// the default
-//		} else if (function == 126) { // mono mode on
-//			// todo
-//		} else if (function == 127) { // poly mode on
-//			// todo
-//		}
-	}
-
-	@Override
-	public void onMidiProgramChange(MidiInputDevice sender, int cable, int channel, int program) {
-		if (myMidiChannel != 0 && channel != myMidiChannel) {
-			return;
-		}
-		System.out.println("MIDI Program Change: " + program);
-		loadProgram(program + 1);
-	}
-
-	@Override
-	public void onMidiChannelAftertouch(MidiInputDevice sender, int cable, int channel, int midipressure) {
-		if (myMidiChannel != 0 && channel != myMidiChannel) {
-			return;
-		}
-		//System.out.println("MIDI Channel Aftertouch: " + channel + " " + midipressure);
-		if (synth != null) {
-			float pressure = FastMath.min(1.0f, (midipressure + 1) / 128.0f); // TODO add a sensitivity option
-			synth.pressure(pressure);
-		}
-	}
-
-	@Override
-	public void onMidiPitchWheel(MidiInputDevice sender, int cable, int channel, int amount) {
-		if (myMidiChannel != 0 && channel != myMidiChannel) {
-			return;
-		}
-		if (synth != null) {
-			synth.pitchBend((amount - 8192) / 8192.0f);
-		}
-	}
-
-	@Override
-	public void onMidiClock() {
-		if (synth != null) {
-			synth.midiclock();
-		}
-	}
-
 	@Override
 	public boolean dispatchKeyEvent(KeyEvent event) {
 		if (event.getAction() == KeyEvent.ACTION_DOWN) {
