@@ -54,6 +54,7 @@ import com.gallantrealm.modsynth.theme.SunsetTheme;
 import com.gallantrealm.modsynth.theme.TropicalTheme;
 import com.gallantrealm.modsynth.theme.WoodTheme;
 import com.gallantrealm.modsynth.viewer.ModuleViewer;
+import com.gallantrealm.modsynth.viewer.OutputViewer;
 import com.gallantrealm.modsynth.viewer.PCMViewer;
 import com.gallantrealm.mysynth.ClientModel;
 import com.gallantrealm.mysynth.ClientModelChangedEvent;
@@ -1254,7 +1255,12 @@ public class MainActivity extends Activity implements View.OnClickListener, Clie
 					} else {
 						noModSelectedText.setVisibility(View.VISIBLE);
 					}
-					synth.setScopeShowing(module instanceof Output);
+					if (module instanceof Output) {
+						synth.setScope(((OutputViewer)module.getViewer((Instrument)synth.getInstrument())).scope);
+						synth.setScopeShowing(true);
+					} else {
+						synth.setScopeShowing(false);
+					}
 				} else {
 					synth.setScopeShowing(false);
 				}
