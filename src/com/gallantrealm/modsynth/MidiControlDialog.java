@@ -1,10 +1,9 @@
 package com.gallantrealm.modsynth;
 
+import com.gallantrealm.android.GallantDialog;
 import com.gallantrealm.android.RangeSlider;
 import com.gallantrealm.android.Translator;
 import com.gallantrealm.modsynth.module.CC;
-import com.gallantrealm.mysynth.ClientModel;
-import com.gallantrealm.mysynth.GallantDialog;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Typeface;

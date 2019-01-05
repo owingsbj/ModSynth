@@ -11,7 +11,7 @@ import java.nio.BufferUnderflowException;
 import java.nio.ShortBuffer;
 import java.util.ArrayList;
 import java.util.List;
-import com.gallantrealm.android.AssetLoader;
+import com.gallantrealm.modsynth.AssetLoader;
 import com.gallantrealm.modsynth.Instrument;
 import jp.kshoji.com.sun.media.sound.ModelByteBuffer;
 import jp.kshoji.com.sun.media.sound.SF2GlobalRegion;

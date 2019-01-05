@@ -1,5 +1,8 @@
 package com.gallantrealm.modsynth;
 
+import com.gallantrealm.android.GallantDialog;
+import com.gallantrealm.android.MessageDialog;
+import com.gallantrealm.android.SelectItemDialog;
 import com.gallantrealm.android.Translator;
 import com.gallantrealm.modsynth.theme.AuraTheme;
 import com.gallantrealm.modsynth.theme.BlueTheme;
@@ -13,10 +16,6 @@ import com.gallantrealm.modsynth.theme.SpaceTheme;
 import com.gallantrealm.modsynth.theme.SunsetTheme;
 import com.gallantrealm.modsynth.theme.TropicalTheme;
 import com.gallantrealm.modsynth.theme.WoodTheme;
-import com.gallantrealm.mysynth.ClientModel;
-import com.gallantrealm.mysynth.GallantDialog;
-import com.gallantrealm.mysynth.MessageDialog;
-import com.gallantrealm.mysynth.SelectItemDialog;
 import android.content.DialogInterface;
 import android.graphics.Typeface;
 import android.media.AudioManager;

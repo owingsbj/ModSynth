@@ -7,7 +7,7 @@ import com.gallantrealm.modsynth.R;
 import com.gallantrealm.modsynth.module.Mixer;
 import com.gallantrealm.modsynth.module.Mixer.MixFunction;
 import com.gallantrealm.modsynth.module.Module;
-import com.gallantrealm.mysynth.ClientModel;
+import com.gallantrealm.modsynth.ClientModel;
 import android.graphics.Canvas;
 import android.graphics.Paint.Style;
 import android.view.View;

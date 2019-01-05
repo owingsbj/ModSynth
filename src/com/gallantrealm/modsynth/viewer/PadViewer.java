@@ -9,7 +9,7 @@ import com.gallantrealm.modsynth.R;
 import com.gallantrealm.modsynth.module.Module;
 import com.gallantrealm.modsynth.module.Pad;
 import com.gallantrealm.modsynth.module.Pad.PadType;
-import com.gallantrealm.mysynth.ClientModel;
+import com.gallantrealm.modsynth.ClientModel;
 import android.graphics.Canvas;
 import android.view.MotionEvent;
 import android.view.View;

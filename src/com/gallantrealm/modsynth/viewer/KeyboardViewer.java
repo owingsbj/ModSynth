@@ -7,7 +7,7 @@ import com.gallantrealm.modsynth.MidiControlDialog;
 import com.gallantrealm.modsynth.R;
 import com.gallantrealm.modsynth.module.Keyboard;
 import com.gallantrealm.modsynth.module.Module;
-import com.gallantrealm.mysynth.ClientModel;
+import com.gallantrealm.modsynth.ClientModel;
 import com.gallantrealm.mysynth.MySynth;
 
 import android.graphics.Canvas;

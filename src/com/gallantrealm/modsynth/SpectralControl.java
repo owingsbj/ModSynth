@@ -1,7 +1,6 @@
 package com.gallantrealm.modsynth;
 
 import com.gallantrealm.modsynth.module.SpectralFilter;
-import com.gallantrealm.mysynth.ClientModel;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;

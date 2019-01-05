@@ -7,7 +7,7 @@ import com.gallantrealm.modsynth.R;
 import com.gallantrealm.modsynth.SpectralControl;
 import com.gallantrealm.modsynth.module.Module;
 import com.gallantrealm.modsynth.module.SpectralFilter;
-import com.gallantrealm.mysynth.MessageDialog;
+import com.gallantrealm.android.MessageDialog;
 import com.gallantrealm.mysynth.MySynth;
 
 import android.graphics.Canvas;

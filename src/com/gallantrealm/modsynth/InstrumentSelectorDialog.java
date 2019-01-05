@@ -13,7 +13,6 @@ import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPFile;
 import com.gallantrealm.android.FileSelectorDialog;
-import com.gallantrealm.mysynth.ClientModel;
 import android.app.Activity;
 import android.os.Bundle;
 import android.widget.TextView;

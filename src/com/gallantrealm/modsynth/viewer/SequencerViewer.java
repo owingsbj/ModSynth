@@ -6,7 +6,7 @@ import com.gallantrealm.modsynth.MainActivity;
 import com.gallantrealm.modsynth.R;
 import com.gallantrealm.modsynth.module.Module;
 import com.gallantrealm.modsynth.module.Sequencer;
-import com.gallantrealm.mysynth.ClientModel;
+import com.gallantrealm.modsynth.ClientModel;
 import android.annotation.SuppressLint;
 import android.graphics.Canvas;
 import android.view.View;

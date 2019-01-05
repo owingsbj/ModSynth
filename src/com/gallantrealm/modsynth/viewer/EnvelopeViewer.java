@@ -6,7 +6,7 @@ import com.gallantrealm.modsynth.MidiControlDialog;
 import com.gallantrealm.modsynth.R;
 import com.gallantrealm.modsynth.module.Envelope;
 import com.gallantrealm.modsynth.module.Module;
-import com.gallantrealm.mysynth.ClientModel;
+import com.gallantrealm.modsynth.ClientModel;
 import android.graphics.Canvas;
 import android.view.View;
 import android.widget.AdapterView;
