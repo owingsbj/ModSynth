@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import com.gallantrealm.android.FileUtils;
+import com.gallantrealm.android.MessageDialog;
 import com.gallantrealm.android.Translator;
 import com.gallantrealm.modsynth.Instrument;
 import com.gallantrealm.modsynth.MainActivity;
@@ -13,8 +14,6 @@ import com.gallantrealm.modsynth.Note;
 import com.gallantrealm.modsynth.R;
 import com.gallantrealm.modsynth.module.Melody;
 import com.gallantrealm.modsynth.module.Module;
-import com.gallantrealm.modsynth.ClientModel;
-import com.gallantrealm.android.MessageDialog;
 import com.leff.midi.MidiFile;
 import com.leff.midi.MidiTrack;
 import com.leff.midi.event.MidiEvent;
@@ -192,13 +191,10 @@ public class MelodyViewer extends ModuleViewer {
 			}
 		});
 		final Button midiLoadButton = (Button) view.findViewById(R.id.melodyLoad);
-		if (!ClientModel.getClientModel().isGoggleDogPass() && !ClientModel.getClientModel().isFullVersion()) {
-			midiLoadButton.setVisibility(View.GONE);
-		}
 		midiLoadButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				if (Build.VERSION.SDK_INT >= 23 && mainActivity.checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-					mainActivity.requestPermissions(new String[] { Manifest.permission.READ_EXTERNAL_STORAGE }, MainActivity.REQUEST_PERMISSION_READ_PCM_EXTERNAL_STORAGE);
+					mainActivity.requestPermissions(new String[] { Manifest.permission.READ_EXTERNAL_STORAGE }, MainActivity.REQUEST_PERMISSION_READ_MIDIFILE_EXTERNAL_STORAGE);
 					return;
 				}
 				onContinueMidiFileSelect(mainActivity);

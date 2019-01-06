@@ -56,6 +56,7 @@ import com.gallantrealm.modsynth.theme.SpaceTheme;
 import com.gallantrealm.modsynth.theme.SunsetTheme;
 import com.gallantrealm.modsynth.theme.TropicalTheme;
 import com.gallantrealm.modsynth.theme.WoodTheme;
+import com.gallantrealm.modsynth.viewer.MelodyViewer;
 import com.gallantrealm.modsynth.viewer.ModuleViewer;
 import com.gallantrealm.modsynth.viewer.OutputViewer;
 import com.gallantrealm.modsynth.viewer.PCMViewer;
@@ -1009,6 +1010,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Clie
 	static final public int REQUEST_PERMISSION_WRITE_EXTERNAL_STORAGE = 123;
 	static final public int REQUEST_PERMISSION_READ_PCM_EXTERNAL_STORAGE = 124;
 	static final public int REQUEST_PERMISSION_READ_IMAGE_EXTERNAL_STORAGE = 125;
+	static final public int REQUEST_PERMISSION_READ_MIDIFILE_EXTERNAL_STORAGE = 126;
 
 	@Override
 	public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
@@ -1027,7 +1029,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Clie
 			if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 				setCustomBackground(clientModel.getCustomBackgroundPath());
 			} else {
-				Toast.makeText(MainActivity.this, "Cannot open PCM.  Permission denied.", Toast.LENGTH_SHORT).show();
+				Toast.makeText(MainActivity.this, "Cannot open image.  Permission denied.", Toast.LENGTH_SHORT).show();
 			}
 			break;
 		case REQUEST_PERMISSION_READ_PCM_EXTERNAL_STORAGE:
@@ -1038,6 +1040,16 @@ public class MainActivity extends Activity implements View.OnClickListener, Clie
 				}
 			} else {
 				Toast.makeText(MainActivity.this, "Cannot open PCM.  Permission denied.", Toast.LENGTH_SHORT).show();
+			}
+			break;
+		case REQUEST_PERMISSION_READ_MIDIFILE_EXTERNAL_STORAGE:
+			if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+				if (((Instrument)synth.getInstrument()).selectedModule != null) {
+					((MelodyViewer) ((Instrument)synth.getInstrument()).selectedModule.getViewer((Instrument)synth.getInstrument())).onContinueMidiFileSelect(this);
+					return;
+				}
+			} else {
+				Toast.makeText(MainActivity.this, "Cannot open MIDI file.  Permission denied.", Toast.LENGTH_SHORT).show();
 			}
 			break;
 		default:
