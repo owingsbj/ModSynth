@@ -15,6 +15,7 @@ import com.gallantrealm.android.FileSelectorDialog;
 import com.gallantrealm.android.InputDialog;
 import com.gallantrealm.android.KeyboardControl;
 import com.gallantrealm.android.MessageDialog;
+import com.gallantrealm.android.Scope;
 import com.gallantrealm.android.SelectItemDialog;
 import com.gallantrealm.android.Translator;
 import com.gallantrealm.modsynth.module.Amp;
@@ -126,6 +127,8 @@ public class MainActivity extends Activity implements View.OnClickListener, Clie
 	TextView noModSelectedText;
 
 	MySynth synth;
+	
+	Scope scope;  // set when scope is showing
 
 	PowerManager.WakeLock wakelock;
 
@@ -162,11 +165,17 @@ public class MainActivity extends Activity implements View.OnClickListener, Clie
 		int sampleRateReducer = Math.max(0, clientModel.getSampleRateReducer());
 		int nbuffers = clientModel.getNBuffers();
 		synth = MySynth.create(this, sampleRateReducer, nbuffers);
-		synth.setCallbacks(new MySynth.Callbacks() {
+		synth.setMonitor(new MySynth.Monitor() {
+			int t;
 			@Override
-			public void updateLevels() {
-				if (modGraph != null) {
+			public void update(float left, float right) {
+				if (scope != null) {
+					scope.scope((left + right) / 2.0f);
+				}
+				t += 1;
+				if (modGraph != null && t >= 1000) {
 					modGraph.updateLevels();
+					t = 0;
 				}
 			}
 		});
@@ -1265,13 +1274,12 @@ public class MainActivity extends Activity implements View.OnClickListener, Clie
 						noModSelectedText.setVisibility(View.VISIBLE);
 					}
 					if (module instanceof Output) {
-						synth.setScope(((OutputViewer)module.getViewer((Instrument)synth.getInstrument())).scope);
-						synth.setScopeShowing(true);
+						scope = ((OutputViewer)module.getViewer((Instrument)synth.getInstrument())).scope;
 					} else {
-						synth.setScopeShowing(false);
+						scope = null;
 					}
 				} else {
-					synth.setScopeShowing(false);
+					scope = null;
 				}
 			}
 		});
