@@ -1,12 +1,12 @@
 package com.gallantrealm.modsynth.viewer;
 
 import com.gallantrealm.android.VerticalBalanceSlider;
+import com.gallantrealm.modsynth.ClientModel;
 import com.gallantrealm.modsynth.Instrument;
 import com.gallantrealm.modsynth.MainActivity;
 import com.gallantrealm.modsynth.R;
 import com.gallantrealm.modsynth.module.Module;
 import com.gallantrealm.modsynth.module.Sequencer;
-import com.gallantrealm.modsynth.ClientModel;
 import android.annotation.SuppressLint;
 import android.graphics.Canvas;
 import android.view.View;
@@ -184,13 +184,11 @@ public class SequencerViewer extends ModuleViewer {
 					module.sequence[i] = seekBars[i].getProgress();
 					instrument.moduleUpdated(module);
 					if (module.sequenceOn[i]) {
-						module.activeSteps = Math.max(module.activeSteps, i + 1);
 						buttons[i].setChecked(true);
 					} else {
 						buttons[i].setChecked(false);
 					}
 				}
-				lengthSpinner.setSelection(Math.max(0, module.activeSteps - 1));
 			}
 		};
 		for (int i = 0; i < Sequencer.MAXSTEPS; i++) {

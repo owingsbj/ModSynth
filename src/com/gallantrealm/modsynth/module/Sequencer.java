@@ -83,9 +83,11 @@ public class Sequencer extends Module {
 		if (sequenceOn == null) {
 			sequenceOn = new boolean[MAXSTEPS + 1];
 			for (int i = 0; i < MAXSTEPS; i++) {
-				sequenceOn[i] = sequence[i] > 0;
-				if (!sequenceOn[i]) {
+				if (sequence[i] <= 0) {
 					sequence[i] = 12;
+				}
+				if (i >= activeSteps || sequence[i] > 0) {
+					sequenceOn[i] = true;
 				}
 			}
 		}
