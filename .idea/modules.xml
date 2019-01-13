@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/../GooglePlayServices/GooglePlayServices.iml" filepath="$PROJECT_DIR$/../GooglePlayServices/GooglePlayServices.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ModSynth.iml" filepath="$PROJECT_DIR$/ModSynth.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../MyAndroid/MyAndroid.iml" filepath="$PROJECT_DIR$/../MyAndroid/MyAndroid.iml" />
+    </modules>
+  </component>
+</project>
