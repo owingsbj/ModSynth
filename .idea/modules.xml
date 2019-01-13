@@ -5,6 +5,7 @@
       <module fileurl="file://$PROJECT_DIR$/../GooglePlayServices/GooglePlayServices.iml" filepath="$PROJECT_DIR$/../GooglePlayServices/GooglePlayServices.iml" />
       <module fileurl="file://$PROJECT_DIR$/ModSynth.iml" filepath="$PROJECT_DIR$/ModSynth.iml" />
       <module fileurl="file://$PROJECT_DIR$/../MyAndroid/MyAndroid.iml" filepath="$PROJECT_DIR$/../MyAndroid/MyAndroid.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../MySynth/MySynth.iml" filepath="$PROJECT_DIR$/../MySynth/MySynth.iml" />
     </modules>
   </component>
 </project>
