@@ -88,7 +88,7 @@ public class SettingsDialog extends GallantDialog {
 			chooseBackgroundButton.setTypeface(typeface);
 		}
 
-		ArrayAdapter<CharSequence> languageAdapter = new ArrayAdapter(activity, R.layout.spinner_item, new String[] { "Default", "English", "franÃ§ais", "Deutsche", "EspaÃ±ol", "Ñ€ÑƒÑ�Ñ�ÐºÐ¸Ð¹" });
+		ArrayAdapter<CharSequence> languageAdapter = new ArrayAdapter(activity, R.layout.spinner_item, new String[] { "Default", "English", "français", "Deutsche", "Español", "русский" });
 		languageAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		languageSpinner.setAdapter(languageAdapter);
 		languageSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
