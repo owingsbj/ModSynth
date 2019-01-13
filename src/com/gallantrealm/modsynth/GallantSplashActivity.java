@@ -5,7 +5,6 @@ import java.util.TimerTask;
 import com.gallantrealm.android.GallantActivity;
 import com.gallantrealm.android.Translator;
 import com.gallantrealm.android.themes.Theme;
-import com.gallantrealm.mysynth.R;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;

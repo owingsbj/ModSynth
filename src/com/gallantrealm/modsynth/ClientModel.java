@@ -20,7 +20,6 @@ import com.example.android.trivialdrivesample.util.Purchase;
 import com.gallantrealm.android.MessageDialog;
 import com.gallantrealm.android.themes.DefaultTheme;
 import com.gallantrealm.android.themes.Theme;
-import com.gallantrealm.mysynth.R;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -85,9 +84,9 @@ public class ClientModel {
 		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
 		preferencesVersion = preferences.getInt("preferencesVersion", 2);
 		if (preferencesVersion <= 1) { // old prefs that used myworld names
-			backgroundName = preferences.getString("avatarName", context.getString(R.string.defaultAvatarName));
-			instrumentName = preferences.getString("worldName", context.getString(R.string.defaultWorldName));
-			fullVersion = preferences.getBoolean("fullVersion", "true".equals(context.getString(R.string.fullVersion)));
+			backgroundName = preferences.getString("avatarName", null);
+			instrumentName = preferences.getString("worldName", null);
+			fullVersion = preferences.getBoolean("fullVersion", false);
 			playCount = preferences.getInt("playCount", 0);
 			keyboardSize = preferences.getInt("score0", 0);
 			midiChannel = preferences.getInt("score1", 0);
@@ -98,10 +97,10 @@ public class ClientModel {
 			nbuffers = preferences.getInt("score6", 0);
 			language = preferences.getInt("score7", 0);
 			customBackgroundPath = preferences.getString("avatarDisplayName0", "");
-		} else { // new mysynth names
-			backgroundName = preferences.getString("avatarName", context.getString(R.string.defaultAvatarName));
-			instrumentName = preferences.getString("worldName", context.getString(R.string.defaultWorldName));
-			fullVersion = preferences.getBoolean("fullVersion", "true".equals(context.getString(R.string.fullVersion)));
+		} else { // new modsynth names
+			backgroundName = preferences.getString("backgroundName", preferences.getString("avatarName", null));
+			instrumentName = preferences.getString("instrumentName", preferences.getString("worldName", null));
+			fullVersion = preferences.getBoolean("fullVersion", false);
 			playCount = preferences.getInt("playCount", 0);
 			keyboardSize = preferences.getInt("keyboardSize", 0);
 			midiChannel = preferences.getInt("midiChannel", 0);
@@ -143,8 +142,8 @@ public class ClientModel {
 		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
 		SharedPreferences.Editor editor = preferences.edit();
 		editor.putInt("preferencesVersion", 2);
-		editor.putString("avatarName", backgroundName);
-		editor.putString("worldName", instrumentName);
+		editor.putString("backgroundName", backgroundName);
+		editor.putString("instrumentName", instrumentName);
 		if (fullVersion) {
 			editor.putBoolean("fullVersion", fullVersion);
 		}
