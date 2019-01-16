@@ -2,10 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/../GooglePlayServices/GooglePlayServices.iml" filepath="$PROJECT_DIR$/../GooglePlayServices/GooglePlayServices.iml" />
       <module fileurl="file://$PROJECT_DIR$/ModSynth.iml" filepath="$PROJECT_DIR$/ModSynth.iml" />
-      <module fileurl="file://$PROJECT_DIR$/../MyAndroid/MyAndroid.iml" filepath="$PROJECT_DIR$/../MyAndroid/MyAndroid.iml" />
-      <module fileurl="file://$PROJECT_DIR$/../MySynth/MySynth.iml" filepath="$PROJECT_DIR$/../MySynth/MySynth.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/app.iml" />
     </modules>
   </component>
 </project>
