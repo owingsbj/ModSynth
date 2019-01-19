@@ -2,7 +2,7 @@
 
 A modular synthesizer for Android.  See https://play.google.com/store/apps/details?id=com.gallantrealm.modsynth for the installable.  If you'd like to view or create an issue for a problem or feature request see the list at https://github.com/owingsbj/ModSynth/issues.
 
-This synthesizer is based on the MySynth synthesizer engine.   At this time, portions of ModSynth are being generalized and moved to MySynth.  Once that completes, MySynth will be made public and you can use it to build your own synthesizer for Android.
+This synthesizer is based on the [MySynth](https://github.com/owingsbj/MySynth) synthesizer engine.   It also uses widgets that I've created or obtained and placed into the [MyAndroid](https://github.com/owingsbj/MyAndroid) repository.
 
 The source for ModSynth is available here for your examination and suggestion for improvement.  You could also create derived works of course, as it is allowed by the license.  However, I wouldn't suggest making another duplicate or slightly modified ModSynth application and releasing it on Google Play, since
 
@@ -23,7 +23,8 @@ You can easy fix it.
 - Here you not see files DxConsole$1.class and DxConsole.class.
 - Now navigate to dx.jar for 25.0.3 or before.
 - Again navigate to com\android\dx\command inside this archive.
-- Here you see files DxConsole$1.class and DxConsole.class. Copy it from old dx.jar to new dx.jar. I just drop its from one WinRAR window to another.
+- Here you see files DxConsole$1.class and DxConsole.class. Copy it from old dx.jar
+  to new dx.jar. I just drop its from one WinRAR window to another.
 
 All done. Now you can use new dx.jar with Eclipse ADT.
 
