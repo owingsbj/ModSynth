@@ -2,7 +2,7 @@
 
 A modular synthesizer for Android.  See https://play.google.com/store/apps/details?id=com.gallantrealm.modsynth for the installable.  If you'd like to view or create an issue for a problem or feature request see the list at https://github.com/owingsbj/ModSynth/issues.
 
-This synthesizer is based on the [MySynth](https://github.com/owingsbj/MySynth) synthesizer engine.   It also uses widgets that I've created or obtained and placed into the [MyAndroid](https://github.com/owingsbj/MyAndroid) repository.
+This synthesizer is dependent on the [MySynth](https://github.com/owingsbj/MySynth) synthesizer engine.   It also uses widgets that I've created or obtained and placed into the [MyAndroid](https://github.com/owingsbj/MyAndroid) repository.  You'll need to download both of these repositories and have them residing under the same parent folder as ModSynth to resolve dependencies.
 
 The source for ModSynth is available here for your examination and suggestion for improvement.  You could also create derived works of course, as it is allowed by the license.  However, I wouldn't suggest making another duplicate or slightly modified ModSynth application and releasing it on Google Play, since
 
