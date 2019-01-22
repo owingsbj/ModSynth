@@ -129,6 +129,7 @@ public class KeyboardViewer extends ModuleViewer {
 				mainActivity.updateKeysPressed();
 			}
 		});
+		sustainBox.setOnLongClickListener(MidiControlDialog.newLongClickListener(module.sustainCC));
 
 		module.dirty = false;
 	}
@@ -165,6 +166,15 @@ public class KeyboardViewer extends ModuleViewer {
 				public void run() {
 					final Spinner tuningSpinner = (Spinner) view.findViewById(R.id.keyboardTuningSpinner);
 					tuningSpinner.setSelection(module.tuning);
+				}
+			});
+		}
+		if (module.sustainCC.cc == cc) {
+			view.post(new Runnable() {
+				@Override
+				public void run() {
+					final CheckBox sustainCheckBox = (CheckBox) view.findViewById(R.id.keyboardSustain);
+					sustainCheckBox.setChecked(module.getSustaining());
 				}
 			});
 		}
