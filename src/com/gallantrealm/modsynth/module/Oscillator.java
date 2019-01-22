@@ -2,7 +2,7 @@ package com.gallantrealm.modsynth.module;
 
 import java.io.Serializable;
 import com.gallantrealm.android.Translator;
-import com.gallantrealm.mysynth.FastMath;
+import com.gallantrealm.modsynth.FastMath;
 
 public class Oscillator extends Module {
 	private static final long serialVersionUID = 1L;
