@@ -21,6 +21,7 @@ public class Keyboard extends Module {
 	public CC voicesCC;
 	public CC tuningCC;
 	public CC octaveCC;
+	public CC sustainCC;
 
 //	private transient float[] prepreLevel;
 	private transient float[] preLevel;
@@ -331,6 +332,11 @@ public class Keyboard extends Module {
 			octaveCC = new CC();
 			octaveCC.setRangeLimits(0, 9);
 		}
+		if (sustainCC == null) {
+			sustainCC = new CC();
+			sustainCC.setRangeLimits(0, 1);
+			sustainCC.cc = 64; //Use default sustain CC
+		}
 		noteVelocities = new float[256];
 		
 		  // replaced legato with zero voices
@@ -396,6 +402,9 @@ public class Keyboard extends Module {
 		if (octaveCC.cc == cc) {
 			double v = octaveCC.range(value);
 			octave = (int)v;
+		}
+		if (sustainCC.cc == cc) {
+			setSustaining(value > 0.5);
 		}
 	}
 
