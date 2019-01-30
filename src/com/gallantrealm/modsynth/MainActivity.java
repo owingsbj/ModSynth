@@ -62,6 +62,7 @@ import com.gallantrealm.modsynth.viewer.ModuleViewer;
 import com.gallantrealm.modsynth.viewer.OutputViewer;
 import com.gallantrealm.modsynth.viewer.PCMViewer;
 import com.gallantrealm.mysynth.MySynth;
+import com.gallantrealm.mysynth.MySynthMidi;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -127,8 +128,9 @@ public class MainActivity extends Activity implements View.OnClickListener, Clie
 	TextView noModSelectedText;
 
 	MySynth synth;
-	
-	Scope scope;  // set when scope is showing
+	MySynthMidi midi;
+
+	Scope scope; // set when scope is showing
 
 	PowerManager.WakeLock wakelock;
 
@@ -165,10 +167,9 @@ public class MainActivity extends Activity implements View.OnClickListener, Clie
 		int sampleRateReducer = Math.max(0, clientModel.getSampleRateReducer());
 		int nbuffers = clientModel.getNBuffers();
 		synth = MySynth.create(this, sampleRateReducer, nbuffers);
-		synth.setMonitor(new MySynth.Monitor() {
+		synth.setCallbacks(new MySynth.Callbacks() {
 			int t;
-			@Override
-			public void update(float left, float right) {
+			public void onUpdateScope(float left, float right) {
 				if (scope != null) {
 					scope.scope((left + right) / 2.0f);
 				}
@@ -177,6 +178,61 @@ public class MainActivity extends Activity implements View.OnClickListener, Clie
 					modGraph.updateLevels();
 					t = 0;
 				}
+			}
+			public void onUpdateCC(int control, double value) {
+				if (MidiControlDialog.lastMidiControlDialog != null) {
+					MidiControlDialog.lastMidiControlDialog.controlChanged(MainActivity.this, control);
+				}
+			}
+		});
+
+		// Start up the MIDI support
+		midi = MySynthMidi.create(this, synth, new MySynthMidi.Callbacks() {
+			public void onDeviceAttached(final String deviceName) {
+				runOnUiThread(new Runnable() {
+					@Override
+					public void run() {
+						keyboardPane.setVisibility(View.GONE);
+						Toast.makeText(MainActivity.this, deviceName + " attached", Toast.LENGTH_LONG).show();
+					}
+				});
+			}
+			public void onDeviceDetached(final String deviceName) {
+				runOnUiThread(new Runnable() {
+					@Override
+					public void run() {
+						keyboardPane.setVisibility(View.VISIBLE);
+						Toast.makeText(MainActivity.this, deviceName + " detached", Toast.LENGTH_LONG).show();
+					}
+				});
+			}
+			public void onControlChange(int control, int value) {
+				if (synth.getInstrument() != null) {
+					synth.getInstrument().updateCC(control, value / 127.0f);
+				}
+			}
+			public void onProgramChange(final int programNum) {
+				runOnUiThread(new Runnable() {
+					@Override
+					public void run() {
+						String soundName = clientModel.findObject("" + programNum + " ", ".modsynth");
+						if (soundName == null) {
+							Toast.makeText(MainActivity.this, "No instrument found with name starting with \"" + programNum + " \" ", Toast.LENGTH_LONG).show();
+						} else {
+							loadInstrument(soundName);
+							ClientModel.getClientModel().setInstrumentName(soundName);
+							ClientModel.getClientModel().savePreferences(MainActivity.this);
+						}
+					}
+				});
+			}
+			public void onTimingClock() {
+				if (synth.getInstrument() != null) {
+					synth.getInstrument().midiclock();
+				}
+			}
+			public void onSysex(byte[] data) {
+				// TODO add support for load/save of instruments via sysex
 			}
 		});
 
@@ -297,7 +353,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Clie
 			@Override
 			public void onClick(View v) {
 				if (!modGraph.isEditing()) {
-					if (!clientModel.isFullVersion() && !clientModel.isGoggleDogPass() && ((Instrument)synth.getInstrument()) != null && ((Instrument)synth.getInstrument()).hasAdvancedModules()) {
+					if (!clientModel.isFullVersion() && !clientModel.isGoggleDogPass() && ((Instrument) synth.getInstrument()) != null && ((Instrument) synth.getInstrument()).hasAdvancedModules()) {
 						MessageDialog dialog = new MessageDialog(MainActivity.this, "Full Version", "Full version is needed to edit this instrument.", new String[] { "OK" });
 						dialog.show();
 						return;
@@ -316,7 +372,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Clie
 					addModuleButton.setVisibility(View.VISIBLE);
 					deleteModuleButton.setVisibility(View.VISIBLE);
 				} else {
-					if (!synth.isMidiDeviceAttached()) {
+					if (!midi.isMidiDeviceAttached()) {
 						keyboardPane.setVisibility(View.VISIBLE);
 					}
 					// keyboardPane.startAnimation(new ScaleAnimation(1.0f,
@@ -353,7 +409,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Clie
 				return true;
 			}
 		});
-		
+
 		keyboardPane.setListener(new KeyboardControl.Listener() {
 			public void onNotePressed(int note, float velocity) {
 				synth.notePress(note, velocity);
@@ -362,7 +418,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Clie
 				synth.noteRelease(note);
 			}
 			public void onNoteAftertouch(int note, float pressure) {
-				//synth.pressure(note, pressure);
+				// synth.pressure(note, pressure);
 			}
 		});
 
@@ -385,8 +441,10 @@ public class MainActivity extends Activity implements View.OnClickListener, Clie
 	@Override
 	protected void onDestroy() {
 		System.out.println(">>MainActivity.onDestroy");
+		midi.terminate();
+		midi = null;
 		synth.stop();
-		synth.destroy();
+		synth.terminate();
 		synth = null;
 		super.onDestroy();
 		System.out.println("<<MainActivity.onDestroy");
@@ -422,8 +480,8 @@ public class MainActivity extends Activity implements View.OnClickListener, Clie
 					Toast.makeText(this, "Custom background could not be opened.  Try a different image", Toast.LENGTH_LONG).show();
 				}
 			}
-		} else if (data != null && synth != null && ((Instrument)synth.getInstrument()) != null && ((Instrument)synth.getInstrument()).selectedModule != null) {
-			((ModuleViewer) ((Instrument)synth.getInstrument()).selectedModule.getViewer((Instrument)synth.getInstrument())).onActivityResult(requestCode, resultCode, data);
+		} else if (data != null && synth != null && ((Instrument) synth.getInstrument()) != null && ((Instrument) synth.getInstrument()).selectedModule != null) {
+			((ModuleViewer) ((Instrument) synth.getInstrument()).selectedModule.getViewer((Instrument) synth.getInstrument())).onActivityResult(requestCode, resultCode, data);
 			return;
 		}
 
@@ -619,11 +677,11 @@ public class MainActivity extends Activity implements View.OnClickListener, Clie
 			}
 		} else if (v == deleteModuleButton) {
 			if (modGraph.isEditing()) {
-				if (((Instrument)synth.getInstrument()).selectedModule == null) {
+				if (((Instrument) synth.getInstrument()).selectedModule == null) {
 					new MessageDialog(this, "Delete", "No module selected.", null).show();
 					return;
 				}
-				if (((Instrument)synth.getInstrument()).selectedModule instanceof Output) {
+				if (((Instrument) synth.getInstrument()).selectedModule instanceof Output) {
 					new MessageDialog(this, "Delete", "You cannot delete the Output module.", null).show();
 				} else {
 					final MessageDialog promptForDelete = new MessageDialog(this, "Delete", "Delete module?", new String[] { "OK", "Cancel" });
@@ -631,7 +689,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Clie
 						@Override
 						public void onDismiss(DialogInterface dialog) {
 							if (promptForDelete.getButtonPressed() == 0) {
-								modGraph.deleteModule(((Instrument)synth.getInstrument()).selectedModule);
+								modGraph.deleteModule(((Instrument) synth.getInstrument()).selectedModule);
 							}
 						}
 					});
@@ -647,7 +705,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Clie
 	public void setKeyboardSize(int keysSelection) {
 		keyboardPane.setKeyboardSize(keysSelection);
 	}
-	
+
 	public void setLanguage(int language) {
 		System.out.println("Setting language to " + language);
 		Translator translator = new ModSynthTranslator();
@@ -670,7 +728,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Clie
 	}
 
 	public void setMidiChannel(int midiChannel) {
-		synth.setMidiChannel(midiChannel);
+		midi.setMidiChannel(midiChannel);
 	}
 
 	public void setTuningCents(int cents) {
@@ -678,10 +736,10 @@ public class MainActivity extends Activity implements View.OnClickListener, Clie
 	}
 
 	public void saveInstrument() {
-		if (synth == null || ((Instrument)synth.getInstrument()) == null) {
+		if (synth == null || ((Instrument) synth.getInstrument()) == null) {
 			return;
 		}
-		if (!clientModel.isFullVersion() && !clientModel.isGoggleDogPass() && ((Instrument)synth.getInstrument()).hasAdvancedModules()) {
+		if (!clientModel.isFullVersion() && !clientModel.isGoggleDogPass() && ((Instrument) synth.getInstrument()).hasAdvancedModules()) {
 			MessageDialog dialog = new MessageDialog(MainActivity.this, "Full Version", "Full version is needed to save this instrument.", new String[] { "OK" });
 			dialog.show();
 			return;
@@ -711,9 +769,9 @@ public class MainActivity extends Activity implements View.OnClickListener, Clie
 				final String soundName = promptForName.getValue();
 				if (promptForName.getButtonPressed() == 0) {
 					clientModel.setContext(MainActivity.this);
-					clientModel.saveObject(((Instrument)synth.getInstrument()), soundName + ".modsynth", true);
-					if (synth != null && ((Instrument)synth.getInstrument()) != null) {
-						((Instrument)synth.getInstrument()).clearDirty();
+					clientModel.saveObject(((Instrument) synth.getInstrument()), soundName + ".modsynth", true);
+					if (synth != null && ((Instrument) synth.getInstrument()) != null) {
+						((Instrument) synth.getInstrument()).clearDirty();
 					}
 					System.out.println("Saved sound as " + soundName + ".modsynth");
 
@@ -756,7 +814,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Clie
 											}
 											OutputStream outputStream = ftpClient.storeFileStream(fileName);
 											ObjectOutputStream instrumentStream = new ObjectOutputStream(outputStream);
-											instrumentStream.writeObject(((Instrument)synth.getInstrument()));
+											instrumentStream.writeObject(((Instrument) synth.getInstrument()));
 											outputStream.close();
 											ftpClient.completePendingCommand();
 											ftpClient.disconnect();
@@ -791,7 +849,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Clie
 	public void sendSound() {
 		final String soundName = soundSelector.getText().toString();
 		try {
-			File file = clientModel.exportObject(((Instrument)synth.getInstrument()), soundName + ".modsynth");
+			File file = clientModel.exportObject(((Instrument) synth.getInstrument()), soundName + ".modsynth");
 			System.out.println("Exported sound as " + soundName + ".modsynth");
 
 			Intent intent = new Intent(Intent.ACTION_SEND);
@@ -874,11 +932,11 @@ public class MainActivity extends Activity implements View.OnClickListener, Clie
 							if (lastSelectedModView != null) {
 								lastSelectedModView.setVisibility(View.GONE);
 							}
-							if (synth != null && ((Instrument)synth.getInstrument()) != null) {
-								if (((Instrument)synth.getInstrument()).selectedModule != null) {
-									selectModule(((Instrument)synth.getInstrument()).selectedModule);
+							if (synth != null && ((Instrument) synth.getInstrument()) != null) {
+								if (((Instrument) synth.getInstrument()).selectedModule != null) {
+									selectModule(((Instrument) synth.getInstrument()).selectedModule);
 								} else {
-									Module outputModule = ((Instrument)synth.getInstrument()).getOutputModule();
+									Module outputModule = ((Instrument) synth.getInstrument()).getOutputModule();
 									if (outputModule != null) {
 										selectModule(outputModule);
 									}
@@ -943,22 +1001,6 @@ public class MainActivity extends Activity implements View.OnClickListener, Clie
 						}
 					}
 				});
-			}
-		});
-	}
-
-	public void loadProgram(final int program) {
-		runOnUiThread(new Runnable() {
-			@Override
-			public void run() {
-				String soundName = clientModel.findObject("" + program + " ", ".modsynth");
-				if (soundName == null) {
-					Toast.makeText(MainActivity.this, "No instrument found with name starting with \"" + program + " \" ", Toast.LENGTH_LONG).show();
-				} else {
-					loadInstrument(soundName);
-					ClientModel.getClientModel().setInstrumentName(soundName);
-					ClientModel.getClientModel().savePreferences(MainActivity.this);
-				}
 			}
 		});
 	}
@@ -1043,8 +1085,8 @@ public class MainActivity extends Activity implements View.OnClickListener, Clie
 			break;
 		case REQUEST_PERMISSION_READ_PCM_EXTERNAL_STORAGE:
 			if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-				if (((Instrument)synth.getInstrument()).selectedModule != null) {
-					((PCMViewer) ((Instrument)synth.getInstrument()).selectedModule.getViewer((Instrument)synth.getInstrument())).onContinuePCMSelect(this);
+				if (((Instrument) synth.getInstrument()).selectedModule != null) {
+					((PCMViewer) ((Instrument) synth.getInstrument()).selectedModule.getViewer((Instrument) synth.getInstrument())).onContinuePCMSelect(this);
 					return;
 				}
 			} else {
@@ -1053,8 +1095,8 @@ public class MainActivity extends Activity implements View.OnClickListener, Clie
 			break;
 		case REQUEST_PERMISSION_READ_MIDIFILE_EXTERNAL_STORAGE:
 			if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-				if (((Instrument)synth.getInstrument()).selectedModule != null) {
-					((MelodyViewer) ((Instrument)synth.getInstrument()).selectedModule.getViewer((Instrument)synth.getInstrument())).onContinueMidiFileSelect(this);
+				if (((Instrument) synth.getInstrument()).selectedModule != null) {
+					((MelodyViewer) ((Instrument) synth.getInstrument()).selectedModule.getViewer((Instrument) synth.getInstrument())).onContinueMidiFileSelect(this);
 					return;
 				}
 			} else {
@@ -1158,16 +1200,16 @@ public class MainActivity extends Activity implements View.OnClickListener, Clie
 			@Override
 			public void run() {
 				applyingASound = true;
-				Instrument instrument = (Instrument)synth.getInstrument();
+				Instrument instrument = (Instrument) synth.getInstrument();
 				for (Module module : instrument.modules) {
 					((ModuleViewer) module.getViewer(instrument)).dropView();
 				}
 				if (instrument.getKeyboardModule() == null) {
 					keyboardPane.setVisibility(View.GONE);
-				} else if (!synth.isMidiDeviceAttached()) {
+				} else if (!midi.isMidiDeviceAttached()) {
 					keyboardPane.setVisibility(View.VISIBLE);
 				}
-				selectModule(((Instrument)synth.getInstrument()).selectedModule);
+				selectModule(((Instrument) synth.getInstrument()).selectedModule);
 				applyingASound = false;
 			}
 		});
@@ -1241,8 +1283,8 @@ public class MainActivity extends Activity implements View.OnClickListener, Clie
 	}
 
 	public void updateKeysPressed() {
-		if (synth != null && ((Instrument)synth.getInstrument()) != null) {
-			Keyboard keyboard = ((Instrument)synth.getInstrument()).getKeyboardModule();
+		if (synth != null && ((Instrument) synth.getInstrument()) != null) {
+			Keyboard keyboard = ((Instrument) synth.getInstrument()).getKeyboardModule();
 			if (keyboard != null) {
 				for (int i = 0; i < 32; i++) {
 					if (!keyboardPane.isKeyPressed(i) && keyboard.isPlaying(i + 48)) {
@@ -1268,13 +1310,13 @@ public class MainActivity extends Activity implements View.OnClickListener, Clie
 					}
 					if (module != null) {
 						noModSelectedText.setVisibility(View.GONE);
-						lastSelectedModView = ((ModuleViewer) module.getViewer((Instrument)synth.getInstrument())).getView(MainActivity.this, modViewGroup);
+						lastSelectedModView = ((ModuleViewer) module.getViewer((Instrument) synth.getInstrument())).getView(MainActivity.this, modViewGroup);
 						lastSelectedModView.setVisibility(View.VISIBLE);
 					} else {
 						noModSelectedText.setVisibility(View.VISIBLE);
 					}
 					if (module instanceof Output) {
-						scope = ((OutputViewer)module.getViewer((Instrument)synth.getInstrument())).scope;
+						scope = ((OutputViewer) module.getViewer((Instrument) synth.getInstrument())).scope;
 					} else {
 						scope = null;
 					}

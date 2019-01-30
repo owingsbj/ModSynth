@@ -32,8 +32,7 @@ public class MidiControlDialog extends GallantDialog {
 	}
 
 	/**
-	 * This is called by MainActivity whenever a MIDI control changes.  This automatically
-	 * selects that control in the dialog.
+	 * This is called by MainActivity whenever a MIDI control changes. This automatically selects that control in the dialog.
 	 */
 	public static void controlChanged(Activity activity, final int cc) {
 		if (lastMidiControlDialog != null && lastMidiControlDialog.isShowing()) {
@@ -41,6 +40,7 @@ public class MidiControlDialog extends GallantDialog {
 				public void run() {
 					if (lastMidiControlDialog != null && lastMidiControlDialog.controlPick != null) {
 						lastMidiControlDialog.controlPick.setCurrent(cc);
+						lastMidiControlDialog.updateCC();
 					}
 				}
 			});
@@ -83,14 +83,23 @@ public class MidiControlDialog extends GallantDialog {
 		}
 		valueRangeSlider.setThumb1Value(cc.minRange);
 		valueRangeSlider.setThumb2Value(cc.maxRange);
+		
+		controlPick.setOnChangeListener(new NumberPicker.OnChangedListener() {
+			public void onChanged(NumberPicker arg0, int arg1, int arg2) {
+				updateCC();
+			}
+		});
+		valueRangeSlider.setOnRangeChangeListener(new RangeSlider.RangeChangeListener() {
+			public void rangeChanged(int arg0, int arg1) {
+				updateCC();
+			}
+		});
 
 		okButton.setOnTouchListener(new OnTouchListener() {
 
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
-				cc.cc = controlPick.getCurrent();
-				cc.minRange = valueRangeSlider.getThumb1Value();
-				cc.maxRange = valueRangeSlider.getThumb2Value();
+				updateCC();
 				MidiControlDialog.this.dismiss();
 				MidiControlDialog.this.cancel();
 				return true;
@@ -115,13 +124,19 @@ public class MidiControlDialog extends GallantDialog {
 	}
 
 	public CC getCC() {
+		updateCC();
+		return cc;
+	}
+
+	public void updateCC() {
 		try {
-			cc.cc = controlPick.getCurrent();
-			cc.minRange = valueRangeSlider.getThumb1Value();
-			cc.maxRange = valueRangeSlider.getThumb2Value();
+			if (cc != null) {
+				cc.cc = controlPick.getCurrent();
+				cc.minRange = valueRangeSlider.getThumb1Value();
+				cc.maxRange = valueRangeSlider.getThumb2Value();
+			}
 		} catch (Exception e) {
 		}
-		return cc;
 	}
 
 	@Override
