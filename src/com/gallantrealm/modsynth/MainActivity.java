@@ -217,7 +217,9 @@ public class MainActivity extends Activity implements View.OnClickListener, Clie
 					public void run() {
 						String soundName = clientModel.findObject("" + programNum + " ", ".modsynth");
 						if (soundName == null) {
-							Toast.makeText(MainActivity.this, "No instrument found with name starting with \"" + programNum + " \" ", Toast.LENGTH_LONG).show();
+							Toast.makeText(MainActivity.this,
+									"No instrument found with name starting with \"" + programNum + " \" ",
+									Toast.LENGTH_LONG).show();
 						} else {
 							loadInstrument(soundName);
 							ClientModel.getClientModel().setInstrumentName(soundName);
@@ -327,7 +329,8 @@ public class MainActivity extends Activity implements View.OnClickListener, Clie
 			fullVersionButton.setOnClickListener(new View.OnClickListener() {
 				public void onClick(View v) {
 					clientModel.setContext(MainActivity.this);
-					final MessageDialog mdialog = new MessageDialog(MainActivity.this, "Full Version", "Add FM Operators, spectral filtering, PCM synthesis, harmonic editing and more with ModSynth full version!",
+					final MessageDialog mdialog = new MessageDialog(MainActivity.this, "Full Version",
+							"Add FM Operators, spectral filtering, PCM synthesis, harmonic editing and more with ModSynth full version!",
 							new String[] { "Buy", "Later" });
 					mdialog.show();
 					mdialog.setOnDismissListener(new OnDismissListener() {
@@ -353,8 +356,11 @@ public class MainActivity extends Activity implements View.OnClickListener, Clie
 			@Override
 			public void onClick(View v) {
 				if (!modGraph.isEditing()) {
-					if (!clientModel.isFullVersion() && !clientModel.isGoggleDogPass() && ((Instrument) synth.getInstrument()) != null && ((Instrument) synth.getInstrument()).hasAdvancedModules()) {
-						MessageDialog dialog = new MessageDialog(MainActivity.this, "Full Version", "Full version is needed to edit this instrument.", new String[] { "OK" });
+					if (!clientModel.isFullVersion() && !clientModel.isGoggleDogPass()
+							&& ((Instrument) synth.getInstrument()) != null
+							&& ((Instrument) synth.getInstrument()).hasAdvancedModules()) {
+						MessageDialog dialog = new MessageDialog(MainActivity.this, "Full Version",
+								"Full version is needed to edit this instrument.", new String[] { "OK" });
 						dialog.show();
 						return;
 					}
@@ -394,7 +400,9 @@ public class MainActivity extends Activity implements View.OnClickListener, Clie
 						}
 					} catch (OutOfMemoryError e) {
 						e.printStackTrace();
-						MessageDialog message = new MessageDialog(MainActivity.this, null, "Not enough memory to load this instrument.  Close other apps and try again.", new String[] { "OK" });
+						MessageDialog message = new MessageDialog(MainActivity.this, null,
+								"Not enough memory to load this instrument.  Close other apps and try again.",
+								new String[] { "OK" });
 						message.show();
 					}
 				}
@@ -412,10 +420,14 @@ public class MainActivity extends Activity implements View.OnClickListener, Clie
 
 		keyboardPane.setListener(new KeyboardControl.Listener() {
 			public void onNotePressed(int note, float velocity) {
-				synth.notePress(note, velocity);
+				if (synth.getInstrument() != null) {
+					synth.getInstrument().notePress(note, velocity);
+				}
 			}
 			public void onNoteReleased(int note) {
-				synth.noteRelease(note);
+				if (synth.getInstrument() != null) {
+					synth.getInstrument().noteRelease(note);
+				}
 			}
 			public void onNoteAftertouch(int note, float pressure) {
 				// synth.pressure(note, pressure);
@@ -477,11 +489,14 @@ public class MainActivity extends Activity implements View.OnClickListener, Clie
 					setCustomBackground(path);
 				} catch (Exception e) {
 					e.printStackTrace();
-					Toast.makeText(this, "Custom background could not be opened.  Try a different image", Toast.LENGTH_LONG).show();
+					Toast.makeText(this, "Custom background could not be opened.  Try a different image",
+							Toast.LENGTH_LONG).show();
 				}
 			}
-		} else if (data != null && synth != null && ((Instrument) synth.getInstrument()) != null && ((Instrument) synth.getInstrument()).selectedModule != null) {
-			((ModuleViewer) ((Instrument) synth.getInstrument()).selectedModule.getViewer((Instrument) synth.getInstrument())).onActivityResult(requestCode, resultCode, data);
+		} else if (data != null && synth != null && ((Instrument) synth.getInstrument()) != null
+				&& ((Instrument) synth.getInstrument()).selectedModule != null) {
+			((ModuleViewer) ((Instrument) synth.getInstrument()).selectedModule
+					.getViewer((Instrument) synth.getInstrument())).onActivityResult(requestCode, resultCode, data);
 			return;
 		}
 
@@ -491,8 +506,10 @@ public class MainActivity extends Activity implements View.OnClickListener, Clie
 
 	@SuppressLint("NewApi")
 	private void setCustomBackground(String path) {
-		if (Build.VERSION.SDK_INT >= 23 && checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-			requestPermissions(new String[] { Manifest.permission.READ_EXTERNAL_STORAGE }, REQUEST_PERMISSION_READ_IMAGE_EXTERNAL_STORAGE);
+		if (Build.VERSION.SDK_INT >= 23 && checkSelfPermission(
+				Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+			requestPermissions(new String[] { Manifest.permission.READ_EXTERNAL_STORAGE },
+					REQUEST_PERMISSION_READ_IMAGE_EXTERNAL_STORAGE);
 			selectingCustomTheme = true;
 			return;
 		}
@@ -684,7 +701,8 @@ public class MainActivity extends Activity implements View.OnClickListener, Clie
 				if (((Instrument) synth.getInstrument()).selectedModule instanceof Output) {
 					new MessageDialog(this, "Delete", "You cannot delete the Output module.", null).show();
 				} else {
-					final MessageDialog promptForDelete = new MessageDialog(this, "Delete", "Delete module?", new String[] { "OK", "Cancel" });
+					final MessageDialog promptForDelete = new MessageDialog(this, "Delete", "Delete module?",
+							new String[] { "OK", "Cancel" });
 					promptForDelete.setOnDismissListener(new DialogInterface.OnDismissListener() {
 						@Override
 						public void onDismiss(DialogInterface dialog) {
@@ -739,8 +757,10 @@ public class MainActivity extends Activity implements View.OnClickListener, Clie
 		if (synth == null || ((Instrument) synth.getInstrument()) == null) {
 			return;
 		}
-		if (!clientModel.isFullVersion() && !clientModel.isGoggleDogPass() && ((Instrument) synth.getInstrument()).hasAdvancedModules()) {
-			MessageDialog dialog = new MessageDialog(MainActivity.this, "Full Version", "Full version is needed to save this instrument.", new String[] { "OK" });
+		if (!clientModel.isFullVersion() && !clientModel.isGoggleDogPass()
+				&& ((Instrument) synth.getInstrument()).hasAdvancedModules()) {
+			MessageDialog dialog = new MessageDialog(MainActivity.this, "Full Version",
+					"Full version is needed to save this instrument.", new String[] { "OK" });
 			dialog.show();
 			return;
 		}
@@ -758,9 +778,11 @@ public class MainActivity extends Activity implements View.OnClickListener, Clie
 		final String finalInitialSoundName = initialSoundName;
 		final InputDialog promptForName;
 		if (clientModel.isGoggleDogPass()) {
-			promptForName = new InputDialog(this, "Save", "Save instrument as ", finalInitialSoundName.trim(), new String[] { "Save", "Share", "Cancel" });
+			promptForName = new InputDialog(this, "Save", "Save instrument as ", finalInitialSoundName.trim(),
+					new String[] { "Save", "Share", "Cancel" });
 		} else {
-			promptForName = new InputDialog(this, "Save", "Save instrument as ", finalInitialSoundName.trim(), new String[] { "Save", "Cancel" });
+			promptForName = new InputDialog(this, "Save", "Save instrument as ", finalInitialSoundName.trim(),
+					new String[] { "Save", "Cancel" });
 		}
 		promptForName.setOnDismissListener(new DialogInterface.OnDismissListener() {
 			@Override
@@ -783,7 +805,9 @@ public class MainActivity extends Activity implements View.OnClickListener, Clie
 					ClientModel.getClientModel().savePreferences(MainActivity.this);
 				}
 				if (clientModel.isGoggleDogPass() && promptForName.getButtonPressed() == 1) {
-					final MessageDialog verifyUpload = new MessageDialog(MainActivity.this, "Share", "This will upload your instrument to gallantrealm.com for sharing online.", new String[] { "OK" });
+					final MessageDialog verifyUpload = new MessageDialog(MainActivity.this, "Share",
+							"This will upload your instrument to gallantrealm.com for sharing online.",
+							new String[] { "OK" });
 					verifyUpload.show();
 					verifyUpload.setOnDismissListener(new DialogInterface.OnDismissListener() {
 						public void onDismiss(DialogInterface dialog) {
@@ -798,14 +822,22 @@ public class MainActivity extends Activity implements View.OnClickListener, Clie
 											ftpClient.setFileType(FTP.BINARY_FILE_TYPE);
 											ftpClient.setKeepAlive(true);
 											ftpClient.changeWorkingDirectory("/ModSynth");
-											String fileName = soundName + "(" + Secure.getString(getApplicationContext().getContentResolver(), Secure.ANDROID_ID) + ").modsynth";
+											String fileName = soundName + "("
+													+ Secure.getString(getApplicationContext().getContentResolver(),
+															Secure.ANDROID_ID)
+													+ ").modsynth";
 											System.out.println("Storing file as " + fileName);
 											String[] names = ftpClient.listNames();
 											for (int i = 0; i < names.length; i++) {
-												if ((names[i].startsWith(soundName + "(") || names[i].startsWith(soundName + ".")) && !names[i].equals(fileName)) {
+												if ((names[i].startsWith(soundName + "(")
+														|| names[i].startsWith(soundName + "."))
+														&& !names[i].equals(fileName)) {
 													MainActivity.this.runOnUiThread(new Runnable() {
 														public void run() {
-															final MessageDialog verifyUpload = new MessageDialog(MainActivity.this, "Exists", "A shared file already exists by this name.  Choose a different name.", new String[] { "OK" });
+															final MessageDialog verifyUpload = new MessageDialog(
+																	MainActivity.this, "Exists",
+																	"A shared file already exists by this name.  Choose a different name.",
+																	new String[] { "OK" });
 															verifyUpload.show();
 														}
 													});
@@ -858,9 +890,11 @@ public class MainActivity extends Activity implements View.OnClickListener, Clie
 			intent.putExtra(Intent.EXTRA_STREAM, uri);
 			intent.putExtra(Intent.EXTRA_SUBJECT, soundName);
 			if (clientModel.isAmazon()) {
-				intent.putExtra(Intent.EXTRA_TEXT, "Sharing an ModSynth instrument with you.  You can play it by installing ModSynth from the Amazon AppStore!");
+				intent.putExtra(Intent.EXTRA_TEXT,
+						"Sharing an ModSynth instrument with you.  You can play it by installing ModSynth from the Amazon AppStore!");
 			} else {
-				intent.putExtra(Intent.EXTRA_TEXT, "Sharing an ModSynth instrument with you.  You can play it by installing ModSynth from Google Play at  http://play.google.com/store/apps/details?id=com.gallantrealm.modsynth");
+				intent.putExtra(Intent.EXTRA_TEXT,
+						"Sharing an ModSynth instrument with you.  You can play it by installing ModSynth from Google Play at  http://play.google.com/store/apps/details?id=com.gallantrealm.modsynth");
 			}
 			clientModel.getContext().startActivity(intent);
 		} catch (Exception e) { // might fail
@@ -925,7 +959,8 @@ public class MainActivity extends Activity implements View.OnClickListener, Clie
 				MainActivity.this.runOnUiThread(new Runnable() {
 					public void run() {
 						if (newsound == null) {
-							final MessageDialog loadMsg = new MessageDialog(MainActivity.this, "Load", soundName + " could not be loaded.", new String[] { "OK" });
+							final MessageDialog loadMsg = new MessageDialog(MainActivity.this, "Load",
+									soundName + " could not be loaded.", new String[] { "OK" });
 							loadMsg.show();
 						} else {
 							applySound(newsound);
@@ -954,11 +989,13 @@ public class MainActivity extends Activity implements View.OnClickListener, Clie
 	public void deleteInstrument() {
 		final String soundName = soundSelector.getText().toString();
 		if (soundName.startsWith("BuiltIn/")) {
-			MessageDialog cannotDelete = new MessageDialog(this, "Delete", "You cannot delete this instrument.", new String[] { "OK" });
+			MessageDialog cannotDelete = new MessageDialog(this, "Delete", "You cannot delete this instrument.",
+					new String[] { "OK" });
 			cannotDelete.show();
 			return;
 		}
-		final MessageDialog promptForDelete = new MessageDialog(this, "Delete", "Delete instrument?", new String[] { "OK", "Cancel" });
+		final MessageDialog promptForDelete = new MessageDialog(this, "Delete", "Delete instrument?",
+				new String[] { "OK", "Cancel" });
 		promptForDelete.setOnDismissListener(new DialogInterface.OnDismissListener() {
 			@Override
 			public void onDismiss(DialogInterface dialog) {
@@ -985,7 +1022,8 @@ public class MainActivity extends Activity implements View.OnClickListener, Clie
 
 	public void selectInstrument() {
 		if (instrumentSectoriDialog == null) {
-			instrumentSectoriDialog = new InstrumentSelectorDialog(MainActivity.this, "ftp.gallantrealm.com", "modsynth@gallantrealm.com", "A23R3&8C", ".modsynth");
+			instrumentSectoriDialog = new InstrumentSelectorDialog(MainActivity.this, "ftp.gallantrealm.com",
+					"modsynth@gallantrealm.com", "A23R3&8C", ".modsynth");
 		}
 		instrumentSectoriDialog.show("", new FileSelectorDialog.SelectionListener() {
 			public void onFileselected(final String filename) {
@@ -1009,7 +1047,8 @@ public class MainActivity extends Activity implements View.OnClickListener, Clie
 
 	public void startRecording() {
 		if (unsavedRecording) {
-			final MessageDialog message = new MessageDialog(MainActivity.this, null, "Erase unsaved recording?", new String[] { "OK", "Cancel" });
+			final MessageDialog message = new MessageDialog(MainActivity.this, null, "Erase unsaved recording?",
+					new String[] { "OK", "Cancel" });
 			message.setOnDismissListener(new OnDismissListener() {
 
 				@Override
@@ -1029,7 +1068,8 @@ public class MainActivity extends Activity implements View.OnClickListener, Clie
 		} else {
 			boolean started = synth.startRecording();
 			if (!started) {
-				MessageDialog message = new MessageDialog(MainActivity.this, null, "Not enough memory to record.  Close other apps and try again.", new String[] { "OK" });
+				MessageDialog message = new MessageDialog(MainActivity.this, null,
+						"Not enough memory to record.  Close other apps and try again.", new String[] { "OK" });
 				message.show();
 			}
 			if (updateThread == null) {
@@ -1086,7 +1126,8 @@ public class MainActivity extends Activity implements View.OnClickListener, Clie
 		case REQUEST_PERMISSION_READ_PCM_EXTERNAL_STORAGE:
 			if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 				if (((Instrument) synth.getInstrument()).selectedModule != null) {
-					((PCMViewer) ((Instrument) synth.getInstrument()).selectedModule.getViewer((Instrument) synth.getInstrument())).onContinuePCMSelect(this);
+					((PCMViewer) ((Instrument) synth.getInstrument()).selectedModule
+							.getViewer((Instrument) synth.getInstrument())).onContinuePCMSelect(this);
 					return;
 				}
 			} else {
@@ -1096,11 +1137,13 @@ public class MainActivity extends Activity implements View.OnClickListener, Clie
 		case REQUEST_PERMISSION_READ_MIDIFILE_EXTERNAL_STORAGE:
 			if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 				if (((Instrument) synth.getInstrument()).selectedModule != null) {
-					((MelodyViewer) ((Instrument) synth.getInstrument()).selectedModule.getViewer((Instrument) synth.getInstrument())).onContinueMidiFileSelect(this);
+					((MelodyViewer) ((Instrument) synth.getInstrument()).selectedModule
+							.getViewer((Instrument) synth.getInstrument())).onContinueMidiFileSelect(this);
 					return;
 				}
 			} else {
-				Toast.makeText(MainActivity.this, "Cannot open MIDI file.  Permission denied.", Toast.LENGTH_SHORT).show();
+				Toast.makeText(MainActivity.this, "Cannot open MIDI file.  Permission denied.", Toast.LENGTH_SHORT)
+						.show();
 			}
 			break;
 		default:
@@ -1112,8 +1155,10 @@ public class MainActivity extends Activity implements View.OnClickListener, Clie
 
 	@SuppressLint("NewApi")
 	public void saveRecording() {
-		if (Build.VERSION.SDK_INT >= 23 && checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-			requestPermissions(new String[] { Manifest.permission.WRITE_EXTERNAL_STORAGE }, REQUEST_PERMISSION_WRITE_EXTERNAL_STORAGE);
+		if (Build.VERSION.SDK_INT >= 23 && checkSelfPermission(
+				Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+			requestPermissions(new String[] { Manifest.permission.WRITE_EXTERNAL_STORAGE },
+					REQUEST_PERMISSION_WRITE_EXTERNAL_STORAGE);
 			return;
 		}
 
@@ -1128,7 +1173,8 @@ public class MainActivity extends Activity implements View.OnClickListener, Clie
 		if (!modSynthDir.exists()) {
 			modSynthDir.mkdir();
 		}
-		final InputDialog inputDialog = new InputDialog(this, "Save Recording", "Recording name:", lastRecordName, new String[] { "Save", "Cancel" });
+		final InputDialog inputDialog = new InputDialog(this, "Save Recording", "Recording name:", lastRecordName,
+				new String[] { "Save", "Cancel" });
 		inputDialog.setOnDismissListener(new OnDismissListener() {
 
 			@Override
@@ -1136,7 +1182,8 @@ public class MainActivity extends Activity implements View.OnClickListener, Clie
 				if (inputDialog.getButtonPressed() == 0) {
 					final String recordname = inputDialog.getValue();
 					lastRecordName = recordname;
-					final String filename = Environment.getExternalStorageDirectory().getAbsolutePath() + "/ModSynth/" + recordname + ".wav";
+					final String filename = Environment.getExternalStorageDirectory().getAbsolutePath() + "/ModSynth/"
+							+ recordname + ".wav";
 					AsyncTask.execute(new Runnable() {
 						public void run() {
 							try {
@@ -1147,7 +1194,8 @@ public class MainActivity extends Activity implements View.OnClickListener, Clie
 								unsavedRecording = false;
 								runOnUiThread(new Runnable() {
 									public void run() {
-										Toast toast = Toast.makeText(MainActivity.this, "Saved to " + filename, Toast.LENGTH_LONG);
+										Toast toast = Toast.makeText(MainActivity.this, "Saved to " + filename,
+												Toast.LENGTH_LONG);
 										toast.show();
 									}
 								});
@@ -1155,7 +1203,8 @@ public class MainActivity extends Activity implements View.OnClickListener, Clie
 								e.printStackTrace();
 								runOnUiThread(new Runnable() {
 									public void run() {
-										Toast toast = Toast.makeText(MainActivity.this, "Failed to save to " + filename, Toast.LENGTH_LONG);
+										Toast toast = Toast.makeText(MainActivity.this, "Failed to save to " + filename,
+												Toast.LENGTH_LONG);
 										toast.show();
 									}
 								});
@@ -1179,7 +1228,8 @@ public class MainActivity extends Activity implements View.OnClickListener, Clie
 		applyingASound = true;
 		// holdButton.setChecked(sound.hold);
 		if (sound.requiresUpgrade() != null) {
-			MessageDialog message = new MessageDialog(MainActivity.this, null, "The " + sound.requiresUpgrade() + " module has significantly changed since this instrument was last saved.  The settings may need adjustment.",
+			MessageDialog message = new MessageDialog(MainActivity.this, null, "The " + sound.requiresUpgrade()
+					+ " module has significantly changed since this instrument was last saved.  The settings may need adjustment.",
 					new String[] { "OK" });
 			message.show();
 		}
@@ -1189,7 +1239,9 @@ public class MainActivity extends Activity implements View.OnClickListener, Clie
 			applyingASound = false;
 			modGraph.setInstrument(sound, synth);
 		} catch (OutOfMemoryError e) {
-			MessageDialog message = new MessageDialog(MainActivity.this, null, "Not enough memory to load this instrument.  Close other apps and try again.", new String[] { "OK" });
+			MessageDialog message = new MessageDialog(MainActivity.this, null,
+					"Not enough memory to load this instrument.  Close other apps and try again.",
+					new String[] { "OK" });
 			message.show();
 			applyingASound = false;
 		}
@@ -1310,7 +1362,8 @@ public class MainActivity extends Activity implements View.OnClickListener, Clie
 					}
 					if (module != null) {
 						noModSelectedText.setVisibility(View.GONE);
-						lastSelectedModView = ((ModuleViewer) module.getViewer((Instrument) synth.getInstrument())).getView(MainActivity.this, modViewGroup);
+						lastSelectedModView = ((ModuleViewer) module.getViewer((Instrument) synth.getInstrument()))
+								.getView(MainActivity.this, modViewGroup);
 						lastSelectedModView.setVisibility(View.VISIBLE);
 					} else {
 						noModSelectedText.setVisibility(View.VISIBLE);
@@ -1366,7 +1419,9 @@ public class MainActivity extends Activity implements View.OnClickListener, Clie
 		int note = getNoteForKeyCode(keyCode);
 		float velocity = 1.0f;
 		if (note >= 0) {
-			synth.notePress(note, velocity);
+			if (synth.getInstrument() != null) {
+				synth.getInstrument().notePress(note, velocity);
+			}
 			return true;
 		}
 		return false;
@@ -1379,7 +1434,9 @@ public class MainActivity extends Activity implements View.OnClickListener, Clie
 			return true;
 		}
 		if (note >= 0) {
-			synth.noteRelease(note);
+			if (synth.getInstrument() != null) {
+				synth.getInstrument().noteRelease(note);
+			}
 		}
 		return false;
 	}

@@ -189,10 +189,6 @@ public class Keyboard extends Module {
 		this.bend = bend;
 	}
 
-	public void pressure(int voice, float amount) {
-		this.pressure[voice] = amount;
-	}
-
 	public void pressure(float amount) {
 		boolean voicePressed = false;
 		int playingVoices = voices == 0 ? 1 : voices;

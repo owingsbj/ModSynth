@@ -375,13 +375,6 @@ public class Instrument extends AbstractInstrument {
 	}
 
 	@Override
-	public void pressure(int voice, float amount) {
-		if (keyboardModule != null) {
-			keyboardModule.pressure(voice, amount);
-		}
-	}
-
-	@Override
 	public void pressure(float amount) {
 		if (keyboardModule != null) {
 			keyboardModule.pressure(amount);
@@ -411,6 +404,7 @@ public class Instrument extends AbstractInstrument {
 	private transient int t;
 	private transient int u;
 	
+	@Override
 	public void generate(float[] output) {
 			voiceCount = getVoices(); // need to update this every so often just in case it changes
 				t++;
