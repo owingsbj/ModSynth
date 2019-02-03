@@ -964,7 +964,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Clie
 			public void onDismiss(DialogInterface dialog) {
 				if (promptForDelete.getButtonPressed() == 0) {
 					if (soundName.startsWith("Online")) {
-						// TODO
+						// TODO implement delete for shared instruments
 					} else {
 						clientModel.deleteObject(soundName + ".modsynth", true);
 					}

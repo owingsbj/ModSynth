@@ -371,7 +371,7 @@ public class Instrument extends AbstractInstrument {
 
 	@Override
 	public void expression(float amount) {
-		// TODO
+		// Expression is not default  mapped to any function in ModSynth.  Use CC 11 to map it from a MIDI device.
 	}
 
 	@Override
