@@ -430,19 +430,6 @@ public class Instrument extends AbstractInstrument {
 							module.min = Math.min(module.min, link.value[voice]);
 						}
 					}
-					u += 1;
-					if (u % 10 == 0) {
-						for (Module module : modules) {
-							module.lastmin = module.min;
-							module.lastmax = module.max;
-							module.min = 0.0;
-							module.max = 0.0;
-						}
-// TODO enable callbacks for modsynth only
-//						if (callbacks != null) {
-//							callbacks.updateLevels();
-//						}
-					}
 				}
 	}
 

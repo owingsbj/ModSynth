@@ -175,6 +175,12 @@ public class MainActivity extends Activity implements View.OnClickListener, Clie
 				}
 				t += 1;
 				if (modGraph != null && t >= 1000) {
+					for (Module module : ((Instrument)synth.getInstrument()).modules) {
+						module.lastmin = module.min;
+						module.lastmax = module.max;
+						module.min = 0.0;
+						module.max = 0.0;
+					}
 					modGraph.updateLevels();
 					t = 0;
 				}
