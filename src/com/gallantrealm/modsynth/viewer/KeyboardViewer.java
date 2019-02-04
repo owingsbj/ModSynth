@@ -1,15 +1,13 @@
 package com.gallantrealm.modsynth.viewer;
 
 import com.gallantrealm.android.Translator;
+import com.gallantrealm.modsynth.ClientModel;
 import com.gallantrealm.modsynth.Instrument;
 import com.gallantrealm.modsynth.MainActivity;
 import com.gallantrealm.modsynth.MidiControlDialog;
 import com.gallantrealm.modsynth.R;
 import com.gallantrealm.modsynth.module.Keyboard;
 import com.gallantrealm.modsynth.module.Module;
-import com.gallantrealm.modsynth.ClientModel;
-import com.gallantrealm.mysynth.MySynth;
-
 import android.graphics.Canvas;
 import android.view.View;
 import android.widget.AdapterView;
@@ -126,7 +124,6 @@ public class KeyboardViewer extends ModuleViewer {
 		sustainBox.setOnCheckedChangeListener(new CheckBox.OnCheckedChangeListener() {
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 				module.setSustaining(isChecked);
-				mainActivity.updateKeysPressed();
 			}
 		});
 		sustainBox.setOnLongClickListener(MidiControlDialog.newLongClickListener(module.sustainCC));

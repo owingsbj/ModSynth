@@ -1334,21 +1334,6 @@ public class MainActivity extends Activity implements View.OnClickListener, Clie
 		super.onConfigurationChanged(newConfig);
 	}
 
-	public void updateKeysPressed() {
-		if (synth != null && ((Instrument) synth.getInstrument()) != null) {
-			Keyboard keyboard = ((Instrument) synth.getInstrument()).getKeyboardModule();
-			if (keyboard != null) {
-				for (int i = 0; i < 32; i++) {
-					if (!keyboardPane.isKeyPressed(i) && keyboard.isPlaying(i + 48)) {
-						keyboardPane.setKeyPressed(i, true);
-					} else if (keyboardPane.isKeyPressed(i) && !keyboard.isPlaying(i + 48)) {
-						keyboardPane.setKeyPressed(i, false);
-					}
-				}
-			}
-		}
-	}
-
 	private void selectModule(final Module module) {
 		runOnUiThread(new Runnable() {
 			public void run() {
