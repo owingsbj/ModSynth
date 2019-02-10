@@ -568,10 +568,6 @@ public class ClientModel {
 		}
 	}
 
-	public void saveObject(Object object, String fileName) {
-		saveObject(object, fileName, false);
-	}
-
 	/**
 	 * Saves an object to app-local files. The object needs to be serializable
 	 * 
