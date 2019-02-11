@@ -381,7 +381,7 @@ public class Instrument extends AbstractInstrument {
 		}
 	}
 
-	public void updateCC(int control, double value) {
+	public void controlChange(int control, double value) {
 		int moduleCount = modules.size();
 		for (int m = 0; m < moduleCount; m++) {
 			Module module = modules.get(m);

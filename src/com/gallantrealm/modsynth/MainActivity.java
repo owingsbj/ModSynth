@@ -185,11 +185,6 @@ public class MainActivity extends Activity implements View.OnClickListener, Clie
 					t = 0;
 				}
 			}
-			public void onUpdateCC(int control, double value) {
-				if (MidiControlDialog.lastMidiControlDialog != null) {
-					MidiControlDialog.lastMidiControlDialog.controlChanged(MainActivity.this, control);
-				}
-			}
 		});
 
 		// Start up the MIDI support
@@ -213,8 +208,9 @@ public class MainActivity extends Activity implements View.OnClickListener, Clie
 				});
 			}
 			public void onControlChange(int control, int value) {
+				MidiControlDialog.controlChanged(MainActivity.this, control);
 				if (synth.getInstrument() != null) {
-					synth.getInstrument().updateCC(control, value / 127.0f);
+					synth.getInstrument().controlChange(control, value / 127.0f);
 				}
 			}
 			public void onProgramChange(final int programNum) {
@@ -243,7 +239,9 @@ public class MainActivity extends Activity implements View.OnClickListener, Clie
 				// TODO add support for load/save of instruments via sysex
 			}
 		});
-
+		if (clientModel.isGoggleDogPass()) {
+			midi.setLogMidi(true);
+		}
 		Settings.tuningCents = clientModel.getTuningCents();
 
 		this.setVolumeControlStream(AudioManager.STREAM_MUSIC);
