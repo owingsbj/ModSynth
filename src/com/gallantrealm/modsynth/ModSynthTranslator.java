@@ -128,6 +128,8 @@ public class ModSynthTranslator extends Translator {
 			trans.put("Background", "Fondo");
 			trans.put("Choose", "Escoger");
 			trans.put("MIDI channel", "MIDI canal");
+			trans.put("MIDI support", "Soporte MIDI");
+			trans.put("Use Android MIDI", "Usar MIDI de Android");
 			trans.put("Tuning type", "Clase de afinar");
 			trans.put("Tuning cents", "Afinar en cents");
 			trans.put("Any", "Cualquier canal");
@@ -415,6 +417,8 @@ public class ModSynthTranslator extends Translator {
 			trans.put("Background", "Fond");
 			trans.put("Choose", "Choisir");
 			trans.put("MIDI channel", "MIDI canal");
+			trans.put("MIDI support", "Support MIDI");
+			trans.put("Use Android MIDI", "Utiliser Android MIDI");
 			trans.put("Tuning type", "Classe de réglage");
 			trans.put("Tuning cents", "Réglage fin");
 			trans.put("Any", "Un canal");
@@ -705,6 +709,8 @@ public class ModSynthTranslator extends Translator {
 			trans.put("Background", "Hintergrund");
 			trans.put("Choose", "Wählen");
 			trans.put("MIDI channel", "MIDI Kanal");
+			trans.put("MIDI support", "MIDI-Unterstützung");
+			trans.put("Use Android MIDI", "Verwenden Sie Android MIDI");
 			trans.put("Tuning type", "Tuning- Klasse");
 			trans.put("Tuning cents", "Feinabstimmung");
 			trans.put("Any", "Irgendeiner");
@@ -1000,6 +1006,8 @@ public class ModSynthTranslator extends Translator {
 			trans.put("Background", "Задний план");
 			trans.put("Choose", "Выберите");
 			trans.put("MIDI channel", "MIDI канал");
+			trans.put("MIDI support", "Поддержка MIDI");
+			trans.put("Use Android MIDI", "Используйте Android MIDI");
 			trans.put("Tuning type", "класс тюнинг");
 			trans.put("Tuning cents", "Тюнинг центов");
 			trans.put("Any", "Любой канал");

@@ -213,7 +213,7 @@ public class SettingsDialog extends GallantDialog {
 				clientModel.setNBuffers(nbuffers);
 				clientModel.savePreferences(activity);
 				if (!buffersFirstSet) {
-					new MessageDialog(SettingsDialog.this.getContext(), "Buffers", "Quit and relaunch ModSynth to apply the change in buffers.", null).show();
+					new MessageDialog(SettingsDialog.this.getContext(), "Buffers", "Quit and relaunch ModSynth to apply the change.", null).show();
 				}
 				buffersFirstSet = false;
 			}
@@ -271,6 +271,16 @@ public class SettingsDialog extends GallantDialog {
 				}
 				activity.setColorIcons(isChecked);
 				clientModel.savePreferences(activity);
+			}
+		});
+
+		final CheckBox androidMidiCheckBox = (CheckBox) findViewById(R.id.androidMidiCheckBox);
+		androidMidiCheckBox.setChecked(clientModel.isPreferAndroidMidi());
+		androidMidiCheckBox.setOnCheckedChangeListener(new CheckBox.OnCheckedChangeListener() {
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+				clientModel.setPreferAndroidMidi(isChecked);
+				clientModel.savePreferences(activity);
+				new MessageDialog(SettingsDialog.this.getContext(), "MIDI", "Quit and relaunch ModSynth to apply the change.", null).show();
 			}
 		});
 

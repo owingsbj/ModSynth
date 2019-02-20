@@ -186,9 +186,11 @@ public class MainActivity extends Activity implements View.OnClickListener, Clie
 				}
 			}
 		});
+		
+		boolean preferAndroidMidi = clientModel.isPreferAndroidMidi();
 
 		// Start up the MIDI support
-		midi = MySynthMidi.create(this, synth, new MySynthMidi.Callbacks() {
+		midi = MySynthMidi.create(this, synth, preferAndroidMidi, new MySynthMidi.Callbacks() {
 			public void onDeviceAttached(final String deviceName) {
 				runOnUiThread(new Runnable() {
 					@Override

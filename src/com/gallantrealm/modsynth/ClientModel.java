@@ -67,6 +67,7 @@ public class ClientModel {
 	private int colorIcons;
 	private int nbuffers;
 	private int language;
+	private boolean preferAndroidMidi;
 
 	public boolean goggleDogPass;
 
@@ -110,6 +111,7 @@ public class ClientModel {
 			colorIcons = preferences.getInt("colorIcons", 0);
 			nbuffers = preferences.getInt("nbuffers", 0);
 			language = preferences.getInt("language", 0);
+			preferAndroidMidi = preferences.getBoolean("preferAndroidMidi", true);
 			customBackgroundPath = preferences.getString("customBackgroundPath", "");
 		}
 	}
@@ -156,6 +158,7 @@ public class ClientModel {
 		editor.putInt("colorIcons", colorIcons);
 		editor.putInt("nbuffers", nbuffers);
 		editor.putInt("language", language);
+		editor.putBoolean("preferAndroidMidi", preferAndroidMidi);
 		editor.putString("customBackgroundPath", customBackgroundPath);
 		editor.commit();
 	}
@@ -260,6 +263,13 @@ public class ClientModel {
 
 	public int getLanguage() {
 		return language;
+	}
+	
+	public void setPreferAndroidMidi(boolean preferAndroidMidi) {
+		this.preferAndroidMidi = preferAndroidMidi;
+	}
+	public boolean isPreferAndroidMidi() {
+		return preferAndroidMidi;
 	}
 
 	public boolean isFullVersion() {
