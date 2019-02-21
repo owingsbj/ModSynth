@@ -80,7 +80,7 @@ public class Keyboard extends Module {
 		pressure[voice] = velocity;
 		smoothPressure[voice] = velocity;
 	}
-
+	
 	public void noteRelease(int note) {
 		noteVelocities[note] = 0.0f;
 		if (!isPlaying(note)) {
@@ -112,6 +112,10 @@ public class Keyboard extends Module {
 		}
 	}
 	
+	public void noteAftertouch(int note, float pressure) {
+		noteVelocities[note] = pressure;
+	}
+
 	public boolean isAnyNotePressed() {
 		for (int i = 0; i < noteVelocities.length; i++) {
 			if (noteVelocities[i] > 0.0f) {

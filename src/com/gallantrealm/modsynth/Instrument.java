@@ -361,6 +361,13 @@ public class Instrument extends AbstractInstrument {
 			doEnvelopes();
 		}
 	}
+	
+	@Override
+	public void noteAftertouch(int note, float pressure) {
+		if (keyboardModule != null) {
+			keyboardModule.noteAftertouch(note, pressure);
+		}
+	}
 
 	@Override
 	public void pitchBend(float bend) {
