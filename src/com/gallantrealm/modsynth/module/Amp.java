@@ -98,7 +98,7 @@ public class Amp extends Module {
 		} else {
 			if (tone2 > 0 && !distortion) {
 				for (int voice = startVoice; voice <= endVoice; voice++) {
-					float amp = 0.9f * smoothAmp[voice] + 0.1f * mod1.value[voice];
+					float amp = 0.99f * smoothAmp[voice] + 0.01f * mod1.value[voice];
 					smoothAmp[voice] = amp;
 					float value = fvolume * input1.value[voice] * amp;
 					value = lastFilteredValue[voice] * tone2 + value * (1.0f - tone2);
@@ -107,7 +107,7 @@ public class Amp extends Module {
 				}
 			} else {
 				for (int voice = startVoice; voice <= endVoice; voice++) {
-					float amp = 0.9f * smoothAmp[voice] + 0.1f * mod1.value[voice];
+					float amp = 0.99f * smoothAmp[voice] + 0.01f * mod1.value[voice];
 					smoothAmp[voice] = amp;
 					float value = fvolume * input1.value[voice] * amp;
 					output1.value[voice] = value;
