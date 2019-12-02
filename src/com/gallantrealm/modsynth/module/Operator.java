@@ -274,7 +274,7 @@ public class Operator extends Module {
 			oscOutput[voice] = waveTable[((new_phase >> 16) + offset) & WAVE_MASK];
 
 			// scale w envelope and min/max
-			smoothEnvLevel[voice] = 0.9f * smoothEnvLevel[voice] + 0.1f * envLevel[voice];
+			smoothEnvLevel[voice] = 0.99f * smoothEnvLevel[voice] + 0.01f * envLevel[voice];
 			float value = oscOutput[voice] * smoothEnvLevel[voice] * (fmax - fmin);
 			value += oscOutput[voice] * min;
 			output1.value[voice] = value;
