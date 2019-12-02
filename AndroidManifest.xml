@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
 	package="com.gallantrealm.modsynth" android:installLocation="auto"
-	android:versionCode="606" android:versionName="6.6">
+	android:versionCode="607" android:versionName="6.7">
 	<uses-sdk android:minSdkVersion="14" android:targetSdkVersion="28"/>
 	<!-- Warning: do not downgrade this to 22 or lower as app will fail to upgrade. 
 		See https://inthecheesefactory.com/blog/things-you-need-to-know-about-android-m-permission-developer-edition/en -->
