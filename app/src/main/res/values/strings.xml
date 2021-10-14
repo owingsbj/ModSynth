@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="app_name">ModSynth</string>
+	<string name="app_tagline">polyphonic, modular, unlimited</string>
+	<string name="mainMenuClassName">com.gallantrealm.modsynth.MainActivity</string>
+	<string name="amazonappkey">4a9363b7ac3e4b3fa03f78467fbe4564</string>
+	<string name="usedSounds">piano,guitar,musicbox</string>
+	<string name="googleappkey">MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAoBx7pMdGqdR8lhpCeEpjBUpSP31q1AV/ZRuRQi4j6vG5OxZ1O6taKMn2acfLlqyM+IHsjiIi4szOVtgZc3RneGvhJRJOxn2m1FfxPI3ih41hJNJpyy/H8H5pndzJxGv4UNgKXU1eQAadcUBds+bWPabQnhQY5TnVG4RqU8CokzAKoEIuey+hB4e2ym3KaTAShs9vOWkBdqw2E4TjKxFCiFDlWh/k9e42raF0RNOwsY6fEeyaxVaVF5yJPfVC/VdtiT6D/e50nolVgvcrBjCUzZXa7xUXwIDzIXDBSdFZUcVGOHudl+iqt3dbkuKKZO0LSDuN4gh3wOgnwPhkJJh2pwIDAQAB</string>
+	<string name="simpleRendering">true</string>
+	<string name="cloudFolderId">0BxYHk5JfJXk1VjN4Um5Gck5Ka2c</string>
+	<string name="buyTitle">Do you like ModSynth?</string>
+	<string name="buyMessage">If so, please consider purchasing the full version.  It expands max polyphony from 3 voices to 10 and adds powerful new modules.  (It also rewards the app writer for his hard work!)</string>
+</resources>

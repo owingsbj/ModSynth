@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:id="@+id/sfPane"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent"
+	android:visibility="visible" >
+
+	<com.gallantrealm.modsynth.SpectralControl
+	    android:id="@+id/sfControl"
+	    android:layout_width="fill_parent"
+	    android:layout_height="fill_parent"
+	    android:layout_alignParentLeft="true"
+	    android:layout_alignParentTop="true"
+	    android:layout_toLeftOf="@+id/sfEdit" />
+
+	<Button
+	    android:id="@+id/sfEdit"
+	    android:layout_width="30dp"
+	    android:layout_height="25dp"
+	    android:layout_alignParentRight="true"
+	    android:layout_alignParentTop="false"
+	    android:background="@drawable/btn_mini_normal"
+	    android:text=">>"
+	    android:textColor="@android:color/primary_text_light"
+	    android:textSize="10dp" />
+
+	<com.gallantrealm.android.IconButton
+	    android:id="@+id/sfUp"
+	    android:layout_width="30dp"
+	    android:layout_height="25dp"
+	    android:layout_alignParentRight="true"
+	    android:layout_below="@id/sfEdit"
+	    android:background="@drawable/btn_mini_normal"
+        android:text="@string/icon_pencil"
+	    android:textColor="@android:color/primary_text_light"
+	    android:textSize="10dp" />
+
+	<com.gallantrealm.android.IconButton
+	    android:id="@+id/sfDown"
+	    android:layout_width="30dp"
+	    android:layout_height="25dp"
+	    android:layout_alignParentRight="true"
+	    android:layout_below="@id/sfUp"
+	    android:background="@drawable/btn_mini_normal"
+        android:text="@string/icon_eraser"
+	    android:textColor="@android:color/primary_text_light"
+	    android:textSize="10dp" />
+
+	<Button
+		android:id="@+id/sfDone"
+		android:layout_width="30dp"
+		android:layout_height="25dp"
+		android:layout_alignParentLeft="true"
+		android:layout_alignParentTop="true"
+		android:background="@drawable/btn_mini_normal"
+		android:text="&lt;&lt;"
+		android:textColor="@android:color/primary_text_light"
+		android:textSize="10dp" />
+
+	<TableLayout
+	    android:id="@+id/sfControls"
+	    android:layout_width="fill_parent"
+	    android:layout_height="fill_parent"
+	    android:layout_below="@id/sfDone" >
+
+		<TableRow
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_weight="1" >
+
+		    <TextView
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_gravity="center_vertical"
+		        android:shadowColor="#80000000"
+		        android:shadowDx="2"
+		        android:shadowDy="2"
+		        android:shadowRadius="1"
+		        android:text="Resonance"
+		        android:textAppearance="?android:attr/textAppearanceMedium"
+		        android:textSize="13sp" />
+
+		    <com.gallantrealm.android.Slider
+		        android:id="@+id/sfResonance"
+		        android:layout_width="100dp"
+		        android:layout_height="fill_parent"
+		        android:layout_gravity="center_vertical"
+		        android:layout_weight="1"
+		        android:max="100"
+		        android:progressDrawable="@drawable/progress_horizontal"
+		        android:thumb="@drawable/seek_thumb" />
+		</TableRow>
+
+		<TableRow
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_weight="1" >
+
+		    <TextView
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_gravity="center_vertical"
+		        android:shadowColor="#80000000"
+		        android:shadowDx="2"
+		        android:shadowDy="2"
+		        android:shadowRadius="1"
+		        android:text="Range"
+		        android:textAppearance="?android:attr/textAppearanceMedium"
+		        android:textSize="13sp" />
+
+		    <com.gallantrealm.android.Slider
+		        android:id="@+id/sfRange"
+		        android:layout_width="100dp"
+		        android:layout_height="fill_parent"
+		        android:layout_gravity="center_vertical"
+		        android:layout_weight="1"
+		        android:max="100"
+		        android:progressDrawable="@drawable/progress_horizontal"
+		        android:thumb="@drawable/seek_thumb" />
+		</TableRow>
+
+		<TableRow
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_weight="1" >
+
+		    <TextView
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_gravity="center_vertical"
+		        android:shadowColor="#80000000"
+		        android:shadowDx="2"
+		        android:shadowDy="2"
+		        android:shadowRadius="1"
+		        android:text="Modulation"
+		        android:textAppearance="?android:attr/textAppearanceMedium"
+		        android:textSize="13sp" />
+
+			<com.gallantrealm.android.Slider
+			    android:id="@+id/sfModulation"
+			    android:layout_width="100dp"
+			    android:layout_height="fill_parent"
+			    android:layout_gravity="center_vertical"
+			    android:layout_weight="1"
+			    android:max="100"
+			    android:progressDrawable="@drawable/progress_horizontal"
+			    android:thumb="@drawable/seek_thumb" />
+
+		</TableRow>
+	</TableLayout>
+
+</RelativeLayout>

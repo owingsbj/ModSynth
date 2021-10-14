@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent"
+	android:orientation="vertical"
+	android:visibility="visible" >
+	<TableLayout
+		android:layout_width="fill_parent"
+		android:layout_height="fill_parent"
+		android:shrinkColumns="0"
+		android:stretchColumns="1" >
+	    <TableRow
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_weight="1" >
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_gravity="center_vertical"
+				android:layout_marginTop="5dp"
+				android:shadowColor="#80000000"
+				android:shadowDx="2"
+				android:shadowDy="2"
+				android:shadowRadius="1"
+				android:text="Amount"
+				android:textAppearance="?android:attr/textAppearanceMedium"
+				android:textSize="13sp" />
+
+			<com.gallantrealm.android.Slider
+			    android:id="@+id/reverbAmount"
+			    android:layout_width="match_parent"
+			    android:layout_height="fill_parent"
+			    android:layout_gravity="center_vertical"
+			    android:max="99"
+			    android:progressDrawable="@drawable/progress_horizontal"
+			    android:thumb="@drawable/seek_thumb" />
+
+		</TableRow>
+	    <TableRow
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_weight="1" >
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_gravity="center_vertical"
+				android:layout_marginTop="5dp"
+				android:shadowColor="#80000000"
+				android:shadowDx="2"
+				android:shadowDy="2"
+				android:shadowRadius="1"
+				android:text="Depth"
+				android:textAppearance="?android:attr/textAppearanceMedium"
+				android:textSize="13sp" />
+
+			<com.gallantrealm.android.Slider
+			    android:id="@+id/reverbDepth"
+			    android:layout_width="match_parent"
+			    android:layout_height="fill_parent"
+			    android:layout_gravity="center_vertical"
+			    android:max="99"
+			    android:progressDrawable="@drawable/progress_horizontal"
+			    android:thumb="@drawable/seek_thumb" />
+
+		</TableRow>
+		<TableRow
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_weight="1" >
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_gravity="center_vertical"
+				android:shadowColor="#80000000"
+				android:shadowDx="2"
+				android:shadowDy="2"
+				android:shadowRadius="1"
+				android:text="Tone"
+				android:textAppearance="?android:attr/textAppearanceMedium"
+				android:textSize="13sp" />
+
+			<com.gallantrealm.android.Slider
+			    android:id="@+id/reverbTone"
+			    android:layout_width="match_parent"
+			    android:layout_height="fill_parent"
+			    android:layout_gravity="center_vertical"
+			    android:layout_weight="1"
+			    android:max="99"
+			    android:progressDrawable="@drawable/progress_horizontal"
+			    android:thumb="@drawable/seek_thumb" />
+
+		</TableRow>
+
+		<TableRow
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_weight="1" >
+
+		</TableRow>
+
+	</TableLayout>
+</LinearLayout>

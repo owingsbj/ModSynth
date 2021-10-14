@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/recordPane"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="horizontal"
+    android:visibility="visible" >
+
+    <Button
+        android:id="@+id/recordStartButton"
+        android:layout_width="wrap_content"
+        android:layout_height="38dp"
+        android:layout_weight="1"
+        android:background="@drawable/btn_default"
+        android:text="Start" />
+
+    <Button
+        android:id="@+id/recordStopButton"
+        android:layout_width="wrap_content"
+        android:layout_height="38dp"
+        android:layout_weight="1"
+        android:background="@drawable/btn_default"
+        android:text="Stop" />
+
+    <Button
+        android:id="@+id/recordReplayButton"
+        android:layout_width="wrap_content"
+        android:layout_height="38dp"
+        android:layout_weight="1"
+        android:background="@drawable/btn_default"
+        android:text="Replay" />
+
+    <TextView
+        android:id="@+id/recordTime"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:text="0:00"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textSize="20sp" />
+
+    <Button
+        android:id="@+id/recordSaveButton"
+        android:layout_width="wrap_content"
+        android:layout_height="38dp"
+        android:layout_weight="1"
+        android:background="@drawable/btn_default"
+        android:text="Save" />
+
+</LinearLayout>

@@ -1,0 +1,20 @@
+{
+  "version": 3,
+  "artifactType": {
+    "type": "APK",
+    "kind": "Directory"
+  },
+  "applicationId": "com.gallantrealm.modsynth",
+  "variantName": "release",
+  "elements": [
+    {
+      "type": "SINGLE",
+      "filters": [],
+      "attributes": [],
+      "versionCode": 609,
+      "versionName": "6.09",
+      "outputFile": "app-release.apk"
+    }
+  ],
+  "elementType": "File"
+}

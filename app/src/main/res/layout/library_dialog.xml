@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="500dp"
+	android:layout_height="wrap_content"
+	android:background="@drawable/dialog_background" >
+	<LinearLayout
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:orientation="vertical" >
+		<TextView
+			android:id="@+id/titleText"
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:layout_gravity="center"
+			android:layout_marginBottom="5dp"
+			android:gravity="center"
+			android:shadowColor="#404040"
+			android:shadowDx="1"
+			android:shadowDy="1"
+			android:shadowRadius="1"
+			android:text="Library"
+			android:textAppearance="?android:attr/textAppearanceLarge"
+			android:textSize="30sp"
+			android:textStyle="bold" />
+		<TextView
+			android:id="@+id/textView1"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="Choose an instrument from the online library and click Open to open it.  Later, if you want to keep the instrument locally, you can click Save to save it on your device." />
+		<TextView
+			android:id="@+id/freesoundMessage"
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:layout_marginBottom="5dp"
+			android:shadowColor="#404040"
+			android:shadowDx="1"
+			android:shadowDy="1"
+			android:shadowRadius="1"
+			android:textAppearance="?android:attr/textAppearanceLarge"
+			android:textSize="16sp"
+			android:textStyle="bold" />
+		<ScrollView
+			android:id="@+id/scrollView1"
+			android:layout_width="match_parent"
+			android:layout_height="100dp" >
+			<ListView
+				android:id="@+id/libraryList"
+				android:layout_width="match_parent"
+				android:layout_height="300dp" >
+			</ListView>
+		</ScrollView>
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:measureWithLargestChild="true" >
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_weight="1" />
+			<Button
+				android:id="@+id/openButton"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_weight="1"
+				android:text="Load" />
+			<Button
+				android:id="@+id/cancelButton"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_weight="1"
+				android:text="Cancel" />
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_weight="1" />
+		</LinearLayout>
+	</LinearLayout>
+</FrameLayout>
