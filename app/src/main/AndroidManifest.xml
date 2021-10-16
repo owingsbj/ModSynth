@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-	package="com.gallantrealm.modsynth" android:installLocation="auto"
-	android:versionCode="609" android:versionName="6.9">
+	xmlns:tools="http://schemas.android.com/tools"
+	package="com.gallantrealm.modsynth"
+	android:installLocation="auto"
+	android:versionCode="609"
+	android:versionName="6.9">
+
 	<!-- Warning: do not downgrade this to 22 or lower as app will fail to upgrade.
 		See https://inthecheesefactory.com/blog/things-you-need-to-know-about-android-m-permission-developer-edition/en -->
 	<uses-permission android:name="android.permission.WAKE_LOCK" />
@@ -21,6 +25,9 @@
 		android:required="false" />
 	<uses-feature android:name="android.software.midi"
 		android:required="false" />
+
+	<uses-sdk tools:overrideLibrary="com.gallantrealm.mysynth" />
+
 	<application android:allowBackup="true" android:icon="@mipmap/ic_launcher"
 		android:label="@string/app_name" android:largeHeap="true">
 		<activity android:name="com.gallantrealm.modsynth.GallantSplashActivity"
