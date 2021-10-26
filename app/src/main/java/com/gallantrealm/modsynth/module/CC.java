@@ -11,6 +11,7 @@ public class CC implements Serializable {
 	public int cc = 0;
 	public int minRange = 0; // 0-100
 	public int maxRange = 100; // 0-100
+	public boolean invert;
 
 	// new range limit function fields
 	public boolean rangeLimited;
@@ -46,10 +47,18 @@ public class CC implements Serializable {
 	public double range(double value) {
 		if (rangeLimited) {
 			int scale = maxRange - minRange;
-			return value * scale + minRange;
+			if (invert) {
+				return maxRange - value * scale;
+			} else {
+				return value * scale + minRange;
+			}
 		} else {
 			double scale = (maxRange - minRange) / 100.0;
-			return value * scale + minRange / 100.0;
+			if (invert) {
+				return maxRange / 100.0 - value * scale;
+			} else {
+				return value * scale + minRange / 100.0;
+			}
 		}
 	}
 }

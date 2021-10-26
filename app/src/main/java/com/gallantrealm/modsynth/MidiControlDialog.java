@@ -13,6 +13,8 @@ import android.view.View;
 import android.view.View.OnTouchListener;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.CheckBox;
+
 import de.viktorreiser.toolbox.widget.NumberPicker;
 
 public class MidiControlDialog extends GallantDialog {
@@ -51,6 +53,7 @@ public class MidiControlDialog extends GallantDialog {
 
 	NumberPicker controlPick;
 	RangeSlider valueRangeSlider;
+	CheckBox invertCheckBox;
 	Button okButton;
 
 	CC cc;
@@ -69,6 +72,7 @@ public class MidiControlDialog extends GallantDialog {
 
 		controlPick = (NumberPicker) findViewById(R.id.controlPick);
 		valueRangeSlider = (RangeSlider) findViewById(R.id.valueRangeSlider);
+		invertCheckBox = (CheckBox)findViewById(R.id.invertCheckBox);
 		okButton = (Button) findViewById(R.id.okButton);
 
 		Typeface typeface = clientModel.getTypeface(getContext());
@@ -94,6 +98,8 @@ public class MidiControlDialog extends GallantDialog {
 				updateCC();
 			}
 		});
+
+		invertCheckBox.setChecked(cc.invert);
 
 		okButton.setOnTouchListener(new OnTouchListener() {
 
@@ -134,6 +140,7 @@ public class MidiControlDialog extends GallantDialog {
 				cc.cc = controlPick.getCurrent();
 				cc.minRange = valueRangeSlider.getThumb1Value();
 				cc.maxRange = valueRangeSlider.getThumb2Value();
+				cc.invert = invertCheckBox.isChecked();
 			}
 		} catch (Exception e) {
 		}
