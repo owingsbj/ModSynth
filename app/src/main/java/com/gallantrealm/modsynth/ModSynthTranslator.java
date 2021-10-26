@@ -291,6 +291,10 @@ public class ModSynthTranslator extends Translator {
 			trans.put("Pan", "Pan");
 			trans.put("Distortion", "Distorsión");
 			trans.put("Bypass", "Derivación");
+			trans.put("Invert", "Invertir");
+			trans.put("Run in background", "Ejecutar en segundo plano");
+			trans.put("Load", "Carga");
+			trans.put("could not be loaded.", "no pudo ser cargado.");
 		}
 		String transText = trans.get(text);
 		return transText != null ? transText : super.translateSpanish(text);
@@ -579,6 +583,10 @@ public class ModSynthTranslator extends Translator {
 			trans.put("Pan", "Pan");
 			trans.put("Distortion", "Distorsion");
 			trans.put("Bypass", "Contourne");
+			trans.put("Invert", "Inverser");
+			trans.put("Run in background", "De fonctionner en arrière-plan");
+			trans.put("Load", "Charge");
+			trans.put("could not be loaded.", "n'a pas pu être chargé.");
 		}
 		String transText = trans.get(text);
 		return transText != null ? transText : super.translateFrench(text);
@@ -869,6 +877,10 @@ public class ModSynthTranslator extends Translator {
 			trans.put("Pan", "Pan");
 			trans.put("Distortion", "Verzerrung");
 			trans.put("Bypass", "Bypass");
+			trans.put("Invert", "Umkehren");
+			trans.put("Run in background", "Im Hintergrund laufen");
+			trans.put("Load", "Belastung");
+			trans.put("could not be loaded.", "konnte nicht geladen werden.");
 		}
 		String transText = trans.get(text);
 		return transText != null ? transText : super.translateGerman(text);
@@ -1164,6 +1176,10 @@ public class ModSynthTranslator extends Translator {
 			trans.put("Pan", "Пан");
 			trans.put("Distortion", "Искажение");
 			trans.put("Bypass", "байпас");
+			trans.put("Invert", "Инвертировать");
+			trans.put("Run in background", "Запустить в фоновом режиме");
+			trans.put("Load", "Нагрузка");
+			trans.put("could not be loaded.", "не удалось загрузить.");
 		}
 		String transText = trans.get(text);
 		return transText != null ? transText : super.translateRussian(text);
