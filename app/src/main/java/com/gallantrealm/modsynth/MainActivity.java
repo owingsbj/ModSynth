@@ -83,6 +83,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.PowerManager;
+import android.os.StrictMode;
 import android.provider.Settings.Secure;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -144,6 +145,9 @@ public class MainActivity extends Activity implements View.OnClickListener, Clie
 	protected void onCreate(Bundle savedInstanceState) {
 		System.out.println(">>MainActivity.onCreate");
 		super.onCreate(savedInstanceState);
+
+		if(BuildConfig.DEBUG)
+			StrictMode.enableDefaults();
 
 		clientModel.setContext(this);
 
@@ -1386,10 +1390,6 @@ public class MainActivity extends Activity implements View.OnClickListener, Clie
 	 * Override the back button to prompt for quit.
 	 */
 	public boolean nKeyDown(int keyCode, KeyEvent event) {
-		if (keyCode == KeyEvent.KEYCODE_BACK && !event.isAltPressed()) {
-			promptForFinish();
-			return true; // overriding the standard action handling
-		}
 		if (event.getRepeatCount() > 0) {
 			return true;
 		}
@@ -1432,7 +1432,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Clie
 				int rc = dialog.getButtonPressed();
 				if (rc == 0) {
 					System.out.println("Calling finish..");
-					finish();
+					MainActivity.this.finish();
 				}
 			}
 		});
