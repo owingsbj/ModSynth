@@ -198,7 +198,7 @@ public class Instrument extends AbstractInstrument {
 	public synchronized void initialize(int sampleRate) {
 		this.sampleRate = sampleRate;
 		SAMPLERATE_DIV_ENVELOPERATE = sampleRate / ENVELOPE_RATE;
-		System.out.println(">>initialize");
+		System.out.println(">>Instrument.initialize");
 		if (!initialized) {
 			orderModules();
 			for (int m = 0; m < modules.size(); m++) {
@@ -231,11 +231,11 @@ public class Instrument extends AbstractInstrument {
 
 			initialized = true;
 		}
-		System.out.println("<<initialize");
+		System.out.println("<<Instrument.initialize");
 	}
 
 	public synchronized void terminate() {
-		System.out.println(">>terminate");
+		System.out.println(">>Instrument.terminate");
 		if (initialized) {
 			for (int m = 0; m < modules.size(); m++) {
 				Module module = modules.get(m);
@@ -243,7 +243,7 @@ public class Instrument extends AbstractInstrument {
 			}
 			initialized = false;
 		}
-		System.out.println("<<terminate");
+		System.out.println("<<Instrument.terminate");
 	}
 
 	public synchronized void addModule(Module module) {
