@@ -63,7 +63,7 @@ public class ClientModel {
 	private String instrumentName;
 	private String backgroundName;
 	private String customBackgroundPath;
-	private Activity context;
+	private Context context;
 	private boolean fullVersion;
 	private int playCount;
 	private int preferencesVersion; // 0=2013-2014, 1=2015, 2=10/17/2018
@@ -84,9 +84,7 @@ public class ClientModel {
 		listeners = new ArrayList<ClientModelChangedListener>();
 	}
 
-	public void loadPreferences(Activity context) {
-		this.context = context;
-
+	public void loadPreferences() {
 		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
 		preferencesVersion = preferences.getInt("preferencesVersion", 2);
 		if (preferencesVersion <= 1) { // old prefs that used myworld names
@@ -120,15 +118,15 @@ public class ClientModel {
 		}
 	}
 
-	public void setContext(Activity context) {
+	public void setContext(Context context) {
 		this.context = context;
 	}
 
-	public Activity getContext() {
+	public Context getContext() {
 		return context;
 	}
 
-	public void savePreferences(Context context) {
+	public void savePreferences() {
 		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
 		SharedPreferences.Editor editor = preferences.edit();
 		editor.putInt("preferencesVersion", 2);
@@ -154,9 +152,9 @@ public class ClientModel {
 		return playCount;
 	}
 
-	public void updatePlayCount(Context context) {
+	public void updatePlayCount() {
 		playCount = playCount + 1;
-		savePreferences(context);
+		savePreferences();
 	}
 
 	public String getInstrumentName() {
@@ -268,7 +266,7 @@ public class ClientModel {
 	BillingClient billingClient;
 	boolean billingClientConnected;
 
-	public void buyFullVersion() {
+	public void buyFullVersion(Activity activity) {
 		try {
 	//		if (billingClient == null) {
 				System.out.println("initializing billing client");
@@ -276,10 +274,10 @@ public class ClientModel {
 					public void onPurchasesUpdated(final BillingResult billingResult, final List<Purchase> purchases) {
 						System.out.println(">> onPurchasesUpdated");
 						if (billingResult.getResponseCode() == BillingResponseCode.OK  && purchases != null && purchases.size() >= 1) {
-							context.runOnUiThread(new Runnable() {
+							activity.runOnUiThread(new Runnable() {
 								public void run() {
 									setFullVersion(true);
-									savePreferences(context);
+									savePreferences();
 									Purchase purchase = purchases.get(0);
 									AcknowledgePurchaseParams acknowledgePurchaseParams =
 							                AcknowledgePurchaseParams.newBuilder()
@@ -294,10 +292,10 @@ public class ClientModel {
 								}
 							});
 						} else if (billingResult.getResponseCode() == BillingResponseCode.ITEM_ALREADY_OWNED) {
-							context.runOnUiThread(new Runnable() {
+							activity.runOnUiThread(new Runnable() {
 								public void run() {
 									setFullVersion(true);
-									savePreferences(context);
+									savePreferences();
 									new MessageDialog(context, "Purchase Success", "You already own the full version!  Restart the app to enable all features.", null).show();
 								}
 							});
@@ -316,7 +314,7 @@ public class ClientModel {
 				billingClient.startConnection(new BillingClientStateListener() {
 					public void onBillingSetupFinished(BillingResult arg0) {
 						billingClientConnected = true;
-						querySkuDetails();
+						querySkuDetails(activity);
 					}
 					public void onBillingServiceDisconnected() {
 						billingClientConnected = false;
@@ -331,7 +329,7 @@ public class ClientModel {
 		}
 	}
 
-	private void querySkuDetails() {
+	private void querySkuDetails(Activity activity) {
 		System.out.println("querying sku details");
 		List<String> skuList = new ArrayList<>();
 		skuList.add(SKU_FULL_VERSION);
@@ -344,10 +342,10 @@ public class ClientModel {
 					System.out.println("sku details:");
 					System.out.println("  Title: " + skuDetails.getTitle());
 					System.out.println("  Description: " + skuDetails.getDescription());
-					launchPurchaseFlow(skuDetails);
+					launchPurchaseFlow(activity, skuDetails);
 				} else {
 					System.out.println("Purchase Failed: " + billingResult.getDebugMessage());
-					context.runOnUiThread(new Runnable() {
+					activity.runOnUiThread(new Runnable() {
 						public void run() {
 							MessageDialog purchaseFailed = new MessageDialog(context, "Purchase Failed", billingResult.getDebugMessage(), null);
 							purchaseFailed.show();
@@ -358,14 +356,14 @@ public class ClientModel {
 		});
 	}
 
-	private void launchPurchaseFlow(SkuDetails skuDetails) {
+	private void launchPurchaseFlow(Activity activity, SkuDetails skuDetails) {
 		try {
 			System.out.println("launching purchase flow");
 			BillingFlowParams purchaseParams = BillingFlowParams.newBuilder().setSkuDetails(skuDetails).build();
-			billingClient.launchBillingFlow(context, purchaseParams);
+			billingClient.launchBillingFlow(activity, purchaseParams);
 		} catch (Exception e) {
 			e.printStackTrace();
-			context.runOnUiThread(new Runnable() {
+			activity.runOnUiThread(new Runnable() {
 				public void run() {
 					new MessageDialog(context, "Purchase Failed", "There was an error launching Google Play for purchasing.  Please make sure Google Play is installed and working.", null).show();
 				}

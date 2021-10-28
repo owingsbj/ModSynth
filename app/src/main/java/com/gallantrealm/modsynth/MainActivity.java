@@ -145,12 +145,14 @@ public class MainActivity extends Activity implements View.OnClickListener, Clie
 		System.out.println(">>MainActivity.onCreate");
 		super.onCreate(savedInstanceState);
 
+		clientModel.setContext(this);
+
 		// Restore the preferences. If this is the first time, set some of the
 		// preferences to good defaults
-		clientModel.loadPreferences(this);
+		clientModel.loadPreferences();
 		if (clientModel.getPlayCount() <= 1) {
 			clientModel.setKeyboardSize(2); // keyboard size to 2 octaves
-			clientModel.savePreferences(this);
+			clientModel.savePreferences();
 		}
 
 		// Set up the translator with the right language (before rendering view)
@@ -227,7 +229,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Clie
 						} else {
 							loadInstrument(soundName);
 							ClientModel.getClientModel().setInstrumentName(soundName);
-							ClientModel.getClientModel().savePreferences(MainActivity.this);
+							ClientModel.getClientModel().savePreferences();
 						}
 					}
 				});
@@ -342,7 +344,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Clie
 					mdialog.setOnDismissListener(new OnDismissListener() {
 						public void onDismiss(DialogInterface dialog) {
 							if (mdialog.getButtonPressed() == 0) {
-								clientModel.buyFullVersion();
+								clientModel.buyFullVersion(MainActivity.this);
 							}
 						}
 					});
@@ -485,7 +487,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Clie
 					path = ContentUriUtil.getPath(this, mImageCaptureUri);
 					System.out.println("Image selected: " + path);
 					ClientModel.getClientModel().setCustomBackgroundPath(path);
-					ClientModel.getClientModel().savePreferences(this);
+					ClientModel.getClientModel().savePreferences();
 					setCustomBackground(path);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -802,7 +804,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Clie
 
 					soundSelector.setText(soundName);
 					ClientModel.getClientModel().setInstrumentName(soundName);
-					ClientModel.getClientModel().savePreferences(MainActivity.this);
+					ClientModel.getClientModel().savePreferences();
 				}
 				if (clientModel.isGoggleDogPass() && promptForName.getButtonPressed() == 1) {
 					final MessageDialog verifyUpload = new MessageDialog(MainActivity.this, "Share",
@@ -1008,7 +1010,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Clie
 					System.out.println("Deleted sound " + soundName + ".modsynth");
 					loadInstrument("BuiltIn/Basic");
 					ClientModel.getClientModel().setInstrumentName(soundName);
-					ClientModel.getClientModel().savePreferences(MainActivity.this);
+					ClientModel.getClientModel().savePreferences();
 					if (lastSelectedModView != null) {
 						lastSelectedModView.setVisibility(View.GONE);
 					}
@@ -1033,7 +1035,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Clie
 						try {
 							loadInstrument(soundName);
 							ClientModel.getClientModel().setInstrumentName(soundName);
-							ClientModel.getClientModel().savePreferences(MainActivity.this);
+							ClientModel.getClientModel().savePreferences();
 						} catch (Exception e) {
 							e.printStackTrace();
 						}
@@ -1364,6 +1366,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Clie
 			}
 		});
 	}
+
 	@Override
 	public boolean dispatchKeyEvent(KeyEvent event) {
 		if (event.getAction() == KeyEvent.ACTION_DOWN) {
@@ -1374,24 +1377,17 @@ public class MainActivity extends Activity implements View.OnClickListener, Clie
 		return super.dispatchKeyEvent(event);
 	}
 
+	@Override
+	public void onBackPressed() {
+		promptForFinish();
+	}
+
 	/**
 	 * Override the back button to prompt for quit.
 	 */
 	public boolean nKeyDown(int keyCode, KeyEvent event) {
 		if (keyCode == KeyEvent.KEYCODE_BACK && !event.isAltPressed()) {
-			final MessageDialog dialog = new MessageDialog(this, null, "Are you sure you want to quit?", new String[] { //
-					Translator.getTranslator().translate("Yes"), //
-					Translator.getTranslator().translate("No") }, null);
-			dialog.show();
-			dialog.setOnDismissListener(new OnDismissListener() {
-				@Override
-				public void onDismiss(DialogInterface d) {
-					int rc = dialog.getButtonPressed();
-					if (rc == 0) {
-						finish();
-					}
-				}
-			});
+			promptForFinish();
 			return true; // overriding the standard action handling
 		}
 		if (event.getRepeatCount() > 0) {
@@ -1424,6 +1420,23 @@ public class MainActivity extends Activity implements View.OnClickListener, Clie
 			}
 		}
 		return false;
+	}
+
+	private void promptForFinish() {
+		final MessageDialog dialog = new MessageDialog(this, null, "Are you sure you want to quit?", new String[] { //
+				Translator.getTranslator().translate("Yes"), //
+				Translator.getTranslator().translate("No") }, null);
+		dialog.setOnDismissListener(new OnDismissListener() {
+			@Override
+			public void onDismiss(DialogInterface d) {
+				int rc = dialog.getButtonPressed();
+				if (rc == 0) {
+					System.out.println("Calling finish..");
+					finish();
+				}
+			}
+		});
+		dialog.show();
 	}
 
 	boolean upperOctave;

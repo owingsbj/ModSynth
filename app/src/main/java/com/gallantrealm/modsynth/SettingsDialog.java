@@ -97,7 +97,7 @@ public class SettingsDialog extends GallantDialog {
 				int languageSelection = languageSpinner.getSelectedItemPosition();
 				if (languageSelection != clientModel.getLanguage()) {
 					clientModel.setLanguage(languageSelection);
-					clientModel.savePreferences(activity);
+					clientModel.savePreferences();
 					activity.setLanguage(languageSelection);
 					new MessageDialog(SettingsDialog.this.getContext(), "Language", "Quit and relaunch ModSynth to apply the change.", null).show();
 				}
@@ -119,7 +119,7 @@ public class SettingsDialog extends GallantDialog {
 				int keysSelection = keysSpinner.getSelectedItemPosition();
 				activity.setKeyboardSize(keysSelection);
 				clientModel.setKeyboardSize(keysSelection);
-				clientModel.savePreferences(activity);
+				clientModel.savePreferences();
 			}
 
 			@Override
@@ -138,7 +138,7 @@ public class SettingsDialog extends GallantDialog {
 				int midiChannel = midiChannelSpinner.getSelectedItemPosition();
 				activity.setMidiChannel(midiChannel);
 				clientModel.setMidiChannel(midiChannel);
-				clientModel.savePreferences(activity);
+				clientModel.savePreferences();
 			}
 
 			@Override
@@ -177,7 +177,7 @@ public class SettingsDialog extends GallantDialog {
 			public void onItemSelected(AdapterView av, View v, int arg2, long arg3) {
 				int sampleRateReducer = sampleRateSpinner.getSelectedItemPosition();
 				clientModel.setSampleRateReducer(sampleRateReducer);
-				clientModel.savePreferences(activity);
+				clientModel.savePreferences();
 				if (!sampleRateFirstSet) {
 					new MessageDialog(SettingsDialog.this.getContext(), "Sample Rate", "Quit and relaunch ModSynth to apply the change.", null).show();
 				}
@@ -211,7 +211,7 @@ public class SettingsDialog extends GallantDialog {
 					nbuffers = 10;
 				}
 				clientModel.setNBuffers(nbuffers);
-				clientModel.savePreferences(activity);
+				clientModel.savePreferences();
 				if (!buffersFirstSet) {
 					new MessageDialog(SettingsDialog.this.getContext(), "Buffers", "Quit and relaunch ModSynth to apply the change in buffers.", null).show();
 				}
@@ -239,7 +239,7 @@ public class SettingsDialog extends GallantDialog {
 			public void onChanged(NumberPicker picker, int oldVal, int newVal) {
 				activity.setTuningCents(tuningCents.getCurrent());
 				clientModel.setTuningCents(tuningCents.getCurrent());
-				clientModel.savePreferences(activity);
+				clientModel.savePreferences();
 			}
 		});
 
@@ -252,7 +252,7 @@ public class SettingsDialog extends GallantDialog {
 				int controlsSelection = controlsSpinner.getSelectedItemPosition();
 				activity.setControlSide(controlsSelection);
 				clientModel.setControlSide(controlsSelection);
-				clientModel.savePreferences(activity);
+				clientModel.savePreferences();
 			}
 			public void onNothingSelected(AdapterView av) {
 			}
@@ -270,7 +270,7 @@ public class SettingsDialog extends GallantDialog {
 					clientModel.setColorIcons(0);
 				}
 				activity.setColorIcons(isChecked);
-				clientModel.savePreferences(activity);
+				clientModel.savePreferences();
 			}
 		});
 
@@ -312,7 +312,7 @@ public class SettingsDialog extends GallantDialog {
 				if (selectItemDialog.getItemSelected() != null) {
 					String option = selectItemDialog.getItemSelected().getName();
 					clientModel.setBackgroundName(option);
-					clientModel.savePreferences(getContext());
+					clientModel.savePreferences();
 					activity.setTheme(option, null);
 				}
 			}

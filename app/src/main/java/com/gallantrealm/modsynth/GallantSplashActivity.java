@@ -17,7 +17,9 @@ public class GallantSplashActivity extends GallantActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		ClientModel.getClientModel().loadPreferences(this); // to prepare model for use later
+		ClientModel clientModel = ClientModel.getClientModel();
+		clientModel.setContext(this);  // use until main activity sets it again
+		ClientModel.getClientModel().loadPreferences(); // to prepare model for use later
 
 		setContentView(R.layout.gallant_splash);
 		Typeface typeface = Theme.getTheme().getTypeface(this);
@@ -65,7 +67,7 @@ public class GallantSplashActivity extends GallantActivity {
 		t.schedule(new TimerTask() {
 			@Override
 			public void run() {
-				ClientModel.getClientModel().updatePlayCount(GallantSplashActivity.this);
+				ClientModel.getClientModel().updatePlayCount();
 				showMainMenu();
 			}
 		}, 2000l);
