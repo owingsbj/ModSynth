@@ -161,8 +161,8 @@ public class ClientModel {
 		return this.instrumentName;
 	}
 
-	public void setInstrumentName(String worldName) {
-		this.instrumentName = worldName;
+	public void setInstrumentName(String name) {
+		this.instrumentName = name;
 	}
 
 	public void setBackgroundName(String name) {

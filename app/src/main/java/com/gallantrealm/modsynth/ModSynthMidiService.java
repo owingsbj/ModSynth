@@ -58,13 +58,12 @@ public class ModSynthMidiService extends MidiDeviceService {
 //                    Toast.makeText(ModSynthMidiService.this.getApplication(),
 //                            "No instrument found with name starting with \"" + programNum + " \" ",
 //                            Toast.LENGTH_LONG).show();
-                } else {
+                } else if (!soundName.equals(clientModel.getInstrumentName())) {
                     loadInstrument(soundName);
                 }
                 System.out.println("<<ModSynthMidiService.onProgramChange ");
             }
             public void onControlChange(int control, int value) {
-                System.out.println("<>ModSynthMidiService.onControlChange "+control+" "+value);
                 if (synth.getInstrument() != null) {
                     synth.getInstrument().controlChange(control, value / 127.0f);
                 }
@@ -148,44 +147,38 @@ public class ModSynthMidiService extends MidiDeviceService {
 
     private void loadInstrument(final String soundName) {
         System.out.println(">>ModSynthMidiService.loadInstrument: " + soundName);
-//        Thread thread = new Thread() {
-//            public void run() {
-
-                Instrument sound = null;
-                if (soundName.startsWith("file://")) { // playing a sent sound
-                    sound = (Instrument) clientModel.loadObject(soundName, true);
-                } else if (soundName.startsWith("BuiltIn/")) {
-                    try {
-                        String filename = soundName.substring("BuiltIn/".length()).trim();
-                        filename = "Instruments/" + filename;
-                        InputStream is = ModSynthMidiService.this.getApplication().getAssets().open(filename + ".modsynth");
-                        ObjectInputStream inStream = new ObjectInputStream(is);
-                        sound = (Instrument) inStream.readObject();
-                        inStream.close();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                } else {
-                    String fileName = soundName + ".modsynth";
-                    sound = (Instrument) clientModel.loadObject(fileName, true);
+            Instrument sound = null;
+            if (soundName.startsWith("file://")) { // playing a sent sound
+                sound = (Instrument) clientModel.loadObject(soundName, true);
+            } else if (soundName.startsWith("BuiltIn/")) {
+                try {
+                    String filename = soundName.substring("BuiltIn/".length()).trim();
+                    filename = "Instruments/" + filename;
+                    InputStream is = ModSynthMidiService.this.getApplication().getAssets().open(filename + ".modsynth");
+                    ObjectInputStream inStream = new ObjectInputStream(is);
+                    sound = (Instrument) inStream.readObject();
+                    inStream.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-                if (sound == null) {
-                    String msg = soundName + " " + Translator.getTranslator().translate("could not be loaded.");
+            } else {
+                String fileName = soundName + ".modsynth";
+                sound = (Instrument) clientModel.loadObject(fileName, true);
+            }
+            if (sound == null) {
+                String msg = soundName + " " + Translator.getTranslator().translate("could not be loaded.");
 //                    Toast.makeText(ModSynthMidiService.this.getApplication(), "ModSynth: "+msg,
 //                            Toast.LENGTH_LONG).show();
-                } else {
-                    try {
-                        synth.setInstrument(sound);
-                    } catch (OutOfMemoryError e) {
-                        String msg = soundName + " " + Translator.getTranslator().translate("out of memory.");
+            } else {
+                try {
+                    synth.setInstrument(sound);
+                    clientModel.setInstrumentName(soundName);
+                } catch (OutOfMemoryError e) {
+                    String msg = soundName + " " + Translator.getTranslator().translate("out of memory.");
 //                        Toast.makeText(ModSynthMidiService.this.getApplication(), "ModSynth: "+msg,
 //                                Toast.LENGTH_LONG).show();
-                    }
                 }
-
-//            }
-//        };
-//        thread.start();
+            }
         System.out.println("<<ModSynthMidiService.loadInstrument: " + soundName);
     }
 
