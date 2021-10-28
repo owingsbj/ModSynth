@@ -1,0 +1,5 @@
+<devices>
+    <device name="ModSynth" manufacturer="Gallant Realm" product="ModSynth">
+        <input-port name="input" />
+    </device>
+</devices>

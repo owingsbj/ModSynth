@@ -12,7 +12,7 @@
 	<uses-permission android:name="android.permission.INTERNET" />
 	<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-	
+
     <uses-permission android:name="com.android.vending.BILLING" />
 	
 	<uses-feature android:name="android.hardware.audio.output"
@@ -30,6 +30,7 @@
 
 	<application android:allowBackup="true" android:icon="@mipmap/ic_launcher"
 		android:label="@string/app_name" android:largeHeap="true">
+
 		<activity android:name="com.gallantrealm.modsynth.GallantSplashActivity"
 			android:alwaysRetainTaskState="true" android:label="@string/app_name"
 			android:screenOrientation="sensorLandscape"
@@ -69,5 +70,15 @@
 			android:authorities="com.gallantrealm.modsynth" android:exported="true"
 			android:grantUriPermissions="true">
 		</provider>
+
+		<service android:name="com.gallantrealm.modsynth.ModSynthMidiService"
+			android:permission="android.permission.BIND_MIDI_DEVICE_SERVICE">
+			<intent-filter>
+				<action android:name="android.media.midi.MidiDeviceService" />
+			</intent-filter>
+			<meta-data android:name="android.media.midi.MidiDeviceService"
+				android:resource="@xml/synth_device_info" />
+		</service>
+
 	</application>
 </manifest>
