@@ -11,7 +11,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
-public class GallantSplashActivity extends GallantActivity {
+public class SplashActivity extends GallantActivity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -21,10 +21,13 @@ public class GallantSplashActivity extends GallantActivity {
 		clientModel.setContext(this);  // use until main activity sets it again
 		ClientModel.getClientModel().loadPreferences(); // to prepare model for use later
 
-		setContentView(R.layout.gallant_splash);
+		setContentView(R.layout.splash);
 		Typeface typeface = Theme.getTheme().getTypeface(this);
 		((TextView) findViewById(R.id.goggleDog)).setTypeface(typeface);
 		((TextView) findViewById(R.id.appTagline)).setTypeface(typeface);
+		((TextView) findViewById(R.id.splash_version)).setTypeface(typeface);
+		((TextView) findViewById(R.id.splash_version)).setText(BuildConfig.VERSION_NAME);
+
 
 		View goggleDog = findViewById(R.id.goggleDog);
 		if (goggleDog != null) {
@@ -44,10 +47,10 @@ public class GallantSplashActivity extends GallantActivity {
 
 	public void showMainMenu() {
 		try {
-			Intent intent = new Intent(GallantSplashActivity.this, GallantSplashActivity.this.getClassLoader().loadClass(getString(R.string.mainMenuClassName)));
+			Intent intent = new Intent(SplashActivity.this, SplashActivity.this.getClassLoader().loadClass(getString(R.string.mainMenuClassName)));
 			intent.setData(getIntent().getData()); // pass along invokation params
 			startActivity(intent);
-			GallantSplashActivity.this.finish();
+			SplashActivity.this.finish();
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}

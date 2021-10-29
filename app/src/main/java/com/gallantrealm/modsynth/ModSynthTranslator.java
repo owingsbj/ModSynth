@@ -295,6 +295,8 @@ public class ModSynthTranslator extends Translator {
 			trans.put("Run in background", "Ejecutar en segundo plano");
 			trans.put("Load", "Carga");
 			trans.put("could not be loaded.", "no pudo ser cargado.");
+			trans.put("Version", "Versión");
+			trans.put("Buffers", "Amortiguadores");
 		}
 		String transText = trans.get(text);
 		return transText != null ? transText : super.translateSpanish(text);
@@ -587,6 +589,8 @@ public class ModSynthTranslator extends Translator {
 			trans.put("Run in background", "De fonctionner en arrière-plan");
 			trans.put("Load", "Charge");
 			trans.put("could not be loaded.", "n'a pas pu être chargé.");
+			trans.put("Version", "Version");
+			trans.put("Buffers", "Tampons");
 		}
 		String transText = trans.get(text);
 		return transText != null ? transText : super.translateFrench(text);
@@ -881,6 +885,8 @@ public class ModSynthTranslator extends Translator {
 			trans.put("Run in background", "Im Hintergrund laufen");
 			trans.put("Load", "Belastung");
 			trans.put("could not be loaded.", "konnte nicht geladen werden.");
+			trans.put("Version", "Version");
+			trans.put("Buffers", "Puffer");
 		}
 		String transText = trans.get(text);
 		return transText != null ? transText : super.translateGerman(text);
@@ -1180,6 +1186,8 @@ public class ModSynthTranslator extends Translator {
 			trans.put("Run in background", "Запустить в фоновом режиме");
 			trans.put("Load", "Нагрузка");
 			trans.put("could not be loaded.", "не удалось загрузить.");
+			trans.put("Version", "Версия");
+			trans.put("Buffers", "Буферы");
 		}
 		String transText = trans.get(text);
 		return transText != null ? transText : super.translateRussian(text);
