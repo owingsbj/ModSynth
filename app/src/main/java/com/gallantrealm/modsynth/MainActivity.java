@@ -1,8 +1,10 @@
 package com.gallantrealm.modsynth;
 
 import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
@@ -1178,14 +1180,12 @@ public class MainActivity extends Activity implements View.OnClickListener, Clie
 			return;
 		}
 
-		File rootDir = new File("/sdcard");
-		if (!rootDir.exists()) {
-			rootDir = new File("/mnt/sdcard");
-			if (!rootDir.exists()) {
-				rootDir = Environment.getExternalStorageDirectory();
-			}
+		final File modSynthDir;
+		if (Build.VERSION.SDK_INT < 29) {
+			modSynthDir = new File(Environment.getExternalStorageDirectory() + "/ModSynth");
+		} else {
+			modSynthDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC) + "/ModSynth");
 		}
-		final File modSynthDir = new File(rootDir.getPath() + "/ModSynth");
 		if (!modSynthDir.exists()) {
 			modSynthDir.mkdir();
 		}
@@ -1198,13 +1198,15 @@ public class MainActivity extends Activity implements View.OnClickListener, Clie
 				if (inputDialog.getButtonPressed() == 0) {
 					final String recordname = inputDialog.getValue();
 					lastRecordName = recordname;
-					final String filename = Environment.getExternalStorageDirectory().getAbsolutePath() + "/ModSynth/"
-							+ recordname + ".wav";
+					final String filename;
+					filename = modSynthDir.getAbsolutePath() + "/" + recordname + ".wav";
 					AsyncTask.execute(new Runnable() {
 						public void run() {
 							try {
 								File file = new File(filename);
-								synth.saveRecording(filename);
+								OutputStream fileStream = new BufferedOutputStream(new FileOutputStream(file));
+								synth.saveRecording(fileStream);
+								fileStream.close();
 								sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(file)));
 								System.out.println("SAVED RECORDING to " + filename);
 								unsavedRecording = false;
