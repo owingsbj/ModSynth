@@ -9,8 +9,8 @@ android {
         applicationId "com.gallantrealm.modsynth"
         minSdk 14
         targetSdk 30
-        versionCode 701
-        versionName '7.01'
+        versionCode 702
+        versionName '7.02'
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
