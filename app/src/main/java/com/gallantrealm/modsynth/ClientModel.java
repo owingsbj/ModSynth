@@ -40,6 +40,8 @@ import android.graphics.Typeface;
 import android.os.Environment;
 import android.os.PowerManager;
 import android.preference.PreferenceManager;
+import android.util.Log;
+
 import uk.co.labbookpages.WavFile;
 
 public class ClientModel {
@@ -269,10 +271,10 @@ public class ClientModel {
 	public void buyFullVersion(Activity activity) {
 		try {
 	//		if (billingClient == null) {
-				System.out.println("initializing billing client");
+				Log.d("ClientModel", "initializing billing client");
 				billingClient = BillingClient.newBuilder(this.context).setListener(new PurchasesUpdatedListener() {
 					public void onPurchasesUpdated(final BillingResult billingResult, final List<Purchase> purchases) {
-						System.out.println(">> onPurchasesUpdated");
+						Log.d("ClientModel", ">> onPurchasesUpdated");
 						if (billingResult.getResponseCode() == BillingResponseCode.OK  && purchases != null && purchases.size() >= 1) {
 							activity.runOnUiThread(new Runnable() {
 								public void run() {
@@ -285,7 +287,7 @@ public class ClientModel {
 							                    .build();
 									billingClient.acknowledgePurchase(acknowledgePurchaseParams, new AcknowledgePurchaseResponseListener() {
 										public void onAcknowledgePurchaseResponse(BillingResult billingResult) {
-											System.out.println("Purchase acknowledged: "+billingResult.getResponseCode());
+											Log.d("ClientModel", "Purchase acknowledged: "+billingResult.getResponseCode());
 										}
 									});
 									new MessageDialog(context, "Purchase Success", "Thanks for purchasing!  Restart the app to enable all features.", null).show();
@@ -302,15 +304,15 @@ public class ClientModel {
 						} else if (billingResult.getResponseCode() == BillingResponseCode.USER_CANCELED) {
 							// nothing to do.. user cancelled
 						} else {
-							System.out.println("Purchase Failed: " + billingResult.getResponseCode() + " " + billingResult.getDebugMessage());
+							Log.d("ClientModel", "Purchase Failed: " + billingResult.getResponseCode() + " " + billingResult.getDebugMessage());
 //							// Note: No need to show an error as Google Play's error dialog is better.
 						}
-						System.out.println("<< onPurchasesUpdated");
+						Log.d("ClientModel", "<< onPurchasesUpdated");
 					}
 				}).enablePendingPurchases().build();
 	//		}
 //			if (!billingClientConnected) {
-				System.out.println("connecting to google play billing");
+				Log.d("ClientModel", "connecting to google play billing");
 				billingClient.startConnection(new BillingClientStateListener() {
 					public void onBillingSetupFinished(BillingResult arg0) {
 						billingClientConnected = true;
@@ -330,7 +332,7 @@ public class ClientModel {
 	}
 
 	private void querySkuDetails(Activity activity) {
-		System.out.println("querying sku details");
+		Log.d("ClientModel", "querying sku details");
 		List<String> skuList = new ArrayList<>();
 		skuList.add(SKU_FULL_VERSION);
 		SkuDetailsParams.Builder params = SkuDetailsParams.newBuilder();
@@ -339,12 +341,12 @@ public class ClientModel {
 			public void onSkuDetailsResponse(final BillingResult billingResult, List<SkuDetails> skuDetailsList) {
 				if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.OK) {
 					SkuDetails skuDetails = skuDetailsList.get(0);
-					System.out.println("sku details:");
-					System.out.println("  Title: " + skuDetails.getTitle());
-					System.out.println("  Description: " + skuDetails.getDescription());
+					Log.d("ClientModel", "sku details:");
+					Log.d("ClientModel", "  Title: " + skuDetails.getTitle());
+					Log.d("ClientModel", "  Description: " + skuDetails.getDescription());
 					launchPurchaseFlow(activity, skuDetails);
 				} else {
-					System.out.println("Purchase Failed: " + billingResult.getDebugMessage());
+					Log.d("ClientModel", "Purchase Failed: " + billingResult.getDebugMessage());
 					activity.runOnUiThread(new Runnable() {
 						public void run() {
 							MessageDialog purchaseFailed = new MessageDialog(context, "Purchase Failed", billingResult.getDebugMessage(), null);
@@ -358,7 +360,7 @@ public class ClientModel {
 
 	private void launchPurchaseFlow(Activity activity, SkuDetails skuDetails) {
 		try {
-			System.out.println("launching purchase flow");
+			Log.d("ClientModel", "launching purchase flow");
 			BillingFlowParams purchaseParams = BillingFlowParams.newBuilder().setSkuDetails(skuDetails).build();
 			billingClient.launchBillingFlow(activity, purchaseParams);
 		} catch (Exception e) {
@@ -494,7 +496,7 @@ public class ClientModel {
 	 * @return
 	 */
 	public double[] loadWave(String fileName, boolean external) throws Exception {
-		System.out.println("Loading wav file: " + fileName);
+		Log.d("ClientModel", "Loading wav file: " + fileName);
 		File file;
 		if (fileName.startsWith("file:")) { // via an external url
 			file = new File(fileName.substring(7));
@@ -518,7 +520,7 @@ public class ClientModel {
 			len = file.length();
 		} else {
 			// if file not found, perhaps it has a built-in replacement, so try assets
-			System.out.println("Looking for wav in assets");
+			Log.d("ClientModel", "Looking for wav in assets");
 			file = null;
 			fileName = trimName(fileName);
 			is = context.getAssets().open(fileName);
@@ -629,9 +631,6 @@ public class ClientModel {
 
 	/**
 	 * Saves an object to app-local files. The object needs to be serializable
-	 * 
-	 * @param bitmap
-	 * @param fileName
 	 */
 	public void saveObject(Object object, String fileName, boolean external) {
 		boolean saved = false;

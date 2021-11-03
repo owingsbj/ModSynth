@@ -1,5 +1,7 @@
 package com.gallantrealm.modsynth;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import com.gallantrealm.modsynth.module.Arpeggiator;
 import com.gallantrealm.modsynth.module.Compressor;
@@ -66,11 +68,6 @@ public class Instrument extends AbstractInstrument {
 				newModules.add(position, module);
 			}
 			modules = newModules;
-			System.out.println("---- Sorted modules:");
-			for (Module module : modules) {
-				System.out.println(module.predecessorCount + " " + module.getClass().getSimpleName());
-			}
-			System.out.println("----");
 		}
 	}
 
@@ -198,7 +195,7 @@ public class Instrument extends AbstractInstrument {
 	public synchronized void initialize(int sampleRate) {
 		this.sampleRate = sampleRate;
 		SAMPLERATE_DIV_ENVELOPERATE = sampleRate / ENVELOPE_RATE;
-		System.out.println(">>Instrument.initialize");
+		Log.d("Instrument", ">>initialize");
 		if (!initialized) {
 			orderModules();
 			for (int m = 0; m < modules.size(); m++) {
@@ -231,11 +228,11 @@ public class Instrument extends AbstractInstrument {
 
 			initialized = true;
 		}
-		System.out.println("<<Instrument.initialize");
+		Log.d("Instrument", "<<initialize");
 	}
 
 	public synchronized void terminate() {
-		System.out.println(">>Instrument.terminate");
+		Log.d("Instrument", ">>terminate");
 		if (initialized) {
 			for (int m = 0; m < modules.size(); m++) {
 				Module module = modules.get(m);
@@ -243,7 +240,7 @@ public class Instrument extends AbstractInstrument {
 			}
 			initialized = false;
 		}
-		System.out.println("<<Instrument.terminate");
+		Log.d("Instrument", "<<terminate");
 	}
 
 	public synchronized void addModule(Module module) {

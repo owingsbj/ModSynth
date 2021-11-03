@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.media.midi.MidiDeviceService;
 import android.media.midi.MidiDeviceStatus;
 import android.media.midi.MidiReceiver;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -30,14 +31,14 @@ public class ModSynthMidiService extends MidiDeviceService {
 
     @Override
     public void onCreate() {
-        System.out.println(">>ModSynthMidiService.onCreate");
+        Log.d("ModSynthMidiService", ">>onCreate");
         if (synth != null) {
-            System.out.println("  ModSynthMidiService.onCreate already created");
+            Log.d("ModSynthMidiService", "  onCreate already created");
         } else {
             create();
         }
         super.onCreate();
-        System.out.println("<<ModSynthMidiService.onCreate");
+        Log.d("ModSynthMidiService", "<<onCreate");
     }
 
     private void create() {
@@ -52,7 +53,7 @@ public class ModSynthMidiService extends MidiDeviceService {
                 // not called
             }
             public void onProgramChange(int programNum) {
-                System.out.println(">>ModSynthMidiService.onProgramChange "+programNum);
+                Log.d("ModSynthMidiService", ">>onProgramChange "+programNum);
                 String soundName = clientModel.findObject("" + programNum + " ", ".modsynth");
                 if (soundName == null) {
 //                    Toast.makeText(ModSynthMidiService.this.getApplication(),
@@ -61,7 +62,7 @@ public class ModSynthMidiService extends MidiDeviceService {
                 } else if (!soundName.equals(clientModel.getInstrumentName())) {
                     loadInstrument(soundName);
                 }
-                System.out.println("<<ModSynthMidiService.onProgramChange ");
+                Log.d("ModSynthMidiService", "<<onProgramChange ");
             }
             public void onControlChange(int control, int value) {
                 if (synth.getInstrument() != null) {
@@ -79,17 +80,17 @@ public class ModSynthMidiService extends MidiDeviceService {
 
     @Override
     public void onDestroy() {
-        System.out.println(">>ModSynthMidiService.onDestroy");
+        Log.d("ModSynthMidiService", ">>onDestroy");
         super.onDestroy();
         if (synth == null) {
-            System.out.println("  ModSynthMidiService.onDestroy already destroyed");
+            Log.d("ModSynthMidiService", "  onDestroy already destroyed");
         } else {
             mySynthMidiService.terminate();
             mySynthMidiService = null;
             synth.terminate();
             synth = null;
         }
-        System.out.println("<<ModSynthMidiService.onDestroy");
+        Log.d("ModSynthMidiService", "<<onDestroy");
     }
 
     @Override
@@ -109,11 +110,11 @@ public class ModSynthMidiService extends MidiDeviceService {
 
     @Override
     public void onClose() {
-        System.out.println("<>ModSynthMidiService.onClose");
+        Log.d("ModSynthMidiService", "<>onClose");
     }
 
     private void inputPortOpen() {
-        System.out.println(">>ModSynthMidiService.inputPortOpen");
+        Log.d("ModSynthMidiService", ">>inputPortOpen");
         try {
             if (synth == null) {
                 create();
@@ -131,22 +132,22 @@ public class ModSynthMidiService extends MidiDeviceService {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        System.out.println("<<ModSynthMidiService.inputPortOpen");
+        Log.d("ModSynthMidiService", "<<inputPortOpen");
     }
 
     private void inputPortClosed() {
-        System.out.println(">>ModSynthMidiService.inputPortClosed");
+        Log.d("ModSynthMidiService", ">>inputPortClosed");
         if (mySynthMidiService != null) {
             mySynthMidiService.stop();
         }
         if (synth != null) {
             synth.stop();
         }
-        System.out.println("<<ModSynthMidiService.inputPortClosed");
+        Log.d("ModSynthMidiService", "<<inputPortClosed");
     }
 
     private void loadInstrument(final String soundName) {
-        System.out.println(">>ModSynthMidiService.loadInstrument: " + soundName);
+        Log.d("ModSynthMidiService", ">>loadInstrument: " + soundName);
             Instrument sound = null;
             if (soundName.startsWith("file://")) { // playing a sent sound
                 sound = (Instrument) clientModel.loadObject(soundName, true);
@@ -179,7 +180,7 @@ public class ModSynthMidiService extends MidiDeviceService {
 //                                Toast.LENGTH_LONG).show();
                 }
             }
-        System.out.println("<<ModSynthMidiService.loadInstrument: " + soundName);
+        Log.d("ModSynthMidiService", "<<loadInstrument: " + soundName);
     }
 
 }
