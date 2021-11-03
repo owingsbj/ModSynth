@@ -87,6 +87,7 @@ import android.os.Environment;
 import android.os.PowerManager;
 import android.os.StrictMode;
 import android.provider.Settings.Secure;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
@@ -145,7 +146,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Clie
 	@SuppressLint("NewApi")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		System.out.println(">>MainActivity.onCreate");
+		Log.d("MainActivity", ">>onCreate");
 		super.onCreate(savedInstanceState);
 
 		if(BuildConfig.DEBUG)
@@ -465,7 +466,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Clie
 		PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
 		wakelock = pm.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK, "My Tag");
 
-		System.out.println("<<MainActivity.onCreate");
+		Log.d("MainActivity", "<<onCreate");
 	}
 
 	public void setColorIcons(boolean colorIcons) {
@@ -476,14 +477,14 @@ public class MainActivity extends Activity implements View.OnClickListener, Clie
 
 	@Override
 	protected void onDestroy() {
-		System.out.println(">>MainActivity.onDestroy");
+		Log.d("MainActivity", ">>onDestroy");
 		midi.terminate();
 		midi = null;
 		synth.stop();
 		synth.terminate();
 		synth = null;
 		super.onDestroy();
-		System.out.println("<<MainActivity.onDestroy");
+		Log.d("MainActivity", "<<onDestroy");
 	}
 
 	boolean selectingCustomTheme;
@@ -499,9 +500,9 @@ public class MainActivity extends Activity implements View.OnClickListener, Clie
 				try {
 					String path = "";
 					Uri mImageCaptureUri = data.getData();
-					System.out.println("Selected Uri is " + mImageCaptureUri);
+					Log.d("MainActivity", "Selected Uri is " + mImageCaptureUri);
 					path = ContentUriUtil.getPath(this, mImageCaptureUri);
-					System.out.println("Image selected: " + path);
+					Log.d("MainActivity", "Image selected: " + path);
 					ClientModel.getClientModel().setCustomBackgroundPath(path);
 					ClientModel.getClientModel().savePreferences();
 					setCustomBackground(path);
@@ -534,7 +535,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Clie
 		if (path == null || path.length() == 0) {
 			return;
 		}
-		System.out.println("Loading custom background " + path);
+		Log.d("MainActivity", "Loading custom background " + path);
 		try {
 			File file = new File(path);
 			InputStream inStream = new BufferedInputStream(new FileInputStream(file), 65536);
@@ -743,7 +744,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Clie
 	}
 
 	public void setLanguage(int language) {
-		System.out.println("Setting language to " + language);
+		Log.d("MainActivity", "Setting language to " + language);
 		Translator translator = new ModSynthTranslator();
 		translator.setLanguage(language);
 		Translator.setTranslator(translator); // Note: need to do this to rebuild the map inside.. fix someday if needed
@@ -805,7 +806,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Clie
 		promptForName.setOnDismissListener(new OnDismissListener() {
 			@Override
 			public void onDismiss(DialogInterface dialog) {
-				System.out.println("MainActivity.saveInstrument: button pressed = " + promptForName.getButtonPressed());
+				Log.d("MainActivity", "saveInstrument: button pressed = " + promptForName.getButtonPressed());
 				final String soundName = promptForName.getValue();
 				if (promptForName.getButtonPressed() == 0) {
 					clientModel.setContext(MainActivity.this);
@@ -813,7 +814,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Clie
 					if (synth != null && ((Instrument) synth.getInstrument()) != null) {
 						((Instrument) synth.getInstrument()).clearDirty();
 					}
-					System.out.println("Saved sound as " + soundName + ".modsynth");
+					Log.d("MainActivity", "Saved sound as " + soundName + ".modsynth");
 
 					// Uncomment to save for update
 					// clientModel.exportObject(sound, soundName + ".modsynth");
@@ -844,7 +845,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Clie
 													+ Secure.getString(getApplicationContext().getContentResolver(),
 															Secure.ANDROID_ID)
 													+ ").modsynth";
-											System.out.println("Storing file as " + fileName);
+											Log.d("MainActivity", "Storing file as " + fileName);
 											String[] names = ftpClient.listNames();
 											for (int i = 0; i < names.length; i++) {
 												if ((names[i].startsWith(soundName + "(")
@@ -900,7 +901,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Clie
 		final String soundName = soundSelector.getText().toString();
 		try {
 			File file = clientModel.exportObject(((Instrument) synth.getInstrument()), soundName + ".modsynth");
-			System.out.println("Exported sound as " + soundName + ".modsynth");
+			Log.d("MainActivity", "Exported sound as " + soundName + ".modsynth");
 
 			Intent intent = new Intent(Intent.ACTION_SEND);
 			intent.setType("application/vnd.gallantrealm.modsynth");
@@ -921,7 +922,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Clie
 	}
 
 	public void loadInstrument(final String soundName) {
-		System.out.println("MainActivity.loadInstrument: " + soundName);
+		Log.d("MainActivity", "loadInstrument: " + soundName);
 		soundSelector.setText(soundName);
 		clientModel.setContext(MainActivity.this);
 		Thread thread = new Thread() {
@@ -959,7 +960,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Clie
 								break;
 							}
 						}
-						System.out.println(fileName);
+						Log.d("MainActivity", fileName);
 						InputStream is = ftpClient.retrieveFileStream(fileName);
 						ObjectInputStream inStream = new ObjectInputStream(is);
 						sound = (Instrument) inStream.readObject();
@@ -1023,7 +1024,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Clie
 					} else {
 						clientModel.deleteObject(soundName + ".modsynth", true);
 					}
-					System.out.println("Deleted sound " + soundName + ".modsynth");
+					Log.d("MainActivity", "Deleted sound " + soundName + ".modsynth");
 					loadInstrument("BuiltIn/Basic");
 					ClientModel.getClientModel().setInstrumentName(soundName);
 					ClientModel.getClientModel().savePreferences();
@@ -1208,7 +1209,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Clie
 								synth.saveRecording(fileStream);
 								fileStream.close();
 								sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(file)));
-								System.out.println("SAVED RECORDING to " + filename);
+								Log.d("MainActivity", "SAVED RECORDING to " + filename);
 								unsavedRecording = false;
 								runOnUiThread(new Runnable() {
 									public void run() {
@@ -1240,7 +1241,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Clie
 
 	private void applySound(Instrument sound) {
 		if (sound == null || synth == null) {
-			System.out.println("Sound or synth is null!");
+			Log.d("MainActivity", "Sound or synth is null!");
 			return;
 		}
 		applyingASound = true;
@@ -1287,64 +1288,66 @@ public class MainActivity extends Activity implements View.OnClickListener, Clie
 
 	@Override
 	protected void onStart() {
-		System.out.println(">>MainActivity.onStart");
+		Log.d("MainActivity", ">>onStart");
 		setLanguage(clientModel.getLanguage());
 		super.onStart();
 		if (getIntent().getData() != null) {
-			System.out.println("Invocation params: " + getIntent().getData());
+			Log.d("MainActivity", "Invocation params: " + getIntent().getData());
 			loadInstrument(getIntent().getData().toString());
 		}
 		wakelock.acquire();
 //		if (googleApiClient != null) {
 //			googleApiClient.connect();
-//			System.out.println("Started connection to Google Play Services");
+//			Log.d("MainActivity", "Started connection to Google Play Services");
 //		}
 		if (Build.VERSION.SDK_INT >= 24) {
 			getWindow().setSustainedPerformanceMode(true);
 		}
-		System.out.println("<<MainActivity.onStart");
+		Log.d("MainActivity", "<<onStart");
 	}
 
 	@Override
 	protected void onStop() {
-		System.out.println(">>MainActivity.onStop");
+		Log.d("MainActivity", ">>onStop");
 		super.onStop();
 		if (updateThread != null) {
 			stopRecording();
 		}
 		synth.stop();
+		midi.stop();
 		wakelock.release();
 //		if (googleApiClient != null) {
 //			googleApiClient.disconnect();
 //		}
-		System.out.println("<<MainActivity.onStop");
+		Log.d("MainActivity", "<<onStop");
 // Note: although it would be good to finish, it causes problems for file pickers
 //		finish();  // force complete destroy to keep from eating resources
 	}
 
 	@Override
 	protected void onResume() {
-		System.out.println(">>MainActivity.onResume");
+		Log.d("MainActivity", ">>onResume");
 		super.onResume();
 		PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
 		boolean isScreenOn = pm.isScreenOn();
 		if (isScreenOn) {
 			try {
 				synth.start();
+				midi.start();
 			} catch (Exception e) {
 				final MessageDialog dialog = new MessageDialog(this, null, e.getMessage(), null);
 				dialog.show();
 			}
 		}
-		System.out.println("<<MainActivity.onResume");
+		Log.d("MainActivity", "<<onResume");
 	}
 
 	@Override
 	protected void onPause() {
-		System.out.println(">>MainActivity.onPause");
+		Log.d("MainActivity", ">>onPause");
 		super.onPause();
 		// synth.stop(); this is done in onStop so multi-window will still run the synth
-		System.out.println("<<MainActivity.onPause");
+		Log.d("MainActivity", "<<onPause");
 	}
 
 	@Override
@@ -1443,7 +1446,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Clie
 			public void onDismiss(DialogInterface d) {
 				int rc = dialog.getButtonPressed();
 				if (rc == 0) {
-					System.out.println("Calling finish..");
+					Log.d("MainActivity", "Calling finish..");
 					MainActivity.this.finish();
 				}
 			}
