@@ -149,9 +149,6 @@ public class MainActivity extends Activity implements View.OnClickListener, Clie
 		Log.d("MainActivity", ">>onCreate");
 		super.onCreate(savedInstanceState);
 
-		if(BuildConfig.DEBUG)
-			StrictMode.enableDefaults();
-
 		clientModel.setContext(this);
 
 		// Restore the preferences. If this is the first time, set some of the
