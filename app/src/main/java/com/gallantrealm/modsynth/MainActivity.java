@@ -209,9 +209,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Clie
 				runOnUiThread(new Runnable() {
 					@Override
 					public void run() {
-						// Note: keeping keyboard visible as it seems some devices have midi devices attached..
-						// ..they are probably other apps that support MIDI.
-						//keyboardPane.setVisibility(View.GONE);
+						keyboardPane.setVisibility(View.GONE);
 						Toast.makeText(MainActivity.this, deviceName + " attached", Toast.LENGTH_LONG).show();
 					}
 				});
@@ -220,7 +218,9 @@ public class MainActivity extends Activity implements View.OnClickListener, Clie
 				runOnUiThread(new Runnable() {
 					@Override
 					public void run() {
-						keyboardPane.setVisibility(View.VISIBLE);
+						if (((Instrument)synth.getInstrument()).getKeyboardModule() != null) {
+							keyboardPane.setVisibility(View.VISIBLE);
+						}
 						Toast.makeText(MainActivity.this, deviceName + " detached", Toast.LENGTH_LONG).show();
 					}
 				});
@@ -400,7 +400,8 @@ public class MainActivity extends Activity implements View.OnClickListener, Clie
 					addModuleButton.setVisibility(View.VISIBLE);
 					deleteModuleButton.setVisibility(View.VISIBLE);
 				} else {
-					if (!midi.isMidiDeviceAttached()) {
+					if (((Instrument)synth.getInstrument()).getKeyboardModule() != null
+					   && !midi.isMidiDeviceAttached()) {
 						keyboardPane.setVisibility(View.VISIBLE);
 					}
 					// keyboardPane.startAnimation(new ScaleAnimation(1.0f,
