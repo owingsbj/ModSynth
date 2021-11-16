@@ -290,7 +290,9 @@ public class ClientModel {
 											Log.d("ClientModel", "Purchase acknowledged: "+billingResult.getResponseCode());
 										}
 									});
-									new MessageDialog(context, "Purchase Success", "Thanks for purchasing!  Restart the app to enable all features.", null).show();
+									if (context != null) {
+										new MessageDialog(context, "Purchase Success", "Thanks for purchasing!  Restart the app to enable all features.", null).show();
+									}
 								}
 							});
 						} else if (billingResult.getResponseCode() == BillingResponseCode.ITEM_ALREADY_OWNED) {
@@ -298,7 +300,9 @@ public class ClientModel {
 								public void run() {
 									setFullVersion(true);
 									savePreferences();
-									new MessageDialog(context, "Purchase Success", "You already own the full version!  Restart the app to enable all features.", null).show();
+									if (context != null) {
+										new MessageDialog(context, "Purchase Success", "You already own the full version!  Restart the app to enable all features.", null).show();
+									}
 								}
 							});
 						} else if (billingResult.getResponseCode() == BillingResponseCode.USER_CANCELED) {
@@ -327,7 +331,9 @@ public class ClientModel {
 //			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			new MessageDialog(context, "Purchase Failed", "There was an error launching Google Play for purchasing.  Please make sure Google Play is installed and working.", null).show();
+			if (context != null) {
+				new MessageDialog(context, "Purchase Failed", "There was an error launching Google Play for purchasing.  Please make sure Google Play is installed and working.", null).show();
+			}
 		}
 	}
 
@@ -349,8 +355,9 @@ public class ClientModel {
 					Log.d("ClientModel", "Purchase Failed: " + billingResult.getDebugMessage());
 					activity.runOnUiThread(new Runnable() {
 						public void run() {
-							MessageDialog purchaseFailed = new MessageDialog(context, "Purchase Failed", billingResult.getDebugMessage(), null);
-							purchaseFailed.show();
+							if (context != null) {
+								new MessageDialog(context, "Purchase Failed", billingResult.getDebugMessage(), null).show();
+							}
 						}
 					});
 				}
@@ -367,7 +374,9 @@ public class ClientModel {
 			e.printStackTrace();
 			activity.runOnUiThread(new Runnable() {
 				public void run() {
-					new MessageDialog(context, "Purchase Failed", "There was an error launching Google Play for purchasing.  Please make sure Google Play is installed and working.", null).show();
+					if (context != null) {
+						new MessageDialog(context, "Purchase Failed", "There was an error launching Google Play for purchasing.  Please make sure Google Play is installed and working.", null).show();
+					}
 				}
 			});
 		}

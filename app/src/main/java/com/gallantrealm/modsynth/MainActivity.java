@@ -481,6 +481,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Clie
 		synth.stop();
 		synth.terminate();
 		synth = null;
+		clientModel.setContext(null);
 		super.onDestroy();
 		Log.d("MainActivity", "<<onDestroy");
 	}
