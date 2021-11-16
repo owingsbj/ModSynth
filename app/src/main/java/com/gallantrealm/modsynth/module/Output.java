@@ -68,13 +68,8 @@ public class Output extends Module {
 		}
 		float newleft = fleft * limiter;
 		float newright = fright * limiter;
-		if (newleft >= 0.9f || newright >= 0.9f || newleft <= -0.9f || newright <= -0.9f) {
-			limiter -= 0.01f;
-			newleft = fleft * limiter;
-			newright = fright * limiter;
-		}
-		while (newleft >= 1.0f || newright >= 1.0f || newleft <= -1.0f || newright <= -1.0f) {
-			limiter -= 0.01f;
+		while (newleft > 1.0f || newright > 1.0f || newleft < -1.0f || newright < -1.0f) {
+			limiter = (float) Math.max(0.0, limiter - 0.01f);
 			newleft = fleft * limiter;
 			newright = fright * limiter;
 		}
