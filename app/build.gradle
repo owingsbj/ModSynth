@@ -8,9 +8,9 @@ android {
     defaultConfig {
         applicationId "com.gallantrealm.modsynth"
         minSdk 14
-        targetSdk 30
-        versionCode 706
-        versionName '7.06'
+        targetSdk 33
+        versionCode 707
+        versionName '7.07'
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -25,6 +25,7 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    namespace 'com.gallantrealm.modsynth'
 }
 
 dependencies {

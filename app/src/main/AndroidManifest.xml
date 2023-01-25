@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:tools="http://schemas.android.com/tools"
-	package="com.gallantrealm.modsynth"
-	android:installLocation="auto"
-	android:versionCode="609"
-	android:versionName="6.9">
+    android:installLocation="auto">
 
 	<!-- Warning: do not downgrade this to 22 or lower as app will fail to upgrade.
 		See https://inthecheesefactory.com/blog/things-you-need-to-know-about-android-m-permission-developer-edition/en -->
@@ -30,9 +27,12 @@
 
 	<application android:allowBackup="true" android:icon="@mipmap/ic_launcher"
 		android:label="@string/app_name" android:largeHeap="true">
+		<!--android:requestLegacyExternalStorage="true"-->
 
 		<activity android:name="com.gallantrealm.modsynth.SplashActivity"
-			android:alwaysRetainTaskState="true" android:label="@string/app_name"
+			android:alwaysRetainTaskState="true"
+			android:label="@string/app_name"
+			android:exported="true"
 			android:screenOrientation="sensorLandscape"
 			android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
 			<intent-filter>
@@ -49,6 +49,7 @@
 			</intent-filter>
 		</activity>
 		<activity android:name="com.gallantrealm.modsynth.MainActivity"
+			android:exported="true"
 			android:alwaysRetainTaskState="true" android:label="@string/app_name"
 			android:launchMode="singleTask" android:screenOrientation="sensorLandscape"
 			android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
@@ -63,15 +64,13 @@
 		
 		<meta-data android:name="com.google.android.gms.version"
 			android:value="@integer/google_play_services_version" />
-		<activity android:name="com.google.android.gms.common.api.GoogleApiActivity"
-			android:theme="@android:style/Theme.Translucent.NoTitleBar"
-			android:exported="false" />
 		<provider android:name="com.gallantrealm.modsynth.SoundContentProvider"
 			android:authorities="com.gallantrealm.modsynth" android:exported="true"
 			android:grantUriPermissions="true">
 		</provider>
 
 		<service android:name="com.gallantrealm.modsynth.ModSynthMidiService"
+			android:exported="true"
 			android:permission="android.permission.BIND_MIDI_DEVICE_SERVICE">
 			<intent-filter>
 				<action android:name="android.media.midi.MidiDeviceService" />
