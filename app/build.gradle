@@ -3,12 +3,12 @@ plugins {
 }
 
 android {
-    compileSdk 30
+    compileSdk 34
 
     defaultConfig {
         applicationId "com.gallantrealm.modsynth"
         minSdk 14
-        targetSdk 33
+        targetSdk 35
         versionCode 707
         versionName '7.07'
 
