@@ -68,6 +68,8 @@ import com.gallantrealm.mysynth.MySynthMidi;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnDismissListener;
@@ -86,6 +88,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.PowerManager;
 import android.os.StrictMode;
+import android.provider.MediaStore;
 import android.provider.Settings.Secure;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -209,8 +212,10 @@ public class MainActivity extends Activity implements View.OnClickListener, Clie
 				runOnUiThread(new Runnable() {
 					@Override
 					public void run() {
+						System.out.println(">MainActivity.onDeviceAttached");
 						keyboardPane.setVisibility(View.GONE);
 						Toast.makeText(MainActivity.this, deviceName + " attached", Toast.LENGTH_LONG).show();
+						System.out.println("<MainActivity.onDeviceAttached");
 					}
 				});
 			}
@@ -218,10 +223,12 @@ public class MainActivity extends Activity implements View.OnClickListener, Clie
 				runOnUiThread(new Runnable() {
 					@Override
 					public void run() {
+						System.out.println(">MainActivity.onDeviceDetached");
 						if (((Instrument)synth.getInstrument()).getKeyboardModule() != null) {
 							keyboardPane.setVisibility(View.VISIBLE);
 						}
 						Toast.makeText(MainActivity.this, deviceName + " detached", Toast.LENGTH_LONG).show();
+						System.out.println("<MainActivity.onDeviceDetached");
 					}
 				});
 			}
@@ -1173,24 +1180,11 @@ public class MainActivity extends Activity implements View.OnClickListener, Clie
 
 	@SuppressLint("NewApi")
 	public void saveRecording() {
-		if (Build.VERSION.SDK_INT >= 23 && checkSelfPermission(
-				Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-			requestPermissions(new String[] { Manifest.permission.WRITE_EXTERNAL_STORAGE },
-					REQUEST_PERMISSION_WRITE_EXTERNAL_STORAGE);
+		if (Build.VERSION.SDK_INT < 29 && checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+			requestPermissions(new String[] { Manifest.permission.WRITE_EXTERNAL_STORAGE }, REQUEST_PERMISSION_WRITE_EXTERNAL_STORAGE);
 			return;
 		}
-
-		final File modSynthDir;
-		if (Build.VERSION.SDK_INT < 29) {
-			modSynthDir = new File(Environment.getExternalStorageDirectory() + "/ModSynth");
-		} else {
-			modSynthDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC) + "/ModSynth");
-		}
-		if (!modSynthDir.exists()) {
-			modSynthDir.mkdir();
-		}
-		final InputDialog inputDialog = new InputDialog(this, "Save Recording", "Recording name:", lastRecordName,
-				new String[] { "Save", "Cancel" });
+		final InputDialog inputDialog = new InputDialog(this, "Save Recording", "Recording name:", lastRecordName, new String[] { "Save", "Cancel" });
 		inputDialog.setOnDismissListener(new OnDismissListener() {
 
 			@Override
@@ -1198,42 +1192,81 @@ public class MainActivity extends Activity implements View.OnClickListener, Clie
 				if (inputDialog.getButtonPressed() == 0) {
 					final String recordname = inputDialog.getValue();
 					lastRecordName = recordname;
-					final String filename;
-					filename = modSynthDir.getAbsolutePath() + "/" + recordname + ".wav";
-					AsyncTask.execute(new Runnable() {
-						public void run() {
-							try {
-								File file = new File(filename);
-								OutputStream fileStream = new BufferedOutputStream(new FileOutputStream(file));
-								synth.saveRecording(fileStream);
-								fileStream.close();
-								sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(file)));
-								Log.d("MainActivity", "SAVED RECORDING to " + filename);
-								unsavedRecording = false;
-								runOnUiThread(new Runnable() {
-									public void run() {
-										Toast toast = Toast.makeText(MainActivity.this, "Saved to " + filename,
-												Toast.LENGTH_LONG);
-										toast.show();
-									}
-								});
-							} catch (IOException e) {
-								e.printStackTrace();
-								runOnUiThread(new Runnable() {
-									public void run() {
-										Toast toast = Toast.makeText(MainActivity.this, "Failed to save to " + filename,
-												Toast.LENGTH_LONG);
-										toast.show();
-									}
-								});
+
+					if (Build.VERSION.SDK_INT < 29) {
+						File musicDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC);
+						if (!musicDir.exists()) {
+							System.out.println("making Music directory");
+							boolean made = musicDir.mkdir();
+							if (!made) {
+								System.out.println("Music directory could not be made!!");
 							}
 						}
-					});
+						final File easySynthDir = new File(musicDir, "ModSynth");
+						if (!easySynthDir.exists()) {
+							System.out.println("making Music/ModSynth");
+							boolean made = easySynthDir.mkdir();
+							if (!made) {
+								System.out.println("Music/ModSynth could not be made!!");
+							}
+						}
 
+						final String filename = easySynthDir.getPath() + "/" + recordname + ".wav";
+						System.out.println("Saving recording to " + filename);
+
+						File file = new File(filename);
+						if (file.exists()) {
+							final InputDialog confirmDialog = new InputDialog(MainActivity.this, "File Exists", "File already exists with name:", lastRecordName, new String[]{"Overwrite", "Cancel"});
+							confirmDialog.setOnDismissListener(new OnDismissListener() {
+
+								@Override
+								public void onDismiss(DialogInterface dialog) {
+									if (confirmDialog.getButtonPressed() == 0) {
+										finishSavingRecording(file);
+									}
+								}
+							});
+							confirmDialog.show();
+						} else {
+							finishSavingRecording(file);
+						}
+					} else { // sdk >= 29
+						ContentResolver contentResolver = MainActivity.this.getContentResolver();
+						ContentValues contentValues = new ContentValues();
+						contentValues.put(MediaStore.MediaColumns.DISPLAY_NAME, recordname + ".wav");
+						contentValues.put(MediaStore.MediaColumns.MIME_TYPE, "audio/wav");
+						contentValues.put(MediaStore.MediaColumns.RELATIVE_PATH, "Music/ModSynth");
+						Uri uri = contentResolver.insert(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, contentValues);
+						try {
+							OutputStream outputStream = contentResolver.openOutputStream(uri);
+							synth.saveRecording(new BufferedOutputStream(outputStream));
+							System.out.println("Recording saved.");
+							unsavedRecording = false;
+							Toast toast = Toast.makeText(MainActivity.this, "Saved to Music/ModSynth/" + recordname + ".wav", Toast.LENGTH_LONG);
+							toast.show();
+						} catch (IOException e) {
+							throw new RuntimeException(e);
+						}
+					}
 				}
 			}
 		});
 		inputDialog.show();
+	}
+
+	private void finishSavingRecording(File file) {
+		try {
+			synth.saveRecording(new BufferedOutputStream(new FileOutputStream(file)));
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+		sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(file)));
+
+		System.out.println("Recording saved.");
+		unsavedRecording = false;
+
+		Toast toast = Toast.makeText(MainActivity.this, "Saved to " + file, Toast.LENGTH_LONG);
+		toast.show();
 	}
 
 	boolean applyingASound = false;
