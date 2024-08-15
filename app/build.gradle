@@ -7,10 +7,10 @@ android {
 
     defaultConfig {
         applicationId "com.gallantrealm.modsynth"
-        minSdk 14
+        minSdk 21
         targetSdk 35
-        versionCode 707
-        versionName '7.07'
+        versionCode 800
+        versionName '8.00'
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
