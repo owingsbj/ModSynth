@@ -10,4 +10,9 @@ The source for ModSynth is available here for your examination and suggestion fo
 2. You won't make much money at it.  I never did nor did I ever intend to.
 3. You could more easily assist in the development of the existing ModSynth.
 
+If you have build problems here are some suggestions:
+- You need to build the MySynth and MyAndroid projects first.
+- Also, you need to build the *release* variants of these projects!
+- After building the two dependent projects, you'll need to perform File > Sync Project with Gradle Files.
+
 Feel free to email me at bj@gallantrealm.com if you have questions about the source.  I intend to improve its comments to make it easier to understand.
