@@ -2,11 +2,13 @@ package com.gallantrealm.modsynth.viewer;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 import com.gallantrealm.android.FileUtils;
 import com.gallantrealm.android.MessageDialog;
 import com.gallantrealm.android.Translator;
+import com.gallantrealm.modsynth.ClientModel;
 import com.gallantrealm.modsynth.Instrument;
 import com.gallantrealm.modsynth.MainActivity;
 import com.gallantrealm.modsynth.MelodyEditor;
@@ -193,20 +195,17 @@ public class MelodyViewer extends ModuleViewer {
 		final Button midiLoadButton = (Button) view.findViewById(R.id.melodyLoad);
 		midiLoadButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
-				if (Build.VERSION.SDK_INT >= 23 && mainActivity.checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-					mainActivity.requestPermissions(new String[] { Manifest.permission.READ_EXTERNAL_STORAGE }, MainActivity.REQUEST_PERMISSION_READ_MIDIFILE_EXTERNAL_STORAGE);
-					return;
-				}
 				onContinueMidiFileSelect(mainActivity);
 			}
 		});
 	}
 
 	public void onContinueMidiFileSelect(MainActivity mainActivity) {
-		Intent intent = new Intent();
-		intent.setType("*/*");
-		intent.setAction(Intent.ACTION_GET_CONTENT);
+		Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
 		intent.addCategory(Intent.CATEGORY_OPENABLE);
+		intent.setType("*/*");
+		intent.addFlags(Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION);
+		intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
 		intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
 		mainActivity.startActivityForResult(Intent.createChooser(intent, Translator.getTranslator().translate("Select a MIDI file using")), 0);
 	}
@@ -217,10 +216,10 @@ public class MelodyViewer extends ModuleViewer {
 		}
 		String path = "";
 		try {
-			Uri mImageCaptureUri = data.getData();
-			System.out.println("URI: " + mImageCaptureUri);
-			path = FileUtils.getPath(view.getContext(), mImageCaptureUri);
-			loadMidiFileSample(path);
+			Uri midiFileUri = data.getData();
+			System.out.println("URI: " + midiFileUri);
+			((MainActivity) ClientModel.getClientModel().getContext()).getContentResolver().takePersistableUriPermission(midiFileUri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
+			loadMidiFileSample(midiFileUri);
 		} catch (Exception e) {
 			e.printStackTrace();
 			MessageDialog messageDialog = new MessageDialog(view.getRootView().getContext(), null, "The file cannot be opened at " + path, new String[] { "OK" });
@@ -228,8 +227,9 @@ public class MelodyViewer extends ModuleViewer {
 		}
 	}
 
-	public void loadMidiFileSample(String path) throws IOException {
-		File input = new File(path);
+	public void loadMidiFileSample(Uri midiFileUri) throws IOException {
+
+		InputStream input = view.getRootView().getContext().getContentResolver().openInputStream(midiFileUri);
 		MidiFile midi = new MidiFile(input);
 		if (midi.getTrackCount() == 0) {
 			MessageDialog messageDialog = new MessageDialog(view.getRootView().getContext(), null, "No MIDI data found in file.  Is it a MIDI file?", new String[] { "OK" });

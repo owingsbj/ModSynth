@@ -78,6 +78,7 @@ import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Insets;
 import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.media.AudioManager;
@@ -95,6 +96,7 @@ import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowInsets;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.TextView;
@@ -176,6 +178,27 @@ public class MainActivity extends Activity implements View.OnClickListener, Clie
 				// Hide the nav bar and status bar
 				| View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
 				| View.SYSTEM_UI_FLAG_FULLSCREEN);
+
+		// In Desktop mode, a maximize of the window will change the padding.  The
+		// following listener adjusts the padding to compensate
+		View rootLayout = findViewById(R.id.mainLayout);
+		rootLayout.setOnApplyWindowInsetsListener(new View.OnApplyWindowInsetsListener() {
+			@Override
+			public WindowInsets onApplyWindowInsets(View v, WindowInsets insets) {
+				// 'systemBars' includes the status bar and the desktop caption bar
+				android.graphics.Insets bars = insets.getInsets(
+						WindowInsets.Type.systemBars()
+				);
+
+				// Apply the top inset as padding so your app content
+				// shifts down below the desktop title bar
+				v.setPadding(bars.left, bars.top, bars.right, bars.bottom);
+
+				// Return 'consume' so the insets aren't passed down to child views
+				// which might cause double-padding
+				return WindowInsets.CONSUMED;
+			}
+		});
 
 		// Set sustained performance mode (Android 7.0+)
 		if (Build.VERSION.SDK_INT >= 24) {
@@ -483,6 +506,9 @@ public class MainActivity extends Activity implements View.OnClickListener, Clie
 	@Override
 	protected void onDestroy() {
 		Log.d("MainActivity", ">>onDestroy");
+		if (instrumentSectoriDialog != null) {
+			instrumentSectoriDialog.dismiss();
+		}
 		midi.terminate();
 		midi = null;
 		synth.stop();
@@ -505,9 +531,9 @@ public class MainActivity extends Activity implements View.OnClickListener, Clie
 			if (data != null) {
 				try {
 					String path = "";
-					Uri mImageCaptureUri = data.getData();
-					Log.d("MainActivity", "Selected Uri is " + mImageCaptureUri);
-					path = ContentUriUtil.getPath(this, mImageCaptureUri);
+					Uri selectedImageUri = data.getData();
+					getContentResolver().takePersistableUriPermission(selectedImageUri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
+					path = selectedImageUri.toString();
 					Log.d("MainActivity", "Image selected: " + path);
 					ClientModel.getClientModel().setCustomBackgroundPath(path);
 					ClientModel.getClientModel().savePreferences();
@@ -531,20 +557,13 @@ public class MainActivity extends Activity implements View.OnClickListener, Clie
 
 	@SuppressLint("NewApi")
 	private void setCustomBackground(String path) {
-		if (Build.VERSION.SDK_INT >= 23 && checkSelfPermission(
-				Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-			requestPermissions(new String[] { Manifest.permission.READ_EXTERNAL_STORAGE },
-					REQUEST_PERMISSION_READ_IMAGE_EXTERNAL_STORAGE);
-			selectingCustomTheme = true;
-			return;
-		}
 		if (path == null || path.length() == 0) {
 			return;
 		}
 		Log.d("MainActivity", "Loading custom background " + path);
 		try {
-			File file = new File(path);
-			InputStream inStream = new BufferedInputStream(new FileInputStream(file), 65536);
+			Uri imageUri = Uri.parse(path);
+			InputStream inStream = getContentResolver().openInputStream(imageUri);
 			Bitmap tbitmap = BitmapFactory.decodeStream(inStream);
 			inStream.close();
 			Bitmap bitmap = tbitmap.copy(tbitmap.getConfig(), true);
@@ -1580,10 +1599,14 @@ public class MainActivity extends Activity implements View.OnClickListener, Clie
 			} else {
 				mainLayout.setBackgroundResource(R.raw.onyx_background);
 				selectingCustomTheme = true;
-				Intent intent = new Intent();
+				Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+				intent.addCategory(Intent.CATEGORY_OPENABLE);
 				intent.setType("image/*");
-				intent.setAction(Intent.ACTION_GET_CONTENT);
+				intent.addFlags(Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION);
+				intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+				intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
 				startActivityForResult(Intent.createChooser(intent, "Complete action using"), 0);
+				// Note:  onActivityResult will be called when the user selects an image
 			}
 		}
 	}

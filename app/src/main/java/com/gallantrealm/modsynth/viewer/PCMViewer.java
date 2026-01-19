@@ -6,24 +6,23 @@ import com.gallantrealm.android.FileUtils;
 import com.gallantrealm.android.MessageDialog;
 import com.gallantrealm.android.SelectItemDialog;
 import com.gallantrealm.android.Translator;
+import com.gallantrealm.modsynth.ClientModel;
 import com.gallantrealm.modsynth.Instrument;
 import com.gallantrealm.modsynth.MainActivity;
 import com.gallantrealm.modsynth.MidiControlDialog;
 import com.gallantrealm.modsynth.R;
 import com.gallantrealm.modsynth.module.Module;
 import com.gallantrealm.modsynth.module.PCM;
-import android.Manifest;
+
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Canvas;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.view.View;
@@ -121,11 +120,6 @@ public class PCMViewer extends ModuleViewer {
 //							}
 //							freesoundDialog.show();
 
-							if (Build.VERSION.SDK_INT >= 23 && mainActivity.checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-								mainActivity.requestPermissions(new String[] { Manifest.permission.READ_EXTERNAL_STORAGE }, MainActivity.REQUEST_PERMISSION_READ_PCM_EXTERNAL_STORAGE);
-								return;
-							}
-
 							onContinuePCMSelect(mainActivity);
 						}
 					}
@@ -222,10 +216,11 @@ public class PCMViewer extends ModuleViewer {
 	}
 
 	public void onContinuePCMSelect(MainActivity mainActivity) {
-		Intent intent = new Intent();
-		intent.setType("*/*");
-		intent.setAction(Intent.ACTION_GET_CONTENT);
+		Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
 		intent.addCategory(Intent.CATEGORY_OPENABLE);
+		intent.setType("*/*");
+		intent.addFlags(Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION);
+		intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
 		intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
 		mainActivity.startActivityForResult(Intent.createChooser(intent, Translator.getTranslator().translate("Select a WAV or SF2 file using")), 0);
 	}
@@ -248,15 +243,9 @@ public class PCMViewer extends ModuleViewer {
 		}
 		String path = "";
 		try {
-			Uri mImageCaptureUri = data.getData();
-			System.out.println("URI: " + mImageCaptureUri);
-			path = FileUtils.getPath(view.getContext(), mImageCaptureUri);
-//			path = getRealPathFromURI(mImageCaptureUri, (MainActivity) ClientModel.getClientModel().getContext()); // from Gallery
-//			if (path == null) {
-//				path = mImageCaptureUri.getPath(); // from File Manager
-//			}
-//			System.out.println("FILE: " + path);
-			openSample(path);
+			Uri sampleUri = data.getData();
+			((MainActivity) ClientModel.getClientModel().getContext()).getContentResolver().takePersistableUriPermission(sampleUri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
+			openSample(sampleUri.toString());
 		} catch (Exception e) {
 			e.printStackTrace();
 			MessageDialog messageDialog = new MessageDialog(view.getRootView().getContext(), null, "The file cannot be opened at " + path, new String[] { "OK" });
@@ -264,9 +253,9 @@ public class PCMViewer extends ModuleViewer {
 		}
 	}
 
-	private void openSample(String path) {
+	private void openSample(String sampleName) {
 		try {
-			module.sampleName = path;
+			module.sampleName = sampleName;
 			String trim = trimName(module.sampleName);
 			if (trim.contains(".")) {
 				trim = trim.substring(0, trim.lastIndexOf("."));
@@ -291,46 +280,6 @@ public class PCMViewer extends ModuleViewer {
 			e.printStackTrace();
 			MessageDialog messageDialog = new MessageDialog(view.getRootView().getContext(), null, "The file cannot be read.   Is it a valid WAV or SoundFont file?", new String[] { "OK" });
 			messageDialog.show();
-		}
-	}
-
-//	public String getRealPathFromURI(Uri contentUri) {
-//		String[] proj = { MediaStore.Images.Media.DATA };
-//		Cursor cursor = ((Activity) view.getRootView().getContext()).managedQuery(contentUri, proj, null, null, null);
-//		if (cursor == null) {
-//			System.out.println("couldn't find " + contentUri + " in media files");
-//			return null;
-//		}
-//		int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-//		cursor.moveToFirst();
-//		return cursor.getString(column_index);
-//	}
-
-	public String getRealPathFromURI(Uri contentUri, MainActivity mainActivity) {
-		System.out.println("contentUri is " + contentUri);
-		Cursor cursor = null;
-		try {
-			if (contentUri.toString().contains("com.android.externalstorage")) {
-				String s = URLDecoder.decode(contentUri.toString());
-				int i = s.indexOf("/primary");
-				s = s.substring(i + 9);
-				String path = Environment.getExternalStorageDirectory() + "/" + s;
-				return path;
-			} else {
-				// Assume it's a a mediastore managed file
-				String[] proj = { MediaStore.Images.Media.DATA };
-				cursor = mainActivity.getContentResolver().query(contentUri, proj, null, null, null);
-				if (cursor == null)
-					return null;
-				int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-				cursor.moveToFirst();
-				String path = cursor.getString(column_index);
-				return path;
-			}
-		} finally {
-			if (cursor != null) {
-				cursor.close();
-			}
 		}
 	}
 

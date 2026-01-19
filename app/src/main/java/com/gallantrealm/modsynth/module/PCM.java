@@ -1,5 +1,9 @@
 package com.gallantrealm.modsynth.module;
 
+import android.content.ContentResolver;
+import android.content.res.AssetFileDescriptor;
+import android.net.Uri;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -12,6 +16,7 @@ import java.nio.ShortBuffer;
 import java.util.ArrayList;
 import java.util.List;
 import com.gallantrealm.modsynth.AssetLoader;
+import com.gallantrealm.modsynth.ClientModel;
 import com.gallantrealm.modsynth.Instrument;
 import jp.kshoji.com.sun.media.sound.ModelByteBuffer;
 import jp.kshoji.com.sun.media.sound.SF2GlobalRegion;
@@ -223,11 +228,19 @@ public class PCM extends Module {
 			try {
 				for (Note note : notes) {
 					if (note.sampleL != null && note.sampleL.modelByteBuffer != null) {
-						note.sampleL.modelByteBuffer.unload();
+						try {
+							note.sampleL.modelByteBuffer.unload();
+						} catch (Throwable e) {
+							// this fails on more recent Android versions, so ignore
+						}
 						note.sampleL.modelByteBuffer = null;
 					}
 					if (note.sampleR != null && note.sampleR.modelByteBuffer != null) {
-						note.sampleR.modelByteBuffer.unload();
+						try {
+							note.sampleR.modelByteBuffer.unload();
+						} catch (Throwable e) {
+							// this fails on more recent Android versions, so ignore
+						}
 						note.sampleR.modelByteBuffer = null;
 					}
 				}
@@ -265,23 +278,18 @@ public class PCM extends Module {
 		if (sampleName != null) {
 			if (sampleName.toLowerCase().endsWith(".sf2")) { // SOUNDFONT
 
+				String sampleUriName = trimName(sampleName);
+				if (sampleUriName.equals("BuiltIn.sf2")) {
+					sampleUriName = "android.resource://com.gallantrealm.modsynth/raw/builtin";
+				}
+
 				// NOTE: In some SF2 editors, layers are referred to as Instruments, and instruments are referred to as Patches.
 
-				System.out.println("Soundfont file is " + sampleName);
+				System.out.println("Soundfont file is " + sampleUriName + "  patch is "+patchNum);
 
-				File file = new File(sampleName);
-				InputStream is;
-				if (!file.exists()) {
-					// if file not found, perhaps it has a built-in replacement, so try assets
-					sampleName = trimName(sampleName);
-					System.out.println("Looking for sf2 in assets as " + sampleName);
-					is = AssetLoader.loadAsset(sampleName);
-					file = createFileFromInputStream(is);
-				}
-				if (file == null) {
-					return; // no sample file specified
-				}
-				System.out.println("Loading soundfont!");
+				ContentResolver resolver = ClientModel.getClientModel().getContext().getApplicationContext().getContentResolver();
+				AssetFileDescriptor afd = resolver.openAssetFileDescriptor(Uri.parse(sampleUriName), "r");
+				File file = createFileFromInputStream(afd.createInputStream());
 				SF2Soundbank sf = new SF2Soundbank(file);
 				System.out.println("There are " + sf.getInstruments().length + " instruments, " + sf.getLayers().length + " layers, " + sf.getSamples().length + " samples, " + sf.getResources().length + " resources");
 				patchNames = new String[sf.getLayers().length];
@@ -298,6 +306,7 @@ public class PCM extends Module {
 					System.out.println("Layer has global region: " + globalRegion.getGenerators());
 				}
 				List<SF2LayerRegion> regions = layer.getRegions();
+				System.out.println("Layer has " + regions.size() + " regions.");
 				for (SF2LayerRegion region : regions) {
 					SF2Sample sample = region.getSample();
 					int originalKey = sample.getOriginalPitch() > 127 ? 60 : sample.getOriginalPitch();
@@ -416,29 +425,14 @@ public class PCM extends Module {
 
 			} else { // WAV
 
-				System.out.println("Loading wav file: " + sampleName);
-				File file;
-				if (sampleName.startsWith("file:")) { // via an external url
-					file = new File(sampleName.substring(7));
-				} else if (sampleName.startsWith("/")) { // full path file
-					file = new File(sampleName);
-				} else { // within the application
-					file = null;
+				String sampleUriName = trimName(sampleName);
+				if (sampleUriName.equals("Sax.wav")) {
+					sampleUriName = "android.resource://com.gallantrealm.modsynth/raw/sax";
 				}
-				InputStream is;
-				long len;
-				if (file != null && file.exists()) {
-					is = new FileInputStream(file);
-					len = file.length();
-				} else {
-					// if file not found, perhaps it has a built-in replacement, so try assets
-					System.out.println("Looking for wav in assets");
-					file = null;
-					sampleName = trimName(sampleName);
-					is = AssetLoader.loadAsset(sampleName);
-					len = AssetLoader.getAssetLength(sampleName);
-				}
-				WavFile wavFile = WavFile.openWavFile(is, len);
+
+				System.out.println("Loading wav file: " + sampleUriName);
+				InputStream is = ClientModel.getClientModel().getContext().getApplicationContext().getContentResolver().openInputStream(Uri.parse(sampleUriName));
+				WavFile wavFile = WavFile.openWavFile(is);
 				System.out.println("WAV file has " + wavFile.getNumChannels() + " channels of length " + wavFile.getNumFrames() + " sample rate " + wavFile.getSampleRate());
 				int waveLength = Math.min((int) wavFile.getNumFrames(), 1000000);
 				int channels = wavFile.getNumChannels();
