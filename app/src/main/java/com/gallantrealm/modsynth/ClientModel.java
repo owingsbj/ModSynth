@@ -498,50 +498,6 @@ public class ClientModel {
 		}
 	}
 
-	/**
-	 * Loads a RAW wave file into a wave table
-	 * 
-	 * @param fileName
-	 * @return
-	 */
-	public double[] loadWave(String fileName, boolean external) throws Exception {
-		Log.d("ClientModel", "Loading wav file: " + fileName);
-		File file;
-		if (fileName.startsWith("file:")) { // via an external url
-			file = new File(fileName.substring(7));
-		} else if (fileName.startsWith("/")) { // full path file
-			file = new File(fileName);
-		} else { // within the application
-			if (external) {
-				try {
-					file = new File(getContext().getExternalFilesDir(null), fileName);
-				} catch (Exception e) {
-					file = new File(getContext().getFilesDir(), fileName);
-				}
-			} else {
-				file = new File(getContext().getFilesDir(), fileName);
-			}
-		}
-		InputStream is;
-		long len;
-		if (file.exists()) {
-			is = new FileInputStream(file);
-			len = file.length();
-		} else {
-			// if file not found, perhaps it has a built-in replacement, so try assets
-			Log.d("ClientModel", "Looking for wav in assets");
-			file = null;
-			fileName = trimName(fileName);
-			is = context.getAssets().open(fileName);
-			len = context.getAssets().openFd(fileName).getLength();
-		}
-		WavFile wavFile = WavFile.openWavFile(is, len);
-		int waveLength = Math.min((int) wavFile.getNumFrames(), 1000000);
-		double[] wave = new double[waveLength];
-		wavFile.readFramesMono(wave, waveLength);
-		return wave;
-	}
-
 	private String trimName(String sampleName) {
 		if (sampleName.lastIndexOf("/") >= 0) {
 			return sampleName.substring(sampleName.lastIndexOf("/") + 1);
