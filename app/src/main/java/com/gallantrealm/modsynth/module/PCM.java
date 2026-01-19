@@ -431,8 +431,9 @@ public class PCM extends Module {
 				}
 
 				System.out.println("Loading wav file: " + sampleUriName);
-				InputStream is = ClientModel.getClientModel().getContext().getApplicationContext().getContentResolver().openInputStream(Uri.parse(sampleUriName));
-				WavFile wavFile = WavFile.openWavFile(is);
+				ContentResolver resolver = ClientModel.getClientModel().getContext().getApplicationContext().getContentResolver();
+				AssetFileDescriptor afd = resolver.openAssetFileDescriptor(Uri.parse(sampleUriName), "r");
+				WavFile wavFile = WavFile.openWavFile(afd.createInputStream(), afd.getLength());
 				System.out.println("WAV file has " + wavFile.getNumChannels() + " channels of length " + wavFile.getNumFrames() + " sample rate " + wavFile.getSampleRate());
 				int waveLength = Math.min((int) wavFile.getNumFrames(), 1000000);
 				int channels = wavFile.getNumChannels();
