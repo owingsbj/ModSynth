@@ -1454,10 +1454,14 @@ public class MainActivity extends Activity implements View.OnClickListener, Clie
 
 	@Override
 	public boolean dispatchKeyEvent(KeyEvent event) {
+		boolean handled = false;
 		if (event.getAction() == KeyEvent.ACTION_DOWN) {
-			nKeyDown(event.getKeyCode(), event);
+			handled = nKeyDown(event.getKeyCode(), event);
 		} else if (event.getAction() == KeyEvent.ACTION_UP) {
-			nKeyUp(event.getKeyCode(), event);
+			handled = nKeyUp(event.getKeyCode(), event);
+		}
+		if (handled) {
+			return true;
 		}
 		return super.dispatchKeyEvent(event);
 	}
@@ -1560,10 +1564,16 @@ public class MainActivity extends Activity implements View.OnClickListener, Clie
 			note = 16;
 		} else if (keyCode == KeyEvent.KEYCODE_APOSTROPHE) {
 			note = 17;
-		} else if (keyCode == KeyEvent.KEYCODE_LEFT_BRACKET) {
+		} else if (keyCode == KeyEvent.KEYCODE_RIGHT_BRACKET) {
 			note = 18;
+		} else if (keyCode == KeyEvent.KEYCODE_ENTER) {
+			note = 19;
+		} else if (keyCode == KeyEvent.KEYCODE_BACKSLASH) {
+			note = 20;
+		} else {
+			return -1;
 		}
-		if (note >= 0 && upperOctave) {
+		if (upperOctave) {
 			note += 12;
 		}
 		int midiNote = note + 60 - 12;
