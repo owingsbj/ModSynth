@@ -21,8 +21,13 @@ import com.android.billingclient.api.BillingClient.SkuType;
 import com.android.billingclient.api.BillingClientStateListener;
 import com.android.billingclient.api.BillingFlowParams;
 import com.android.billingclient.api.BillingResult;
+import com.android.billingclient.api.PendingPurchasesParams;
+import com.android.billingclient.api.ProductDetails;
+import com.android.billingclient.api.ProductDetailsResponseListener;
 import com.android.billingclient.api.Purchase;
 import com.android.billingclient.api.PurchasesUpdatedListener;
+import com.android.billingclient.api.QueryProductDetailsParams;
+import com.android.billingclient.api.QueryProductDetailsResult;
 import com.android.billingclient.api.SkuDetails;
 import com.android.billingclient.api.SkuDetailsParams;
 import com.android.billingclient.api.SkuDetailsResponseListener;
@@ -31,6 +36,7 @@ import com.gallantrealm.android.themes.DefaultTheme;
 import com.gallantrealm.android.themes.Theme;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
@@ -41,6 +47,8 @@ import android.os.Environment;
 import android.os.PowerManager;
 import android.preference.PreferenceManager;
 import android.util.Log;
+
+import androidx.annotation.NonNull;
 
 import uk.co.labbookpages.WavFile;
 
@@ -313,14 +321,16 @@ public class ClientModel {
 						}
 						Log.d("ClientModel", "<< onPurchasesUpdated");
 					}
-				}).enablePendingPurchases().build();
+				}).enablePendingPurchases(PendingPurchasesParams.newBuilder().enableOneTimeProducts().build())
+						.enableAutoServiceReconnection()
+						.build();
 	//		}
 //			if (!billingClientConnected) {
 				Log.d("ClientModel", "connecting to google play billing");
 				billingClient.startConnection(new BillingClientStateListener() {
 					public void onBillingSetupFinished(BillingResult arg0) {
 						billingClientConnected = true;
-						querySkuDetails(activity);
+						queryProductDetails(activity);
 					}
 					public void onBillingServiceDisconnected() {
 						billingClientConnected = false;
@@ -337,20 +347,47 @@ public class ClientModel {
 		}
 	}
 
-	private void querySkuDetails(Activity activity) {
+	public void restartApp() {
+		Intent intent = context.getPackageManager().getLaunchIntentForPackage(context.getPackageName());
+		if (intent != null) {
+			intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+			context.startActivity(intent);
+
+			// Finish the current activity so the user can't "back" into the old state
+			if (context instanceof Activity) {
+				((Activity) context).finish();
+			}
+
+			// Optional: Kill the current process to ensure a total cold start
+			Runtime.getRuntime().exit(0);
+		}
+	}
+
+	private void queryProductDetails(Activity activity) {
 		Log.d("ClientModel", "querying sku details");
-		List<String> skuList = new ArrayList<>();
-		skuList.add(SKU_FULL_VERSION);
-		SkuDetailsParams.Builder params = SkuDetailsParams.newBuilder();
-		params.setSkusList(skuList).setType(SkuType.INAPP);
-		billingClient.querySkuDetailsAsync(params.build(), new SkuDetailsResponseListener() {
-			public void onSkuDetailsResponse(final BillingResult billingResult, List<SkuDetails> skuDetailsList) {
+		List<QueryProductDetailsParams.Product> productList = new ArrayList<QueryProductDetailsParams.Product>();
+		productList.add(
+				QueryProductDetailsParams.Product.newBuilder()
+						.setProductId(SKU_FULL_VERSION)
+						.setProductType(BillingClient.ProductType.INAPP)
+						.build()
+		);
+		QueryProductDetailsParams params = QueryProductDetailsParams.newBuilder()
+						.setProductList(productList)
+						.build();
+		billingClient.queryProductDetailsAsync(params, new ProductDetailsResponseListener() {
+			@Override
+			public void onProductDetailsResponse(@NonNull BillingResult billingResult, @NonNull QueryProductDetailsResult queryProductDetailsResult) {
 				if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.OK) {
-					SkuDetails skuDetails = skuDetailsList.get(0);
-					Log.d("ClientModel", "sku details:");
-					Log.d("ClientModel", "  Title: " + skuDetails.getTitle());
-					Log.d("ClientModel", "  Description: " + skuDetails.getDescription());
-					launchPurchaseFlow(activity, skuDetails);
+					ProductDetails productDetails = queryProductDetailsResult.getProductDetailsList().get(0);
+					Log.d("ClientModel", "product details:");
+					Log.d("ClientModel", "  Title: " + productDetails.getTitle());
+					Log.d("ClientModel", "  Description: " + productDetails.getDescription());
+					activity.runOnUiThread(new Runnable() {
+						public void run() {
+							launchPurchaseFlow(activity, productDetails);
+						}
+					});
 				} else {
 					Log.d("ClientModel", "Purchase Failed: " + billingResult.getDebugMessage());
 					activity.runOnUiThread(new Runnable() {
@@ -365,11 +402,18 @@ public class ClientModel {
 		});
 	}
 
-	private void launchPurchaseFlow(Activity activity, SkuDetails skuDetails) {
+	private void launchPurchaseFlow(Activity activity, ProductDetails productDetails) {
 		try {
 			Log.d("ClientModel", "launching purchase flow");
-			BillingFlowParams purchaseParams = BillingFlowParams.newBuilder().setSkuDetails(skuDetails).build();
-			billingClient.launchBillingFlow(activity, purchaseParams);
+			ArrayList<BillingFlowParams.ProductDetailsParams> productDetailsParamsList = new ArrayList<>();
+			productDetailsParamsList.add(
+					BillingFlowParams.ProductDetailsParams.newBuilder()
+							.setProductDetails(productDetails)
+							.build()
+			);
+			BillingFlowParams billingFlowParams = BillingFlowParams.newBuilder()
+					.setProductDetailsParamsList(productDetailsParamsList).build();
+			billingClient.launchBillingFlow(activity, billingFlowParams);
 		} catch (Exception e) {
 			e.printStackTrace();
 			activity.runOnUiThread(new Runnable() {
